@@ -46,24 +46,30 @@ public class GameController implements Controller {
     }
 
     public final void gameStart() {
+        gameView.stopPauseKeyListen();
+        gameView.startPlayerKeyListen();
         gameView.setVisiblePauseDialog(false);
         gameView.drawBoard(gameModel.getBoard());
         mainTimer.start();
     }
 
     public final void gameStop() {
+        gameView.stopPlayerKeyListen();
+        gameView.startPauseKeyListen();
         gameView.setVisiblePauseDialog(true);
         mainTimer.stop();
     }
 
     public final void gameOver() {
-        mainTimer.stop();   //종료화면 불러와야함
+        gameView.stopPlayerKeyListen();
+        gameView.stopPauseKeyListen();
+        mainTimer.stop();   //종료화면 불러와야함, 불러올때 게임난이도,점수 넘겨줘야함
     }
 
     @Override
     public void initController() {
         this.gameModel = new GameModel(this);
-        this.gameView = new GameView();
+        this.gameView = new GameView(this);
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 

@@ -38,10 +38,6 @@ public class GameModel {
         return score;
     }
 
-    public Block getCurrentBlock() {
-        return currentBlock;
-    }
-
     public Block getNextBlock() {
         return nextBlock;
     }

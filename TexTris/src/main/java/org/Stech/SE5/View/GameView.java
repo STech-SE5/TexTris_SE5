@@ -2,12 +2,15 @@ package org.Stech.SE5.View;
 
 import org.Stech.SE5.Block.Block;
 import org.Stech.SE5.Block.Element;
+import org.Stech.SE5.Controller.GameController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class GameView extends JFrame {
@@ -24,33 +27,28 @@ public class GameView extends JFrame {
 
     private SimpleAttributeSet styleSet;
 
+    private GameController gamecontroller;
+    private PlayerKeyListener playerKeyListener;
+    private PauseKeyListener pauseKeyListener;
+
     private JPanel pauseDialog = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g); // 패널의 기본 그리기 동작을 수행합니다.
-
-            // 배경을 그리기 위해 검은색 설정
+            super.paintComponent(g);
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, this.getWidth(), this.getHeight()); // 패널 전체를 검은색으로 채웁니다.
-
-            // Graphics 객체를 Graphics2D 객체로 캐스팅하여 더 세밀한 그리기 옵션 사용
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
             Graphics2D g2 = (Graphics2D) g;
-
-            // 테두리를 그리기 위해 회색 설정
             g2.setColor(Color.GRAY);
-            // drawRect 메서드를 사용하여 테두리 그리기
-            // 여기서는 테두리의 두께를 직접 조절할 수 없으므로, 테두리를 원하는 두께로 만들기 위해 여러 번 그릴 수 있습니다.
-            // 예를 들어, 1픽셀 두께의 테두리를 원한다면 아래와 같이 하면 됩니다.
-            g2.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1); // 테두리의 두께를 고려하여 -1
-            // 더 두꺼운 테두리를 원하면, 반복문을 사용하여 여러 번 그릴 수 있습니다.
+            g2.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
         }
     };
 
-    public GameView() {
+    public GameView(final GameController controller) {
         super("TETRIS");
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gamecontroller = controller;
 
         JPanel backgroundPanel = new JPanel() {
             @Override
@@ -181,6 +179,73 @@ public class GameView extends JFrame {
         boardPane.setFocusable(true);
         boardPane.requestFocus();
         boardPane.requestFocusInWindow();
+
+        this.playerKeyListener = new PlayerKeyListener();
+        this.pauseKeyListener = new PauseKeyListener();
+    }
+
+    class PlayerKeyListener implements KeyListener {
+        @Override
+        public void keyTyped(final KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(final KeyEvent e) {          //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_DOWN:
+                   gamecontroller.moveDown();
+                   break;
+                case KeyEvent.VK_RIGHT:
+                                                        //각 case에 맞는 이동 구현해서 넣어야함
+                    break;
+                case KeyEvent.VK_LEFT:
+
+                    break;
+                case KeyEvent.VK_UP:
+
+                    break;
+                case KeyEvent.VK_SPACE:
+
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    gamecontroller.gameStop();
+                    break;
+            }
+        }
+        @Override
+        public void keyReleased(final KeyEvent e) {}
+    }
+
+    class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+        @Override
+        public void keyTyped(final KeyEvent e) {}
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                    gamecontroller.gameStart();
+                    break;
+            }
+        }
+        @Override
+        public void keyReleased(final KeyEvent e) {}
+    }
+
+    public void startPlayerKeyListen() {
+        boardPane.addKeyListener(this.playerKeyListener);
+    }
+
+    public void stopPlayerKeyListen() {
+        boardPane.removeKeyListener(this.playerKeyListener);
+    }
+
+    public void startPauseKeyListen() {
+        boardPane.addKeyListener(this.pauseKeyListener);
+    }
+
+    public void stopPauseKeyListen() {
+        boardPane.removeKeyListener(this.pauseKeyListener);
     }
 
     public void setVisiblePauseDialog(boolean ifVisible) {
