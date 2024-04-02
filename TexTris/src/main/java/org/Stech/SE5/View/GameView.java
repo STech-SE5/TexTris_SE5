@@ -125,10 +125,26 @@ public class GameView extends JFrame {
         deletedRawPane.setBackground(Color.BLACK);
         deletedRawPane.setBounds(5, 20, 60, 50);
 
-        pauseDialog.setBounds(100, 200, 200, 100);
+        pauseDialog.setBounds(100, 200, 200, 100);      //이새끼 똑바로 안됨 나중에 확인
         pauseDialog.setLayout(null);
         pauseDialog.setVisible(false);
         pauseDialog.setOpaque(false);
+
+        JButton continueBtn = new JButton("Continue");
+        continueBtn.setBounds(10, 30, 80, 40);
+        continueBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
+        continueBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
+        continueBtn.setOpaque(true); // 불투명 설정을 통해 배경색이 보이게 합니다.
+        continueBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
+        continueBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
+
+        JButton exitBtn = new JButton("Exit");
+        exitBtn.setBounds(110, 30, 80, 40);
+        exitBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
+        exitBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
+        exitBtn.setOpaque(true); // 불투명 설정을 통해 배경색이 보이게 합니다.
+        exitBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
+        exitBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
         add(backgroundPanel);
         backgroundPanel.add(nextPanel);
@@ -149,6 +165,8 @@ public class GameView extends JFrame {
 
         backgroundPanel.add(boardPane);
         backgroundPanel.add(pauseDialog);
+        pauseDialog.add(continueBtn);
+        pauseDialog.add(exitBtn);
     }
 
 
