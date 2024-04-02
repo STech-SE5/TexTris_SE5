@@ -197,16 +197,16 @@ public class GameView extends JFrame {
                    gamecontroller.moveDown();
                    break;
                 case KeyEvent.VK_RIGHT:
-                                                        //각 case에 맞는 이동 구현해서 넣어야함
+                    gamecontroller.moveRight();    //각 case에 맞는 이동 구현해서 넣어야함
                     break;
                 case KeyEvent.VK_LEFT:
-
+                    gamecontroller.moveLeft();
                     break;
                 case KeyEvent.VK_UP:
-
+                    gamecontroller.actRotate();
                     break;
                 case KeyEvent.VK_SPACE:
-
+                    gamecontroller.moveStraightDown();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     gamecontroller.gameStop();

@@ -142,6 +142,26 @@ public class GameModel {
         public abstract void hook();
     }
 
+    class Rotate extends Act {
+        public boolean ifBoundaryGoOver() {
+            return (posY + currentBlock.height() > 20)  //설정에서 20이랑 10에 바뀌는 보드 높이 연동해야함
+                    || (posX + currentBlock.width() > 10);
+        }
+
+        public void move() {
+            currentBlock.rotate();
+        }
+
+        public void moveBack() {
+            currentBlock.rotate();
+            currentBlock.rotate();
+            currentBlock.rotate();
+        }
+
+        public void hook() {
+        }
+    }
+
     class Down extends Act {
         public boolean ifBoundaryGoOver() {
             return posY + currentBlock.height() > 20;
@@ -160,6 +180,52 @@ public class GameModel {
                 checkRaw();
                 setRandomBlock();
         }
+    }
+
+    class Right extends Act {
+        public boolean ifBoundaryGoOver() {
+            return posX + currentBlock.width() > 10;
+        }   //설정에서 보드 너비 받아와야함
+
+        public void move() {
+            posX++;
+        }
+
+        public void moveBack() {
+            posX--;
+        }
+
+        public void hook() {
+        }
+    }
+
+    class Left extends Act {
+        public boolean ifBoundaryGoOver() {
+            return posX < 0;
+        }
+
+        public void move() {
+            posX--;
+        }
+
+        public void moveBack() {
+            posX++;
+        }
+
+        public void hook() {
+        }
+    }
+
+    public final void moveStraightDown() {
+        Down down = new Down();
+        int cnt = 0;
+        while (true) {
+            cnt++;
+            if (down.run() == Result.ERR) {
+                break;
+            }
+        }
+        score += cnt * 1;   //1자리에 설정에서 난이도 점수 가중치 받아와서 넣어야함
     }
 
     class GameOver extends Act {
@@ -199,6 +265,21 @@ public class GameModel {
                 }
             }
         }
+    }
+
+    public final void actRotate() {
+        Rotate rotate = new Rotate();
+        rotate.run();
+    }
+
+    public final void moveRight() {
+        Right right = new Right();
+        right.run();
+    }
+
+    public final void moveLeft() {
+        Left left = new Left();
+        left.run();
     }
 
     public final void moveDownAndCheck() {

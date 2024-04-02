@@ -81,8 +81,28 @@ public class GameController implements Controller {
         gameView.drawDeletedRaw(gameModel.getDeletedRaw());
     }
 
+    public final void actRotate() {
+        gameModel.actRotate();
+        drawView();
+    }
+
+    public final void moveLeft() {
+        gameModel.moveLeft();
+        drawView();
+    }
+
+    public final void moveRight() {
+        gameModel.moveRight();
+        drawView();
+    }
+
     public final void moveDown() {
         gameModel.moveDownAndCheck();
+        drawView();
+    }
+
+    public final void moveStraightDown() {
+        gameModel.moveStraightDown();
         drawView();
     }
 }
