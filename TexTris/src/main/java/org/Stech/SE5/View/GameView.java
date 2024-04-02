@@ -5,12 +5,11 @@ import javax.swing.JComponent;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 
 public class GameView extends JFrame {
 
-    static final int LINE_BORDER_OUTER_WEIGHT = 10;
-    static final int LINE_BORDER_INNER_WEIGHT = 5;
     private final int VIEW_WIDTH = 400;
     private final int VIEW_HEIGHT = 600;
     static final int FONT_SIZE = 28;
@@ -20,8 +19,7 @@ public class GameView extends JFrame {
     private JTextPane scorePane;
     private JTextPane levelPane;
     private JTextPane deletedRawPane;
-    private JTextPane recordScorePane;
-    private JTextField namePane;
+
     private SimpleAttributeSet styleSet;
 
     private JPanel pauseDialog = new JPanel() {
@@ -146,6 +144,9 @@ public class GameView extends JFrame {
         exitBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
         exitBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
+        //continueBtn.addActionListener(e -> ); 나중에 기능 만들고 연결시키기
+        //exitBtn.addActionListener(e -> );
+
         add(backgroundPanel);
         backgroundPanel.add(nextPanel);
         nextPanel.add(nextBlockPane);
@@ -167,6 +168,13 @@ public class GameView extends JFrame {
         backgroundPanel.add(pauseDialog);
         pauseDialog.add(continueBtn);
         pauseDialog.add(exitBtn);
+
+        styleSet = new SimpleAttributeSet();
+        StyleConstants.setFontSize(styleSet, FONT_SIZE);
+        StyleConstants.setLineSpacing(styleSet, LINE_SPACING);
+        StyleConstants.setFontFamily(styleSet, "Courier New");
+        StyleConstants.setBold(styleSet, true);
+        StyleConstants.setAlignment(styleSet, StyleConstants.ALIGN_CENTER);
     }
 
 
