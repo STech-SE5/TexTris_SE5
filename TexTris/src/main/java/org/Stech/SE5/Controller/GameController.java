@@ -20,10 +20,13 @@ public class GameController implements Controller {
 
     private final Timer mainTimer;
 
+    private final Timer deleteTimer;
+
     private static final double INIT_INTERVAL = 1000 / 1;       //추후 1자리에 설정에서 speed 받아와서 넣기
 
     public GameController() {
         mainTimer = new Timer((int)INIT_INTERVAL, new MainTimerActionListener());
+        deleteTimer = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener());
         initController();
     }
 
@@ -31,6 +34,14 @@ public class GameController implements Controller {
         @Override
         public final void actionPerformed(final ActionEvent e) {
             moveDown();
+        }
+    }
+
+    public class DeleteTimerActionListener implements ActionListener {      //메인하고나서
+        @Override
+        public final void actionPerformed(final ActionEvent e) {
+            gameModel.runDelete();
+            drawView();
         }
     }
 
@@ -51,6 +62,7 @@ public class GameController implements Controller {
         gameView.setVisiblePauseDialog(false);
         gameView.drawBoard(gameModel.getBoard());
         mainTimer.start();
+        deleteTimer.start();
     }
 
     public final void gameStop() {
@@ -58,12 +70,14 @@ public class GameController implements Controller {
         gameView.startPauseKeyListen();
         gameView.setVisiblePauseDialog(true);
         mainTimer.stop();
+        deleteTimer.stop();
     }
 
     public final void gameOver() {
         gameView.stopPlayerKeyListen();
         gameView.stopPauseKeyListen();
         mainTimer.stop();   //종료화면 불러와야함, 불러올때 게임난이도,점수 넘겨줘야함
+        deleteTimer.stop();
     }
 
     @Override

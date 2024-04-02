@@ -306,4 +306,22 @@ public class GameModel {
         }
         gamecontroller.drawView();
     }
+
+    public final void runDelete() {
+        for (int i = 0; i < 20; i++) {      //20,10 각각 설정에서 보드 높이, 너비 받아와야함
+            for (int j = 0; j < 10; j++) {
+                if (board.get(i)[j] == Element.DELETE) {
+                    shiftDown(i-1, j);
+                }
+            }
+        }
+    }
+
+    public final void shiftDown(final int startHeight, final int posX) {
+        eraseCurr();
+        for (int i = startHeight; i >= 0; i--) {
+            board.get(i + 1)[posX] = board.get(i)[posX];
+        }
+        placeBlock();
+    }
 }
