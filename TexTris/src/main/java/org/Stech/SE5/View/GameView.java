@@ -164,8 +164,8 @@ public class GameView extends JFrame {
         linesPanel.add(deletedRawPane);
         linesPanel.add(linesLabel);
 
-        backgroundPanel.add(boardPane);
         backgroundPanel.add(pauseDialog);
+        backgroundPanel.add(boardPane);
         pauseDialog.add(continueBtn);
         pauseDialog.add(exitBtn);
 
