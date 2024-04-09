@@ -126,7 +126,7 @@ public class GameView extends JFrame {
         pauseDialog.setBounds(100, 200, 200, 100);      //이새끼 똑바로 안됨 나중에 확인
         pauseDialog.setLayout(null);
         pauseDialog.setVisible(false);
-        pauseDialog.setOpaque(false);
+        pauseDialog.setOpaque(true);
 
         JButton continueBtn = new JButton("Continue");
         continueBtn.setBounds(10, 30, 80, 40);
@@ -144,8 +144,8 @@ public class GameView extends JFrame {
         exitBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
         exitBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
-        //continueBtn.addActionListener(e -> ); 나중에 기능 만들고 연결시키기
-        //exitBtn.addActionListener(e -> );
+        continueBtn.addActionListener(e -> gamecontroller.gameStart());
+        //exitBtn.addActionListener(e -> 메인메뉴 불러오는 함수 );
 
         add(backgroundPanel);
         backgroundPanel.add(nextPanel);

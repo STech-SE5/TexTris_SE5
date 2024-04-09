@@ -36,8 +36,16 @@ public abstract class Block {
         return 0;
     }
 
+    public int getItemPosY() {
+        throw new UnsupportedOperationException();
+    }
+
     public Element getElement() {
         return this.element;
+    }
+
+    public boolean isItemBlock() {
+        return false;
     }
 
     public BlockType getKind() {

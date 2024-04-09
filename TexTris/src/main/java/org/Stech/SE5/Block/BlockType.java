@@ -1,10 +1,17 @@
 package org.Stech.SE5.Block;
 
+import org.Stech.SE5.Item.*;
+
 public enum BlockType {
-    J_BLOCK, L_BLOCK, Z_BLOCK, S_BLOCK, T_BLOCK, O_BLOCK, I_BLOCK;
+    J_BLOCK, L_BLOCK, Z_BLOCK, S_BLOCK, T_BLOCK, O_BLOCK, I_BLOCK,
+    WEIGHT_BLOCK;
 
     public static final int getTetrominoSize() {
         return 7;
+    }
+
+    public static final int getItemSize() {
+        return 1;
     }
 
     public static final Block getBlockInstance(final BlockType blocktype) {
@@ -16,6 +23,7 @@ public enum BlockType {
             case S_BLOCK -> new SBlock();
             case T_BLOCK -> new TBlock();
             case O_BLOCK -> new OBlock();
+            case WEIGHT_BLOCK -> new WeightBlock();
         };
     }
 }

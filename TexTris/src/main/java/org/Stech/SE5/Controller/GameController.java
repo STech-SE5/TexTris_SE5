@@ -19,14 +19,15 @@ public class GameController implements Controller {
     private GameModel gameModel;
 
     private final Timer mainTimer;
-
     private final Timer deleteTimer;
+    private final Timer weightBlockTimer;
 
     private static final double INIT_INTERVAL = 1000 / 1;       //추후 1자리에 설정에서 speed 받아와서 넣기
 
     public GameController() {
         mainTimer = new Timer((int)INIT_INTERVAL, new MainTimerActionListener());
         deleteTimer = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener());
+        weightBlockTimer = new Timer((int)INIT_INTERVAL / 5, new WeightBlockTimerActionListener());
         initController();
     }
 
@@ -45,6 +46,14 @@ public class GameController implements Controller {
         }
     }
 
+    public class WeightBlockTimerActionListener implements ActionListener {      //아이템 나중에
+        @Override
+        public final void actionPerformed(final ActionEvent e) {
+            gameModel.moveWeightBlockDown();
+            drawView();
+        }
+    }
+
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
@@ -54,6 +63,13 @@ public class GameController implements Controller {
             gameView.setVisible(false);
             gameStop();
         }
+    }
+
+    @Override
+    public void initController() {
+        this.gameModel = new GameModel(this);
+        this.gameView = new GameView(this);
+        this.gameView.drawBoard(this.gameModel.getBoard());
     }
 
     public final void gameStart() {
@@ -80,11 +96,16 @@ public class GameController implements Controller {
         deleteTimer.stop();
     }
 
-    @Override
-    public void initController() {
-        this.gameModel = new GameModel(this);
-        this.gameView = new GameView(this);
-        this.gameView.drawBoard(this.gameModel.getBoard());
+    public final void weightBlockStart() {
+        gameView.stopPlayerKeyListen();
+        mainTimer.stop();
+        weightBlockTimer.start();
+    }
+
+    public final void weightBlockStop() {
+        gameView.startPlayerKeyListen();
+        mainTimer.start();
+        weightBlockTimer.stop();
     }
 
     public void drawView() {

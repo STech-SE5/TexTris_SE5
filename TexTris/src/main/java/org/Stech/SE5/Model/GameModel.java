@@ -15,6 +15,12 @@ public class GameModel {
     private double score = 0;
     private int deletedRowCount = 0;
 
+    private int itemCount = 0;
+
+    private final int ITEM_GENERATE_INTERVAL = 1;
+
+    private boolean itemModeFlag = true;        //시작화면에서 정보 넘겨받아야 함
+
     private final int DEFAULT_POS_X = 3;
     private final int DEFAULT_POS_Y = 0;
     private double gameSpeed = 1;       //추후 설정에서 받아오기
@@ -62,14 +68,20 @@ public class GameModel {
         BlockType blocktype;
         int rndNum = 0;
 
-        if(nextBlock == null) {
+        if (nextBlock == null) {
             rndNum = rnd.nextInt(BlockType.getTetrominoSize());
             blocktype = BlockType.values()[rndNum];
             currentBlock = BlockType.getBlockInstance(blocktype);
-        } else {
+        }
+        else {
             currentBlock = nextBlock;
         }
-       /* switch (설정에서 가져온 난이도 값) {
+        if (itemModeFlag = true && itemCount >= ITEM_GENERATE_INTERVAL){
+            itemCount = Math.max(0, itemCount - ITEM_GENERATE_INTERVAL);
+            rndNum = rnd.nextInt(BlockType.getItemSize()) + BlockType.getTetrominoSize();
+        }
+        else {
+            /* switch (설정에서 가져온 난이도 값) {
             case EASY -> {
                 rndNum = rnd.nextInt(72) / 10; // I_BLOCK 60 ~ 71, weight 12
                 if(rndNum > 6) rndNum = 6;
@@ -77,8 +89,8 @@ public class GameModel {
             case NORMAL -> rndNum = rnd.nextInt(70) / 10; // I_BLOCK 60 ~ 69, weight 10
             case HARD -> rndNum = rnd.nextInt(68) / 10; // I_BLOCK 60 ~ 67, weight 8
         }*/
-        rndNum = rnd.nextInt(70) / 10;  //일단 노말로 설정
-
+            rndNum = rnd.nextInt(70) / 10;  //일단 노말로 설정
+        }
         blocktype = BlockType.values()[rndNum];
         nextBlock = BlockType.getBlockInstance(blocktype);
 
@@ -88,7 +100,8 @@ public class GameModel {
         GameOver gameOver = new GameOver();
         if (gameOver.canPlaceBlock()) {
             placeBlock();
-        } else {
+        }
+        else {
             gamecontroller.gameOver();
         }
     }
@@ -177,8 +190,13 @@ public class GameModel {
         }
 
         public void hook() {
+            if(currentBlock.isItemBlock()) {
+                triggerItem();
+            }
+            else {
                 checkRaw();
                 setRandomBlock();
+            }
         }
     }
 
@@ -302,6 +320,7 @@ public class GameModel {
                 }
                 score += 100 * 1;       //추후 난이도 따른 가중치 추가
                 deletedRowCount++;
+                itemCount++;
             }
         }
         gamecontroller.drawView();
@@ -323,5 +342,27 @@ public class GameModel {
             board.get(i + 1)[posX] = board.get(i)[posX];
         }
         placeBlock();
+    }
+
+    public final void moveWeightBlockDown() {
+        eraseCurr();
+        posY++;
+        if (posY + currentBlock.height() > 20/*설정에서 높이 받기*/) {
+            posY--;
+            placeBlock();
+            gamecontroller.weightBlockStop();;
+            checkRaw();
+            setRandomBlock();
+            return;
+        }
+        placeBlock();
+    }
+
+    public final void triggerItem() {
+        switch (currentBlock.getKind()) {
+            case WEIGHT_BLOCK -> {
+                gamecontroller.weightBlockStart();
+            }
+        }
     }
 }
