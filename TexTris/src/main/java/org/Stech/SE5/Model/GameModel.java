@@ -104,6 +104,13 @@ public class GameModel {
         else {
             gamecontroller.gameOver();
         }
+        gameSpeedUp();
+    }
+
+    public void gameSpeedUp() {
+        if(gameSpeed > 6) return;
+        gameSpeed *= 1.005;
+        gamecontroller.setTimeInterval((int)(1000 / gameSpeed));
     }
 
     private enum Result {       //확인용

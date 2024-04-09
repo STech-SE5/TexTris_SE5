@@ -72,6 +72,11 @@ public class GameController implements Controller {
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 
+    public final void setTimeInterval(int interval) {
+        mainTimer.setDelay(interval);
+        deleteTimer.setDelay(Math.max(interval/3, 200));
+    }
+
     public final void gameStart() {
         gameView.stopPauseKeyListen();
         gameView.startPlayerKeyListen();
