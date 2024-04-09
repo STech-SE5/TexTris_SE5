@@ -4,7 +4,6 @@ import  org.Stech.SE5.Controller.GameController;
 import  org.Stech.SE5.Block.*;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameModel {
@@ -14,9 +13,12 @@ public class GameModel {
     private Block nextBlock;
     private double score = 0;
 
+    private int lineCounts = 0;
     private int itemCount = 0;
 
-    private final int ITEM_GENERATE_INTERVAL = 3;
+    private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
+
+    private final int ITEM_GENERATE_INTERVAL = 10;
 
     private boolean itemModeFlag = true;        //시작화면에서 정보 넘겨받아야 함
 
@@ -58,8 +60,22 @@ public class GameModel {
         }
     }
 
+    public int getLineCounts(){     //기록용
+        return lineCounts;
+    }
+
     public int getItemCount(){
         return itemCount;
+    }
+
+    private void increaseItemcount(){
+        if (boostturn > 0){
+            itemCount = itemCount + 3;
+            boostturn--;
+        }
+        else {
+            itemCount++;
+        }
     }
 
     public final void setRandomBlock() {
@@ -325,7 +341,8 @@ public class GameModel {
                     board.get(i)[j] = Element.DELETE;
                 }
                 score += 100 * 1;       //추후 난이도 따른 가중치 추가
-                itemCount++;
+                increaseItemcount();
+                lineCounts++;
             }
         }
         gamecontroller.drawView();
@@ -373,9 +390,9 @@ public class GameModel {
                     board.get(posY + currentBlock.getItemPosY())[j] = Element.DELETE;
                 }
                 checkRaw();
-
                 score += 100;   //가중치 곱하기 추가해야함
-                itemCount++;
+                increaseItemcount();
+                lineCounts++;
                 gameSpeedUp();
                 setRandomBlock();
             }
@@ -398,6 +415,11 @@ public class GameModel {
                     }
                 }
                 score += 10 * cnt;  //가중치 곱하기 추가해야함
+                setRandomBlock();
+            }
+            case ITEM_BOOST -> {
+                boostturn = boostturn + 3;
+                checkRaw();
                 setRandomBlock();
             }
         }

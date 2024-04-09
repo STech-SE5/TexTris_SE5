@@ -4,13 +4,13 @@ import org.Stech.SE5.Block.Block;
 import org.Stech.SE5.Block.BlockType;
 import org.Stech.SE5.Block.Element;
 
-public class Bomb extends Block {
+public class ItemBoost extends Block {
 
-    public Bomb() {
+    public ItemBoost() {
         shape = new Element[][] {
-                {Element.BOMB}
+                {Element.ITEM_BOOST}
         };
-        type = BlockType.BOMB;
+        type = BlockType.ITEM_BOOST;
     }
 
     @Override
