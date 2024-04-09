@@ -370,6 +370,18 @@ public class GameModel {
             case WEIGHT_BLOCK -> {
                 gamecontroller.weightBlockStart();
             }
+            case LINE_CLEANER -> {
+                for (int j = 0; j < 10/*설정에서 받아오기*/; j++) {
+                    board.get(posY + currentBlock.getItemPosY())[j] = Element.DELETE;
+                }
+                checkRaw();
+
+                score += 100;   //가중치 곱하기 추가해야함
+                deletedRowCount++;
+                itemCount++;
+                gameSpeedUp();
+                setRandomBlock();
+            }
         }
     }
 }
