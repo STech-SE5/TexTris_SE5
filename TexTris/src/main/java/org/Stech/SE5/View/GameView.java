@@ -148,6 +148,7 @@ public class GameView extends JFrame {
         //exitBtn.addActionListener(e -> 메인메뉴 불러오는 함수 );
 
         add(backgroundPanel);
+        backgroundPanel.add(pauseDialog);
         backgroundPanel.add(nextPanel);
         nextPanel.add(nextBlockPane);
         nextPanel.add(nextLabel);
@@ -164,7 +165,6 @@ public class GameView extends JFrame {
         linesPanel.add(itemCountPane);
         linesPanel.add(linesLabel);
 
-        backgroundPanel.add(pauseDialog);
         backgroundPanel.add(boardPane);
         pauseDialog.add(continueBtn);
         pauseDialog.add(exitBtn);

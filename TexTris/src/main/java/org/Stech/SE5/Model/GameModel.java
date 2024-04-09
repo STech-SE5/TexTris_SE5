@@ -14,11 +14,11 @@ public class GameModel {
     private double score = 0;
     private double scorerate = 1;
     private int lineCounts = 0;
-    private int itemCount = 9;
+    private int itemCount = 0;
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private final int ITEM_GENERATE_INTERVAL = 10;
+    private final int ITEM_GENERATE_INTERVAL = 3;
 
     private boolean itemModeFlag = true;        //시작화면에서 정보 넘겨받아야 함
 
@@ -91,7 +91,7 @@ public class GameModel {
         else {
             currentBlock = nextBlock;
         }
-        if (itemModeFlag = true && itemCount >= ITEM_GENERATE_INTERVAL){
+        if (itemModeFlag && itemCount >= ITEM_GENERATE_INTERVAL){
             itemCount = Math.max(0, itemCount - ITEM_GENERATE_INTERVAL);
             rndNum = rnd.nextInt(BlockType.getItemSize()) + BlockType.getTetrominoSize();
         }
@@ -124,7 +124,7 @@ public class GameModel {
 
     public void gameSpeedUp() {
         if(gameSpeed > 6) return;
-        gameSpeed *= 1.05;
+        gameSpeed *= 1.01;
         scorerate *= 1.05;
         gamecontroller.setTimeInterval((int)(1000 / gameSpeed));
     }
@@ -391,7 +391,7 @@ public class GameModel {
                     board.get(posY + currentBlock.getItemPosY())[j] = Element.DELETE;
                 }
                 checkRaw();
-                score += 100 * scorerate;   //가중치 곱하기 추가해야함
+                score += 100 * scorerate;
                 increaseItemcount();
                 lineCounts++;
                 gameSpeedUp();
@@ -415,7 +415,7 @@ public class GameModel {
                         }
                     }
                 }
-                score += 10 * cnt * scorerate;  //가중치 곱하기 추가해야함
+                score += 10 * cnt * scorerate;
                 setRandomBlock();
             }
             case ITEM_BOOST -> {
@@ -433,7 +433,7 @@ public class GameModel {
                         }
                     }
                 }
-                score += 10 * cnt * scorerate;  //점수 가중치 곱하기 추가해야함
+                score += 10 * cnt * scorerate;
                 setRandomBlock();
             }
         }
