@@ -12,7 +12,7 @@ public class GameModel {
     private Block currentBlock;
     private Block nextBlock;
     private double score = 0;
-
+    private double scorerate = 1;
     private int lineCounts = 0;
     private int itemCount = 9;
 
@@ -124,7 +124,8 @@ public class GameModel {
 
     public void gameSpeedUp() {
         if(gameSpeed > 6) return;
-        gameSpeed *= 1.005;
+        gameSpeed *= 1.05;
+        scorerate *= 1.05;
         gamecontroller.setTimeInterval((int)(1000 / gameSpeed));
     }
 
@@ -204,7 +205,7 @@ public class GameModel {
 
         public void move() {
             posY++;
-            score += 1;     //난이도따라 가중치 바꿔서 해야함
+            score += 1 * scorerate;     //난이도따라 가중치 바꿔서 해야함
         }
 
         public void moveBack() {
@@ -265,7 +266,7 @@ public class GameModel {
                 break;
             }
         }
-        score += cnt * 1;   //1자리에 설정에서 난이도 점수 가중치 받아와서 넣어야함
+        score += cnt * scorerate;   //1자리에 설정에서 난이도 점수 가중치 받아와서 넣어야함
     }
 
     class GameOver extends Act {
@@ -340,7 +341,7 @@ public class GameModel {
                 for (int j = 0; j < 10/*설정에서 크기에 따른 보드 넓이 받아와야함*/; j++) {
                     board.get(i)[j] = Element.DELETE;
                 }
-                score += 100 * 1;       //추후 난이도 따른 가중치 추가
+                score += 100 * scorerate;       //추후 난이도 따른 가중치 추가
                 increaseItemcount();
                 lineCounts++;
             }
@@ -390,7 +391,7 @@ public class GameModel {
                     board.get(posY + currentBlock.getItemPosY())[j] = Element.DELETE;
                 }
                 checkRaw();
-                score += 100;   //가중치 곱하기 추가해야함
+                score += 100 * scorerate;   //가중치 곱하기 추가해야함
                 increaseItemcount();
                 lineCounts++;
                 gameSpeedUp();
@@ -414,7 +415,7 @@ public class GameModel {
                         }
                     }
                 }
-                score += 10 * cnt;  //가중치 곱하기 추가해야함
+                score += 10 * cnt * scorerate;  //가중치 곱하기 추가해야함
                 setRandomBlock();
             }
             case ITEM_BOOST -> {
@@ -432,7 +433,7 @@ public class GameModel {
                         }
                     }
                 }
-                score += 10 * cnt;  //점수 가중치 곱하기 추가해야함
+                score += 10 * cnt * scorerate;  //점수 가중치 곱하기 추가해야함
                 setRandomBlock();
             }
         }
