@@ -23,7 +23,7 @@ public class GameView extends JFrame {
     private JTextPane nextBlockPane;
     private JTextPane scorePane;
     private JTextPane levelPane;
-    private JTextPane deletedRawPane;
+    private JTextPane itemCountPane;
 
     private SimpleAttributeSet styleSet;
 
@@ -89,7 +89,7 @@ public class GameView extends JFrame {
         linesPanel.setLayout(null);
         linesPanel.setBounds(280,420,70,75);
         linesPanel.setBackground(Color.GRAY);
-        JLabel linesLabel = new JLabel("lines", SwingConstants.CENTER);  // linesPanel에 "lines" 텍스트를 추가합니다.
+        JLabel linesLabel = new JLabel("ItemCounts", SwingConstants.CENTER);  // linesPanel에 "lines" 텍스트를 추가합니다.
         linesLabel.setForeground(Color.WHITE);
         linesLabel.setBounds(0, 0, 70, 20);
 
@@ -117,11 +117,11 @@ public class GameView extends JFrame {
         levelPane.setBackground(Color.BLACK);
         levelPane.setBounds(5, 20, 60, 50);
 
-        deletedRawPane = new JTextPane();
-        deletedRawPane.setEditable(false);
-        deletedRawPane.setOpaque(true);
-        deletedRawPane.setBackground(Color.BLACK);
-        deletedRawPane.setBounds(5, 20, 60, 50);
+        itemCountPane = new JTextPane();
+        itemCountPane.setEditable(false);
+        itemCountPane.setOpaque(true);
+        itemCountPane.setBackground(Color.BLACK);
+        itemCountPane.setBounds(5, 20, 60, 50);
 
         pauseDialog.setBounds(100, 200, 200, 100);      //이새끼 똑바로 안됨 나중에 확인
         pauseDialog.setLayout(null);
@@ -161,7 +161,7 @@ public class GameView extends JFrame {
         levelPanel.add(levelLabel);
 
         backgroundPanel.add(linesPanel);
-        linesPanel.add(deletedRawPane);
+        linesPanel.add(itemCountPane);
         linesPanel.add(linesLabel);
 
         backgroundPanel.add(pauseDialog);
@@ -330,18 +330,18 @@ public class GameView extends JFrame {
         levelPane.setStyledDocument(doc);
     }
 
-    public final void drawDeletedRaw(int deletedRaw) {
-        deletedRawPane.setText("");
-        Style style = deletedRawPane.addStyle("textStyle", null);
-        StyledDocument doc = deletedRawPane.getStyledDocument();
+    public final void drawItemCount(int ItemCount) {
+        itemCountPane.setText("");
+        Style style = itemCountPane.addStyle("textStyle", null);
+        StyledDocument doc = itemCountPane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         StyleConstants.setForeground(style, Color.WHITE);
         StyleConstants.setFontSize(style, 24);
         try {
-            doc.insertString(doc.getLength(), Integer.toString(deletedRaw), style);
+            doc.insertString(doc.getLength(), Integer.toString(ItemCount), style);
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
-        deletedRawPane.setStyledDocument(doc);
+        itemCountPane.setStyledDocument(doc);
     }
 }

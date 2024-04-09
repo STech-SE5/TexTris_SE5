@@ -118,7 +118,7 @@ public class GameController implements Controller {
         gameView.drawNextBlock(gameModel.getNextBlock());
         gameView.drawScore(gameModel.getScore());
         gameView.drawLevel();
-        gameView.drawDeletedRaw(gameModel.getDeletedRaw());
+        gameView.drawItemCount(gameModel.getItemCount());
     }
 
     public final void actRotate() {

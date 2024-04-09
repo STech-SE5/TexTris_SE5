@@ -13,11 +13,10 @@ public class GameModel {
     private Block currentBlock;
     private Block nextBlock;
     private double score = 0;
-    private int deletedRowCount = 0;
 
     private int itemCount = 0;
 
-    private final int ITEM_GENERATE_INTERVAL = 1;
+    private final int ITEM_GENERATE_INTERVAL = 3;
 
     private boolean itemModeFlag = true;        //시작화면에서 정보 넘겨받아야 함
 
@@ -48,10 +47,6 @@ public class GameModel {
         return nextBlock;
     }
 
-    public int getDeletedRaw() {
-        return deletedRowCount;
-    }
-
     public final void initBoard(final int width, final int height) {
         board = new ArrayList<>(height);
         for (int i = 0; i < height; i++) {
@@ -61,6 +56,10 @@ public class GameModel {
             }
             board.add(row);
         }
+    }
+
+    public int getItemCount(){
+        return itemCount;
     }
 
     public final void setRandomBlock() {
@@ -326,7 +325,6 @@ public class GameModel {
                     board.get(i)[j] = Element.DELETE;
                 }
                 score += 100 * 1;       //추후 난이도 따른 가중치 추가
-                deletedRowCount++;
                 itemCount++;
             }
         }
@@ -377,7 +375,6 @@ public class GameModel {
                 checkRaw();
 
                 score += 100;   //가중치 곱하기 추가해야함
-                deletedRowCount++;
                 itemCount++;
                 gameSpeedUp();
                 setRandomBlock();
