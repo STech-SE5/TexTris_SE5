@@ -382,6 +382,27 @@ public class GameModel {
                 gameSpeedUp();
                 setRandomBlock();
             }
+            case BOMB -> {
+                int cnt = 0;
+                for (int i = -2; i <= 2; i++) { // 중심점에서 위로 2칸, 아래로 2칸
+                    int currentY = posY + i;
+                    if (currentY < 0 || currentY >= 20/*높이 받아와서 수정*/) continue; // 게임보드 범위를 벗어나면 무시
+                    // 각 줄마다 영향을 받는 X 범위의 너비를 계산
+                    int width = 5 - Math.abs(i) * 2; // 1, 3, 5, 3, 1 패턴에 맞게 너비를 계산
+                    int startX = posX - (width / 2); // 시작 X 좌표
+                    int endX = startX + width - 1; // 종료 X 좌표
+
+                    for (int j = startX; j <= endX; j++) {
+                        if (j < 0 || j >= 10/*너비 받아와서 수정*/) continue; // 게임보드 범위를 벗어나면 무시
+                        if (board.get(currentY)[j] != Element.EMPTY) {
+                            board.get(currentY)[j] = Element.DELETE;
+                            cnt++;
+                        }
+                    }
+                }
+                score += 10 * cnt;  //가중치 곱하기 추가해야함
+                setRandomBlock();
+            }
         }
     }
 }

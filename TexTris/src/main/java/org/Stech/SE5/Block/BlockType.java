@@ -4,14 +4,14 @@ import org.Stech.SE5.Item.*;
 
 public enum BlockType {
     J_BLOCK, L_BLOCK, Z_BLOCK, S_BLOCK, T_BLOCK, O_BLOCK, I_BLOCK,
-    WEIGHT_BLOCK, LINE_CLEANER;
+    WEIGHT_BLOCK, LINE_CLEANER, BOMB;
 
     public static final int getTetrominoSize() {
         return 7;
     }
 
     public static final int getItemSize() {
-        return 2;
+        return 3;
     }
 
     public static final Block getBlockInstance(final BlockType blocktype) {
@@ -25,6 +25,7 @@ public enum BlockType {
             case O_BLOCK -> new OBlock();
             case WEIGHT_BLOCK -> new WeightBlock();
             case LINE_CLEANER -> new LineCleaner();
+            case BOMB -> new Bomb();
         };
     }
 }
