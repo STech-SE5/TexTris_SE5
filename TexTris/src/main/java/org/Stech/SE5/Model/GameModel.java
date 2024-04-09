@@ -14,7 +14,7 @@ public class GameModel {
     private double score = 0;
 
     private int lineCounts = 0;
-    private int itemCount = 0;
+    private int itemCount = 9;
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
@@ -420,6 +420,19 @@ public class GameModel {
             case ITEM_BOOST -> {
                 boostturn = boostturn + 3;
                 checkRaw();
+                setRandomBlock();
+            }
+            case CROSS_DELETE -> {
+                int cnt = 0;
+                for (int i = 0; i < 20/*높이 받아오기*/; i++) {
+                    for (int j = 0; j < 10/*너비 받아오기*/; j++) {
+                        if(Math.abs(posX - j) == Math.abs(posY - i) && board.get(i)[j] != Element.EMPTY) {
+                            board.get(i)[j] = Element.DELETE;
+                            cnt++;
+                        }
+                    }
+                }
+                score += 10 * cnt;  //점수 가중치 곱하기 추가해야함
                 setRandomBlock();
             }
         }
