@@ -43,7 +43,7 @@ public class GameView extends JFrame {
         }
     };
 
-    public GameView(final GameController controller) {
+    public GameView(final GameController controller, boolean modeflag) {
         super("TETRIS");
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         setLocationRelativeTo(null);
@@ -85,13 +85,13 @@ public class GameView extends JFrame {
         levelLabel.setForeground(Color.WHITE);
         levelLabel.setBounds(0, 0, 70, 20);
 
-        JPanel linesPanel = new JPanel();
-        linesPanel.setLayout(null);
-        linesPanel.setBounds(280,420,70,75);
-        linesPanel.setBackground(Color.GRAY);
-        JLabel linesLabel = new JLabel("ItemCounts", SwingConstants.CENTER);  // linesPanel에 "lines" 텍스트를 추가합니다.
-        linesLabel.setForeground(Color.WHITE);
-        linesLabel.setBounds(0, 0, 70, 20);
+        JPanel itemcountpanel = new JPanel();
+        itemcountpanel.setLayout(null);
+        itemcountpanel.setBounds(280,420,70,75);
+        itemcountpanel.setBackground(Color.GRAY);
+        JLabel itemcountLabel = new JLabel("ItemCounts", SwingConstants.CENTER);  // linesPanel에 "lines" 텍스트를 추가합니다.
+        itemcountLabel.setForeground(Color.WHITE);
+        itemcountLabel.setBounds(0, 0, 70, 20);
 
         boardPane = new JTextPane();
         boardPane.setEditable(false);
@@ -123,7 +123,7 @@ public class GameView extends JFrame {
         itemCountPane.setBackground(Color.BLACK);
         itemCountPane.setBounds(5, 20, 60, 50);
 
-        pauseDialog.setBounds(100, 200, 200, 100);      //이새끼 똑바로 안됨 나중에 확인
+        pauseDialog.setBounds(100, 200, 200, 100);
         pauseDialog.setLayout(null);
         pauseDialog.setVisible(false);
         pauseDialog.setOpaque(true);
@@ -161,9 +161,13 @@ public class GameView extends JFrame {
         levelPanel.add(levelPane);
         levelPanel.add(levelLabel);
 
-        backgroundPanel.add(linesPanel);
-        linesPanel.add(itemCountPane);
-        linesPanel.add(linesLabel);
+        backgroundPanel.add(itemcountpanel);
+        itemcountpanel.add(itemCountPane);
+        itemcountpanel.add(itemcountLabel);
+
+        if (!modeflag){
+            itemcountpanel.setVisible(false);
+        }
 
         backgroundPanel.add(boardPane);
         pauseDialog.add(continueBtn);

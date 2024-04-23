@@ -18,9 +18,11 @@ public class GameModel {
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private final int ITEM_GENERATE_INTERVAL = 3;
+    private final int ITEM_GENERATE_INTERVAL = 10;
 
-    private boolean itemModeFlag = true;        //시작화면에서 정보 넘겨받아야 함
+    private boolean itemModeFlag;        //시작화면에서 정보 넘겨받아야 함
+
+    private int diff;
 
     private final int DEFAULT_POS_X = 3;
     private final int DEFAULT_POS_Y = 0;
@@ -29,8 +31,10 @@ public class GameModel {
     private int posX;
     private int posY;
 
-    public GameModel(final GameController controller) {
+    public GameModel(final GameController controller, boolean itemFlag, int difficulty) {
         this.gamecontroller = controller;
+        itemModeFlag = itemFlag;
+        diff = difficulty;
         initBoard(10, 20);  //나중에 설정쪽에서 받아올 수 있게 변경 필요
         this.setRandomBlock();
         posX = DEFAULT_POS_X;
@@ -96,15 +100,16 @@ public class GameModel {
             rndNum = rnd.nextInt(BlockType.getItemSize()) + BlockType.getTetrominoSize();
         }
         else {
-            /* switch (설정에서 가져온 난이도 값) {
-            case EASY -> {
-                rndNum = rnd.nextInt(72) / 10; // I_BLOCK 60 ~ 71, weight 12
+             if (diff == 0){
+                rndNum = rnd.nextInt(72) / 10;
                 if(rndNum > 6) rndNum = 6;
             }
-            case NORMAL -> rndNum = rnd.nextInt(70) / 10; // I_BLOCK 60 ~ 69, weight 10
-            case HARD -> rndNum = rnd.nextInt(68) / 10; // I_BLOCK 60 ~ 67, weight 8
-        }*/
-            rndNum = rnd.nextInt(70) / 10;  //일단 노말로 설정
+             else if (diff == 1) {
+                 rndNum = rnd.nextInt(70) / 10;
+             }
+             else if (diff == 2) {
+                rndNum = rnd.nextInt(68) / 10;
+             }
         }
         blocktype = BlockType.values()[rndNum];
         nextBlock = BlockType.getBlockInstance(blocktype);
