@@ -1,5 +1,7 @@
 package org.Stech.SE5.View;
 
+import org.Stech.SE5.Controller.HomeController;
+import org.Stech.SE5.Main;
 import org.Stech.SE5.Model.ConfigModel;
 //import tetris.model.RecordModel;
 import org.Stech.SE5.Controller.ConfigController;
@@ -277,11 +279,10 @@ public class ConfigView extends JFrame {
         exit.setBounds(343, 10, 30, 30);
 
 
-//        exit.addActionListener(e -> {
-//            App.navigate(App.View.MAIN);
-//            setFocusable(true);
-//            requestFocus();
-//        });
+        exit.addActionListener(e -> {
+            HomeController homeController = new HomeController();
+            homeController.setVisible(true);
+        });
 
         // pane
         gameSpeedPane = new JTextPane();
