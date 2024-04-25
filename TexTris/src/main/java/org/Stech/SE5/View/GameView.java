@@ -3,6 +3,7 @@ package org.Stech.SE5.View;
 import org.Stech.SE5.Block.Block;
 import org.Stech.SE5.Block.Element;
 import org.Stech.SE5.Controller.GameController;
+import org.Stech.SE5.Controller.HomeController;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 public class GameView extends JFrame {
 
+    HomeController homeController;
     private  double Size;
     private  int VIEW_WIDTH;
     private  int VIEW_HEIGHT;
@@ -23,11 +25,16 @@ public class GameView extends JFrame {
     static  float LINE_SPACING;
     static  int PANE_WIDTH;
     static  int PANE_HEIGHT;
+    private boolean buttoncount = true;
     private JTextPane boardPane;
     private JTextPane nextBlockPane;
     private JTextPane scorePane;
     private JTextPane levelPane;
     private JTextPane itemCountPane;
+
+    private JButton exitBtn;
+
+    private JButton continueBtn;
 
     private SimpleAttributeSet styleSet;
 
@@ -137,7 +144,7 @@ public class GameView extends JFrame {
         pauseDialog.setVisible(false);
         pauseDialog.setOpaque(true);
 
-        JButton continueBtn = new JButton("Continue");
+        continueBtn = new JButton("Continue");
         continueBtn.setBounds((int)(10 * Size), (int)(30 * Size), (int)(80 * Size), (int)(40 * Size));
         continueBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
         continueBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
@@ -145,7 +152,7 @@ public class GameView extends JFrame {
         continueBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
         continueBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
-        JButton exitBtn = new JButton("Exit");
+        exitBtn = new JButton("Exit");
         exitBtn.setBounds((int)(110 * Size), (int)(30 * Size), (int)(80 * Size), (int)(40 * Size));
         exitBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
         exitBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
@@ -154,7 +161,7 @@ public class GameView extends JFrame {
         exitBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
         continueBtn.addActionListener(e -> gamecontroller.gameStart());
-        //exitBtn.addActionListener(e -> 메인메뉴 불러오는 함수 );
+        exitBtn.addActionListener(e -> exitGame());
 
         add(backgroundPanel);
         backgroundPanel.add(pauseDialog);
@@ -197,6 +204,17 @@ public class GameView extends JFrame {
         this.pauseKeyListener = new PauseKeyListener();
     }
 
+    private void highlightSelectedButton(boolean count){
+        if (count){
+            continueBtn.setBackground(Color.YELLOW);
+            exitBtn.setBackground(Color.GRAY);
+        }else {
+            continueBtn.setBackground(Color.GRAY);
+            exitBtn.setBackground(Color.YELLOW);
+        }
+
+    }
+
     class PlayerKeyListener implements KeyListener {
         @Override
         public void keyTyped(final KeyEvent e) {
@@ -223,6 +241,7 @@ public class GameView extends JFrame {
                     break;
                 case KeyEvent.VK_ESCAPE:
                     gamecontroller.gameStop();
+                    highlightSelectedButton(buttoncount);
                     break;
             }
         }
@@ -239,12 +258,31 @@ public class GameView extends JFrame {
                 case KeyEvent.VK_ESCAPE:
                     gamecontroller.gameStart();
                     break;
+                case KeyEvent.VK_LEFT:
+                    buttoncount = !buttoncount;
+                    highlightSelectedButton(buttoncount);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    buttoncount = !buttoncount;
+                    highlightSelectedButton(buttoncount);
+                    break;
+                case KeyEvent.VK_ENTER:
+                    if (buttoncount){
+                        gamecontroller.gameStart();
+                    }else {
+                        exitGame();
+                    }
             }
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
     }
 
+    public void exitGame(){
+        setVisible(false);
+        homeController = new HomeController();
+        homeController.setVisible(true);
+    }
     public void startPlayerKeyListen() {
         boardPane.addKeyListener(this.playerKeyListener);
     }

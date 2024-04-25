@@ -1,5 +1,6 @@
 package org.Stech.SE5.View;
 
+import org.Stech.SE5.Controller.GameController;
 import org.Stech.SE5.Controller.HomeController;
 
 import javax.swing.*;
@@ -18,10 +19,13 @@ public class SelectView extends JFrame {
     private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
     private PlayerKeyListener playerKeyListener;
     private int buttonPtrIndex;
+    private boolean itemModeflag;
+    private GameController gameController;
 
     public SelectView(final HomeController controller, boolean itemMode) {    // HomeController형 controller 객체를 매개로 하는 생성자
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
+        itemModeflag = itemMode;
 
         // 전체 프로그램 or HomeView의 제목을 설정
         setTitle("SE5_TEXTRIS");
@@ -139,13 +143,19 @@ public class SelectView extends JFrame {
                 case KeyEvent.VK_ENTER:
                     switch(buttonPtrIndex){
                         case 0: // easyMode
-                            /* 게임 모드(int) + 게임 난이도(int) 자료 묶어서 Game으로 넘김*/
+                            gameController = new GameController(itemModeflag, 0);
+                            gameController.setVisible(true);
+                            setVisible(false);
                             break;
                         case 1: // normalMode
-                            /* 게임 모드(int) + 게임 난이도(int) 자료 묶어서 Game으로 넘김*/
+                            gameController = new GameController(itemModeflag, 1);
+                            gameController.setVisible(true);
+                            setVisible(false);
                             break;
                         case 2: // hardMode
-                            /* 게임 모드(int) + 게임 난이도(int) 자료 묶어서 Game으로 넘김*/
+                            gameController = new GameController(itemModeflag, 2);
+                            gameController.setVisible(true);
+                            setVisible(false);
                             break;
                         case 3: // backToMainMenu
                             homeController.setVisible(true);
