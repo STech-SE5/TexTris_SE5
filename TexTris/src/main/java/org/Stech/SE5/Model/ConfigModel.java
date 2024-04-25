@@ -2,8 +2,8 @@ package org.Stech.SE5.Model;
 
 import java.awt.event.KeyEvent;
 import java.io.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigModel {
     public enum GameMode {
@@ -59,6 +59,7 @@ public class ConfigModel {
             KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
             KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
     };
+    private final static String path = "saved-config/config.txt";
 
     private ConfigModel() {
 
@@ -125,92 +126,61 @@ public class ConfigModel {
         saveConfig();
     }
 
+    public static void saveConfig() {
+        BufferedWriter out = null;
+        List<String> strList = new ArrayList<>();
+        for (Integer integer : keyBinding) {
+            strList.add(String.valueOf(integer));
+        }
 
-    // public static void loadConfig() {
-    static class ConfigFromJson {
-
-        public GameMode GameMode;
-        public GameDifficulty GameDifficulty;
-        public BoardSize BoardSize;
-        public int BoardWidth;
-        public int BoardHeight;
-        public double GameSpeed;
-        public boolean ColorBlindMode;
-        public int KeyBindingLength;
-        public int moveBlockLeft;
-        public int moveBlockRight;
-        public int moveBlockDown;
-        public int clockwiseRotate;
-        public int dropBlockAtOnce;
-
-    }
-
-    // Load JSON file
-    static ObjectMapper objectMapper = new ObjectMapper();
-    private static final String path = "src/main/java/org/Stech/SE5/Model/data/config.json";
-
-    public static void loadConfig() {
         try {
-            ConfigFromJson config = objectMapper.readValue(new File(path), ConfigFromJson.class);
-
-            boardWidth = config.BoardWidth;
-            boardHeight = config.BoardHeight;
-            gameSpeed = config.GameSpeed;
-            colorBlindMode = config.ColorBlindMode;
-            keyBinding = new int[]{
-                    config.clockwiseRotate, config.moveBlockLeft, config.moveBlockRight,
-                    config.moveBlockDown, config.dropBlockAtOnce
-            };
-
-            // Applying configuration values
-//            System.out.println("Game Mode: " + config.GameMode);
-//            System.out.println("Game Difficulty: " + config.GameDifficulty);
-            System.out.println("Board Size: " + config.BoardSize);
-            System.out.println("Board Width: " + config.BoardWidth);
-            System.out.println("Board Height: " + config.BoardHeight);
-            System.out.println("Game Speed: " + config.GameSpeed);
-            System.out.println("Color Blind Mode: " + config.ColorBlindMode);
-            System.out.println("Key Binding Length: " + config.KeyBindingLength);
-            System.out.println("Move Block Left Key: " + config.moveBlockLeft);
-            System.out.println("Move Block Right Key: " + config.moveBlockRight);
-            System.out.println("Move Block Down Key: " + config.moveBlockDown);
-            System.out.println("Clockwise Rotate Key: " + config.clockwiseRotate);
-            System.out.println("Drop Block At Once Key: " + config.dropBlockAtOnce);
-
+            File f = new File(path);
+            f.getParentFile().mkdir();
+            f.createNewFile();
+            FileWriter fStream = new FileWriter(f, false);
+            out = new BufferedWriter(fStream);
+            out.write(gameMode.name() + ",");
+            out.write(gameDifficulty.name() + ",");
+            out.write(boardSize.name() + ",");
+            out.write(Integer.toString(boardWidth) + ",");
+            out.write(Integer.toString(boardHeight) + ",");
+            out.write(Double.toString(gameSpeed) + ",");
+            out.write(Boolean.toString(colorBlindMode) + ",");
+            out.write(Integer.toString(keyBinding.length) + ",");
+            out.write(String.join(",", strList));
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    // saveConfig() overwrites current Setting of the game to the JSON file
-    public static void saveConfig() {
+    public static void loadConfig() {
         try {
-            ConfigFromJson config = new ConfigFromJson();
-            config.GameMode = gameMode;
-            config.GameDifficulty = gameDifficulty;
-            config.BoardSize = boardSize;
-            config.BoardWidth = boardWidth;
-            config.BoardHeight = boardHeight;
-            config.GameSpeed = gameSpeed;
-            config.ColorBlindMode = colorBlindMode;
-            config.KeyBindingLength = keyBinding.length;
-            config.clockwiseRotate = keyBinding[0];
-            config.moveBlockLeft = keyBinding[1];
-            config.moveBlockRight = keyBinding[2];
-            config.moveBlockDown = keyBinding[3];
-            config.dropBlockAtOnce = keyBinding[4];
-
-            objectMapper.writeValue(new File(path), config);
-
+            File f = new File(path);
+            FileReader fStream = new FileReader(f);
+            BufferedReader bufReader = new BufferedReader(fStream);
+            String line = bufReader.readLine();
+            String[] configs = line.split(",");
+            gameMode = Enum.valueOf(GameMode.class, configs[0]);
+            gameDifficulty = Enum.valueOf(GameDifficulty.class, configs[1]);
+            boardSize = Enum.valueOf(BoardSize.class, configs[2]);
+            boardWidth = Integer.parseInt(configs[3]);
+            boardHeight = Integer.parseInt(configs[4]);
+            gameSpeed = Double.parseDouble(configs[5]);
+            colorBlindMode = Boolean.parseBoolean(configs[6]);
+            int keyBingdingLength = Integer.parseInt(configs[7]);
+            for (int i = 0; i < keyBingdingLength; i++) {
+                keyBinding[i] = Integer.parseInt(configs[8 + i]);
+            }
+            bufReader.close();
         } catch (IOException e) {
-            e.printStackTrace();
-
+            System.out.println("저장된 환경설정이 없습니다.");
         }
     }
 
     public static double getScoreRate() {
         return gameSpeed * gameMode.rate * gameDifficulty.rate;
     }
-}
 
+}
