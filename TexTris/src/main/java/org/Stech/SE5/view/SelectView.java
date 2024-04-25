@@ -17,10 +17,9 @@ public class SelectView extends JFrame {
     private HomeController homeController;
     private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
     private PlayerKeyListener playerKeyListener;
-    public int gameMode;
     private int buttonPtrIndex;
 
-    public SelectView(final HomeController controller) {    // HomeController형 controller 객체를 매개로 하는 생성자
+    public SelectView(final HomeController controller, int gameMode) {    // HomeController형 controller 객체를 매개로 하는 생성자
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
 
@@ -40,7 +39,7 @@ public class SelectView extends JFrame {
         JLabel title = new JLabel();
         String titleText = null;
 
-        updateLabelTitle(title, titleText);
+        //updateLabelTitle(title, titleText);
 
         if (gameMode == 1)
             titleText = "ITEM";
@@ -91,7 +90,7 @@ public class SelectView extends JFrame {
         for (JButton i : buttonList) buttonPanel.add(i); // ArrayList 내 모든 버튼을 btnPanel에 삽입
     }
 
-    public void setGameMode(int newGameMode) {
+   /* public void setGameMode(int newGameMode) {
         gameMode = newGameMode;    // HomeView에서 호출할 메소드; SelectView의 GameMode 변수를 매개변수의 값으로 설정
     }
 
@@ -101,7 +100,7 @@ public class SelectView extends JFrame {
         else
             titleText = "BASIC";
         title.setText(titleText);
-    }
+    }*/
 
     private void highlightSelectedButton() {
         for (int i = 0; i < buttonList.size(); i++) {

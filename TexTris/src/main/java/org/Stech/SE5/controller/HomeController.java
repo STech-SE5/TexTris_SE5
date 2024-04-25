@@ -8,7 +8,7 @@ import org.Stech.SE5.view.HomeView;
     2) 키보드 입력 받기
  */
 
-public class HomeController implements Controller { // Controller Interface에서 Overriding
+public class HomeController { // Controller Interface에서 Overriding
     private HomeView homeView;
     private HomeModel homeModel;
 
@@ -19,14 +19,14 @@ public class HomeController implements Controller { // Controller Interface에�
         initController();
     }
 
-    @Override
+
     public void initController() {
         homeView = new HomeView(this);
         HomeModel.initConfig();
     }
 
-    @Override
-    public final void setVisible(final boolean visible) {
+
+    public void setVisible(final boolean visible) {
         if (visible) {
             homeView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
             homeView.setLocationRelativeTo(null);

@@ -37,7 +37,6 @@ public class HomeView extends JFrame {
 
     public HomeView(final HomeController controller) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        selectView = new SelectView(controller);
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
 
@@ -147,16 +146,18 @@ public class HomeView extends JFrame {
                     switch (buttonPtrIndex) {
                         case 0: // basicMode
                             setVisible(false);
-                            selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
+                            //selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
+                            selectView = new SelectView(homeController, 0);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
                             break;
                         case 1: // itemMode
                             setVisible(false);
-                            selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
+                            //selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
+                            selectView = new SelectView(homeController, 1);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
