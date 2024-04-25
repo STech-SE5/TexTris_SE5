@@ -15,8 +15,6 @@ public class SelectView extends JFrame {
     public int gameMode;
     private int buttonPtrIndex;
 
-
-
     public SelectView(final HomeController controller) {    // HomeController형 controller 객체를 매개로 하는 생성자
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
@@ -146,7 +144,8 @@ public class SelectView extends JFrame {
                             /* 게임 모드(int) + 게임 난이도(int) 자료 묶어서 Game으로 넘김*/
                             break;
                         case 3: // backToMainMenu
-                            /* HomeView와 SelectView를 연결*/
+                            homeController.setVisible(true);
+                            setVisible(false);
                             break;
                         default:
                             throw new IllegalStateException("Unexpected value: " + buttonPtrIndex);

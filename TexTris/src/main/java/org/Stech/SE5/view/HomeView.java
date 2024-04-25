@@ -20,9 +20,12 @@ public class HomeView extends JFrame {
 
     private HomeController homeController;
     private PlayerKeyListener playerKeyListener;
+    private SelectView selectView;
+
 
     public HomeView(final HomeController controller) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        selectView = new SelectView(controller);
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
 
@@ -131,8 +134,20 @@ public class HomeView extends JFrame {
                 case KeyEvent.VK_ENTER:
                     switch (buttonPtrIndex) {
                         case 0: // basicMode
+                            setVisible(false);
+                            selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
+                            //selectView.updateTitle();
+                            selectView.setVisible(true);
+                            selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
+                            selectView.setLocationRelativeTo(null);
                             break;
                         case 1: // itemMode
+                            setVisible(false);
+                            selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
+                            //selectView.updateTitle();
+                            selectView.setVisible(true);
+                            selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
+                            selectView.setLocationRelativeTo(null);
                             break;
                         case 2: // scoreBoard
                             break;
