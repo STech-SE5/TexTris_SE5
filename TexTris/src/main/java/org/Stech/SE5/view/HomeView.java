@@ -2,6 +2,8 @@ package org.Stech.SE5.view;
 
 import org.Stech.SE5.controller.HomeController;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
@@ -76,5 +78,42 @@ public class HomeView extends JFrame {
     public void setScreen(JPanel buttonPanel, JLabel title) {
         buttonPanel.add(title); // title을 btnPanel에 삽입
         for (JButton i : buttonList) buttonPanel.add(i); // ArrayList 내 모든 버튼을 btnPanel에 삽입
+    }
+
+    class PlayerKeyListener implements KeyListener {
+
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {   // 사용하지 않음
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int key = e.getKeyCode();
+            switch (key) {
+                case KeyEvent.VK_UP:    // 현재 선택된 버튼이 첫번째 버튼일 경우 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
+                    break;
+                case KeyEvent.VK_DOWN:  // 현재 선택된 버튼이 마지막 버튼일 경우 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
+                    break;
+                case KeyEvent.VK_ENTER:
+                    switch (/*기준이 될 변수*/) {
+                        case 0: // basicMode
+                            break;
+                        case 1: // itemMode
+                            break;
+                        case 2: // scoreBoard
+                            break;
+                        case 3: // setting
+                            break;
+                        case 4: // exit
+                            break;
+                        default:
+                            break;
+                    }
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {    // 사용하지 않음
+        }
     }
 }
