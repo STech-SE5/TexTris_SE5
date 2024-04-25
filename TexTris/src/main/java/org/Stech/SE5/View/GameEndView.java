@@ -1,6 +1,7 @@
 package org.Stech.SE5.View;
 
 import org.Stech.SE5.Controller.RecordController;
+import org.Stech.SE5.Model.GameModel;
 import org.Stech.SE5.Model.RecordModel;
 
 import java.awt.event.KeyAdapter;
@@ -15,13 +16,14 @@ import java.awt.event.ActionListener;
 public class GameEndView extends JFrame {
     private JTextField userNameField;
 
-    public GameEndView(int score, int gameMode, int gameDifficulty) {
+    public GameEndView(int score, int gameMode, int gameDifficulty, int deletedLine) {
         LocalDate date = LocalDate.now();
         String formattedDate = String.format("%02d%02d", date.getMonthValue(), date.getDayOfMonth());
 
         int currentScore = score;
         int currentGameMode = gameMode;
         int currentGameDifficulty = gameDifficulty;
+        int currentDeletedLine = deletedLine;
 
         int resolution = 1; // 해상도 설정시 값을 불러와서 대입.
 
@@ -101,7 +103,7 @@ public class GameEndView extends JFrame {
 
                     // Score Board 화면으로 이동하는 로직
                     RecordModel.loadRecord();
-                    RecordModel.addRecord(currentScore, 10, currentGameMode,currentGameDifficulty,formattedDate, userName);
+                    RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode,currentGameDifficulty,formattedDate, userName);
                     RecordController record = new RecordController();
                     record.setVisible(true);
 
@@ -119,7 +121,7 @@ public class GameEndView extends JFrame {
 
                                                // Score Board 화면으로 이동하는 로직
                                                RecordModel.loadRecord();
-                                               RecordModel.addRecord(currentScore, 10,currentGameMode,currentGameDifficulty, formattedDate, userName);
+                                               RecordModel.addRecord(currentScore, currentDeletedLine,currentGameMode,currentGameDifficulty, formattedDate, userName);
                                                RecordController record = new RecordController();
                                                record.setVisible(true);
 

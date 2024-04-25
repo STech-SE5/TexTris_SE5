@@ -142,13 +142,13 @@ public class RecordView extends JFrame {
             String difficultyString;
             switch (RecordModel.rankedRecords.get(i).gameDifficulty) {
                 case 0:
-                    difficultyString = "Easy";
+                    difficultyString = "EASY";
                     break;
                 case 1:
-                    difficultyString = "Normal";
+                    difficultyString = "NORMAL";
                     break;
                 case 2:
-                    difficultyString = "Hard";
+                    difficultyString = "HARD";
                     break;
                 default:
                     difficultyString = "Unknown";
@@ -159,7 +159,7 @@ public class RecordView extends JFrame {
                     RecordModel.rankedRecords.get(i).name + " | " +
                     RecordModel.rankedRecords.get(i).score + " | " +
                     RecordModel.rankedRecords.get(i).deletedLine + " | " +
-                    (RecordModel.rankedRecords.get(i).gameMode  == 0 ? "Normal" : "Item" )+ " | " +
+                    (RecordModel.rankedRecords.get(i).gameMode  == 0 ? "BASIC" : "ITEM" )+ " | " +
                     difficultyString + " | " +
                     RecordModel.rankedRecords.get(i).createdAt);
             individualRecord.setBounds(30,(110+(i*40)), WIDTH-74, 40);
