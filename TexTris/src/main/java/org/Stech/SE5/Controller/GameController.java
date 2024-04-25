@@ -66,7 +66,7 @@ public class GameController{
 
     public void initController(boolean itemmodeflag, int diff) {
         this.gameModel = new GameModel(this, itemmodeflag, diff);
-        this.gameView = new GameView(this, itemmodeflag);
+        this.gameView = new GameView(this, itemmodeflag, diff);
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 
@@ -115,7 +115,7 @@ public class GameController{
         gameView.drawBoard(gameModel.getBoard());
         gameView.drawNextBlock(gameModel.getNextBlock());
         gameView.drawScore(gameModel.getScore());
-        gameView.drawLevel();
+        gameView.drawLevel(gameModel.getDiff());
         gameView.drawItemCount(gameModel.getItemCount());
     }
 

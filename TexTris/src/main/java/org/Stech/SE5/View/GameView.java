@@ -47,7 +47,7 @@ public class GameView extends JFrame {
         }
     };
 
-    public GameView(final GameController controller, boolean modeflag) {
+    public GameView(final GameController controller, boolean modeflag, int diff) {
         super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
@@ -319,7 +319,7 @@ public class GameView extends JFrame {
         StyledDocument doc = scorePane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         StyleConstants.setForeground(style, Color.WHITE);
-        StyleConstants.setFontSize(style, 24);
+        StyleConstants.setFontSize(style, (int)(24 * Size));
         try {
             doc.insertString(doc.getLength(), Integer.toString((int) score), style);
         } catch (BadLocationException e) {
@@ -328,15 +328,21 @@ public class GameView extends JFrame {
         scorePane.setStyledDocument(doc);
     }
 
-    public final void drawLevel() {
+    public final void drawLevel(int diff) {
         levelPane.setText("");
         Style style = levelPane.addStyle("textStyle", null);
         StyledDocument doc = levelPane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         StyleConstants.setForeground(style, Color.WHITE);
-        StyleConstants.setFontSize(style, 12);
+        StyleConstants.setFontSize(style, (int)(12 * Size));
         try {
-            doc.insertString(doc.getLength(),"NORMAL", style);  //난이도 추후 설정부분에서 받아와서 적용하도록 변경해야함
+            if (diff == 0) {
+                doc.insertString(doc.getLength(), "EASY", style);
+            } else if (diff == 1) {
+                doc.insertString(doc.getLength(), "NORMAL", style);
+            } else if (diff == 2) {
+                doc.insertString(doc.getLength(), "HARD", style);
+            }
         } catch (BadLocationException e) {
             e.printStackTrace();
         }

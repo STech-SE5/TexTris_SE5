@@ -64,6 +64,8 @@ public class GameModel {
         }
     }
 
+    public int getDiff(){ return diff; }
+
     public int getLineCounts(){     //기록용
         return lineCounts;
     }
