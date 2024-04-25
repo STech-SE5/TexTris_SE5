@@ -1,6 +1,8 @@
 package org.Stech.SE5.View;
 
 import org.Stech.SE5.Controller.HomeController;
+import org.Stech.SE5.Controller.RecordController;
+import org.Stech.SE5.Model.RecordModel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,8 +23,9 @@ import java.awt.*;
  */
 
 public class HomeView extends JFrame {
-    private final int VIEW_WIDTH = 400;
-    private final int VIEW_HEIGHT = 600;
+    private double Size;    //설정에서 받아와야함
+    private int VIEW_WIDTH;
+    private int VIEW_HEIGHT;
     private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
     private JPanel bgPanel;    // 전체 버튼을 담을 패널
     private JLabel title;   // 패널에 들어갈 타이틀(TEXTRIS)
@@ -39,7 +42,7 @@ public class HomeView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
-
+        setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         setTitle("SE5_TEXTRIS");
 
@@ -50,7 +53,7 @@ public class HomeView extends JFrame {
 
         bgPanel.setBackground(new Color(20, 20, 20));
         bgPanel.setLayout(null);
-        bgPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
+        //bgPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
 
         // 제목 레이블 객체 생성
         title = new JLabel("TEXTRIS");
@@ -63,23 +66,20 @@ public class HomeView extends JFrame {
         scoreBrdBtn = new JButton("Score Board");    // 스코어 보드로 이동하는 버튼
 
         // 폰트 설정
-        Font titleFont = new Font("Arial", Font.BOLD, 60);
-        Font buttonFont = new Font("Arial", Font.BOLD, 24);
+        Font titleFont = new Font("Arial", Font.BOLD, (int)(60 * Size));
+        Font buttonFont = new Font("Arial", Font.BOLD, (int)(24 * Size));
 
         title.setFont(titleFont);
-        title.setBounds(30, 50, 320, 90);
-
-        title.setFont(titleFont);
-        title.setBounds(30, 50, 320, 90);
+        title.setBounds((int)(30 * Size), (int)(50 * Size), (int)(320 * Size), (int)(90 * Size));
 
         // 모드 버튼
-        setButton(basicBtn, buttonFont, 30, 200, 320, 60);    // 일반 모드 버튼
-        setButton(itemBtn, buttonFont, 30, 270, 320, 60);    // 아이템 모드 버튼
+        setButton(basicBtn, buttonFont, (int)(30 * Size), (int)(200 * Size), (int)(320 * Size), (int)(60 * Size));    // 일반 모드 버튼
+        setButton(itemBtn, buttonFont, (int)(30 * Size), (int)(270 * Size), (int)(320 * Size), (int)(60 * Size));    // 아이템 모드 버튼
 
         // 기타 버튼
-        setButton(scoreBrdBtn, buttonFont, 30, 340, 320, 60);   // 스코어보드 버튼
-        setButton(configBtn, buttonFont, 30, 410, 320, 60);    // 설정 버튼
-        setButton(exitBtn, new Font("Arial", Font.BOLD, 11), 305, 485, 46, 46);  // 종료버튼
+        setButton(scoreBrdBtn, buttonFont, (int)(30 * Size), (int)(340 * Size), (int)(320 * Size), (int)(60 * Size));   // 스코어보드 버튼
+        setButton(configBtn, buttonFont, (int)(30 * Size), (int)(410 * Size), (int)(320 * Size), (int)(60 * Size));    // 설정 버튼
+        setButton(exitBtn, new Font("Arial", Font.BOLD, (int)(11 * Size)), (int)(305 * Size), (int)(485 * Size), (int)(46 * Size), (int)(46 * Size));  // 종료버튼
 
         // bgPanel에 모든 요소를 삽입
         this.setContentPane(bgPanel);
@@ -148,7 +148,7 @@ public class HomeView extends JFrame {
                             setVisible(false);
                             //selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
-                            selectView = new SelectView(homeController, false);
+                            selectView = new SelectView(homeController, false, Size);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
@@ -157,16 +157,21 @@ public class HomeView extends JFrame {
                             setVisible(false);
                             //selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
-                            selectView = new SelectView(homeController, true);
+                            selectView = new SelectView(homeController, true, Size);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
                             break;
-                        case 2: // scoreBoard
+                        case 2:
+                            RecordModel.loadRecord();
+                            RecordController record = new RecordController();
+                            record.setVisible(true);
+                            setVisible(false);
                             break;
                         case 3: // setting
                             break;
-                        case 4: // exit
+                        case 4:
+                            System.exit(0);
                             break;
                         default:
                             break;
@@ -176,6 +181,22 @@ public class HomeView extends JFrame {
 
         @Override
         public void keyReleased(KeyEvent keyEvent) {    // 사용하지 않음
+        }
+    }
+    public void setSize() {
+        Size = 1.5;   //설정에서 받아와야함
+        if (Size == 1) {
+            VIEW_WIDTH = 400;
+            VIEW_HEIGHT = 600;
+
+        } else if (Size == 1.25){
+            VIEW_WIDTH = 500;
+            VIEW_HEIGHT = 750;
+
+        } else if (Size == 1.5) {
+            VIEW_WIDTH = 600;
+            VIEW_HEIGHT = 900;
+
         }
     }
 }

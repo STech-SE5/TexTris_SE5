@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class GameView extends JFrame {
 
-    HomeController homeController;
+    private HomeController homeController;
     private  double Size;
     private  int VIEW_WIDTH;
     private  int VIEW_HEIGHT;

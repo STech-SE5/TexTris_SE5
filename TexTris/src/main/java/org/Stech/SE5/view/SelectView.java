@@ -22,7 +22,7 @@ public class SelectView extends JFrame {
     private boolean itemModeflag;
     private GameController gameController;
 
-    public SelectView(final HomeController controller, boolean itemMode) {    // HomeController형 controller 객체를 매개로 하는 생성자
+    public SelectView(final HomeController controller, boolean itemMode, double Size) {    // HomeController형 controller 객체를 매개로 하는 생성자
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
         itemModeflag = itemMode;
@@ -37,7 +37,7 @@ public class SelectView extends JFrame {
 
         bgPanel.setBackground(new Color(20, 20, 20));
         bgPanel.setLayout(null);
-        bgPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
+        //bgPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
 
         // 제목 레이블
         JLabel title = new JLabel();
@@ -57,17 +57,17 @@ public class SelectView extends JFrame {
         JButton hardLvBtn = new JButton("Hard");
         JButton toHomeBtn = new JButton("Back to Menu");
         // 폰트 설정
-        Font titleFont = new Font("Arial", Font.BOLD, 60);
-        Font buttonFont = new Font("Arial", Font.BOLD, 24);
+        Font titleFont = new Font("Arial", Font.BOLD, (int)(60 * Size));
+        Font buttonFont = new Font("Arial", Font.BOLD, (int)(24 * Size));
 
         title.setFont(titleFont);
-        title.setBounds(30, 50, 320, 90);
+        title.setBounds((int)(30 * Size), (int)(50 * Size), (int)(320 * Size), (int)(90 * Size));
 
         // 난이도 버튼
-        setButton(easyLvBtn, buttonFont, 30, 200, 320, 60);  // 쉬움 난이도 버튼
-        setButton(normalLvBtn, buttonFont, 30, 270, 320, 60);   // 보통 난이도 버튼
-        setButton(hardLvBtn, buttonFont, 30, 340, 320, 60); // 어려움 난이도 버튼
-        setButton(toHomeBtn, buttonFont, 30, 410, 320, 60); // 돌아가기 버튼
+        setButton(easyLvBtn, buttonFont, (int)(30 * Size), (int)(200 * Size), (int)(320 * Size), (int)(60 * Size));  // 쉬움 난이도 버튼
+        setButton(normalLvBtn, buttonFont, (int)(30 * Size), (int)(270 * Size), (int)(320 * Size), (int)(60 * Size));   // 보통 난이도 버튼
+        setButton(hardLvBtn, buttonFont, (int)(30 * Size), (int)(340 * Size), (int)(320 * Size), (int)(60 * Size)); // 어려움 난이도 버튼
+        setButton(toHomeBtn, buttonFont, (int)(30 * Size), (int)(410 * Size), (int)(320 * Size), (int)(60 * Size)); // 돌아가기 버튼
 
         this.setContentPane(bgPanel);
         setScreen(bgPanel, title);

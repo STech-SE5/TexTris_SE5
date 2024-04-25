@@ -7,25 +7,27 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
+import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Controller.RecordController;
 import org.Stech.SE5.Model.RecordModel;
 
 
 public class RecordView extends JFrame {
     private static RecordController recordController;
+
+    private HomeController homeController;
     private JButton goToMainBtn;
     private ArrayList<JTextPane> recordList;
+    public PlayerKeyListener playerKeyListener;
 
     public RecordView(final RecordController controller) {
         super("Record");
         recordController = controller;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.playerKeyListener = new PlayerKeyListener();
 
         int resolution = 1; // 해상도 설정시 값을 불러와서 대입.
 
@@ -55,6 +57,16 @@ public class RecordView extends JFrame {
         JPanel recordPanel = new JPanel();
         recordPanel.setBackground(Color.BLACK);
         this.add(recordPanel);
+
+        goToMainBtn = new JButton("Go To Main");
+        goToMainBtn.setBounds(100, HEIGHT-84, WIDTH-210, 30);
+        goToMainBtn.setBorderPainted(false); // 경계선이 보이지 않도록 설정
+        goToMainBtn.setContentAreaFilled(true); //배경색이 보이도록 설정
+        goToMainBtn.setBackground(Color.GRAY); //배경색은 회색
+        goToMainBtn.setForeground(Color.GREEN); // 버튼 텍스트 색상을 흰색으로 설정합니다.
+        goToMainBtn.setFont(new Font("Arial", Font.BOLD, 20)); //폰트 및 크기 설정
+
+        recordPanel.add(goToMainBtn);
 
         JTextPane backgroundPane = new JTextPane();
         backgroundPane.setBounds(10,10,WIDTH-34,HEIGHT-56);
@@ -95,42 +107,9 @@ public class RecordView extends JFrame {
 
         recordPanel.add(columnNamePane);
 
-
-        goToMainBtn = new JButton("Go To Main");
-        goToMainBtn.setBounds(100, HEIGHT-84, WIDTH-210, 30);
-        goToMainBtn.setBorderPainted(false); // 경계선이 보이지 않도록 설정
-        goToMainBtn.setContentAreaFilled(true); //배경색이 보이도록 설정
-        goToMainBtn.setBackground(Color.GRAY); //배경색은 회색
-        goToMainBtn.setForeground(Color.GREEN); // 버튼 텍스트 색상을 흰색으로 설정합니다.
-        goToMainBtn.setFont(new Font("Arial", Font.BOLD, 20)); //폰트 및 크기 설정
-
-        recordPanel.add(goToMainBtn);
-
         // 엔터키 입력을 처리하기 위한 KeyListener 추가
-        goToMainBtn.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    // Home 화면으로 이동하는 로직
-                    //HomeController.setVisible(true);
-
-                    // 현재 창을 숨김
-                    setVisible(false);
-                }
-            }
-        });
-
+        goToMainBtn.addActionListener(e -> gotoMain());
         // 버튼 클릭 이벤트 처리
-        goToMainBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Home 화면으로 이동하는 로직
-                //HomeController.setVisible(true);
-
-                // 현재 창을 숨김
-                setVisible(false);
-            }
-        });
 
         recordList = new ArrayList<>();
 
@@ -182,7 +161,28 @@ public class RecordView extends JFrame {
         recordPanel.setVisible(true);
 
         this.setContentPane(recordPanel);
-        setFocusable(true);
-        requestFocus();
+        recordPanel.addKeyListener(this.playerKeyListener);
+        recordPanel.setFocusable(true);
+        recordPanel.requestFocus();
+    }
+    class PlayerKeyListener implements KeyListener {
+        @Override
+        public void keyTyped(final KeyEvent e) {}
+
+        @Override
+        public void keyPressed(final KeyEvent e) {          //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER:
+                    gotoMain();
+                    break;
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {}
+    }
+    private void gotoMain(){
+        homeController = new HomeController();
+        homeController.setVisible(true);
+        setVisible(false);
     }
 }
