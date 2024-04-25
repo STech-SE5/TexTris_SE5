@@ -16,6 +16,7 @@ public class HomeView extends JFrame {
     private JLabel title;   // 패널에 들어갈 타이틀(TEXTRIS)
     private JButton basicBtn, itemBtn;  // 게임 모드 버튼
     private JButton configBtn, exitBtn, scoreBrdBtn;    // 기타 버튼
+    private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
     public HomeView(final HomeController controller) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,15 +91,26 @@ public class HomeView extends JFrame {
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_UP:    // 현재 선택된 버튼이 첫번째 버튼일 경우 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
+                case KeyEvent.VK_UP:
+                    if (buttonPtrIndex == 0)    // 현재 선택된 버튼이 첫번째 버튼일 경우
+                        buttonPtrIndex = buttonList.size(); // 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
+                    else {
+                        buttonPtrIndex = (buttonPtrIndex + buttonList.size() - 1) % buttonList.size();
+                    }
                     break;
-                case KeyEvent.VK_DOWN:  // 현재 선택된 버튼이 마지막 버튼일 경우 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
+                case KeyEvent.VK_DOWN:
+                    if (buttonPtrIndex == buttonList.size())    // 현재 선택된 버튼이 마지막 버튼일 경우
+                        buttonPtrIndex = 0; // 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
+                    else {
+                        buttonPtrIndex = (buttonPtrIndex + 1) % buttonList.size();
+                    }
                     break;
                 case KeyEvent.VK_ENTER:
-                    switch (/*기준이 될 변수*/) {
+                    switch (buttonPtrIndex) {
                         case 0: // basicMode
                             break;
                         case 1: // itemMode
+                            setVisible(false);
                             break;
                         case 2: // scoreBoard
                             break;
