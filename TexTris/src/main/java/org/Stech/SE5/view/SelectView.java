@@ -1,6 +1,6 @@
-package org.Stech.SE5.view;
+package org.Stech.SE5.View;
 
-import org.Stech.SE5.controller.HomeController;
+import org.Stech.SE5.Controller.HomeController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,7 @@ public class SelectView extends JFrame {
     private PlayerKeyListener playerKeyListener;
     private int buttonPtrIndex;
 
-    public SelectView(final HomeController controller, int gameMode) {    // HomeController형 controller 객체를 매개로 하는 생성자
+    public SelectView(final HomeController controller, boolean itemMode) {    // HomeController형 controller 객체를 매개로 하는 생성자
         homeController = controller;
         playerKeyListener = new PlayerKeyListener();
 
@@ -41,7 +41,7 @@ public class SelectView extends JFrame {
 
         //updateLabelTitle(title, titleText);
 
-        if (gameMode == 1)
+        if (itemMode)
             titleText = "ITEM";
         else
             titleText = "BASIC";

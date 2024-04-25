@@ -1,6 +1,6 @@
-package org.Stech.SE5.view;
+package org.Stech.SE5.View;
 
-import org.Stech.SE5.controller.HomeController;
+import org.Stech.SE5.Controller.HomeController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -148,7 +148,7 @@ public class HomeView extends JFrame {
                             setVisible(false);
                             //selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
-                            selectView = new SelectView(homeController, 0);
+                            selectView = new SelectView(homeController, false);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
@@ -157,7 +157,7 @@ public class HomeView extends JFrame {
                             setVisible(false);
                             //selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
                             //selectView.updateTitle();
-                            selectView = new SelectView(homeController, 1);
+                            selectView = new SelectView(homeController, true);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);

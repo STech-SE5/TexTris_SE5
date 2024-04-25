@@ -1,7 +1,7 @@
-package org.Stech.SE5.controller;
+package org.Stech.SE5.Controller;
 
-import org.Stech.SE5.model.HomeModel;
-import org.Stech.SE5.view.HomeView;
+import org.Stech.SE5.Model.HomeModel;
+import org.Stech.SE5.View.HomeView;
 
 /*
     1) 설정에서 변경한 해상도 반영

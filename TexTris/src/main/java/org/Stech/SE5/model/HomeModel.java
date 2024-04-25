@@ -1,4 +1,4 @@
-package org.Stech.SE5.model;
+package org.Stech.SE5.Model;
 
 /*
     1) HomeModel에 필요한 요소 확정
