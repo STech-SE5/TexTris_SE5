@@ -334,7 +334,7 @@ public class GameView extends JFrame {
         StyledDocument doc = levelPane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         StyleConstants.setForeground(style, Color.WHITE);
-        StyleConstants.setFontSize(style, (int)(12 * Size));
+        StyleConstants.setFontSize(style, (int)(16 * Size));
         try {
             if (diff == 0) {
                 doc.insertString(doc.getLength(), "EASY", style);
@@ -384,7 +384,7 @@ public class GameView extends JFrame {
         StyledDocument doc = itemCountPane.getStyledDocument();
         doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
         StyleConstants.setForeground(style, Color.WHITE);
-        StyleConstants.setFontSize(style, 24);
+        StyleConstants.setFontSize(style, (int)(30 * Size));
         try {
             doc.insertString(doc.getLength(), Integer.toString(ItemCount), style);
         } catch (BadLocationException e) {
