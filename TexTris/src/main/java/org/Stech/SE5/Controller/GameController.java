@@ -13,7 +13,7 @@ import java.util.Date;
 
 import javax.swing.Timer;
 
-public class GameController implements Controller {
+public class GameController{
 
     private GameView gameView;
     private GameModel gameModel;
@@ -54,7 +54,6 @@ public class GameController implements Controller {
         }
     }
 
-    @Override
     public void setVisible(boolean visible) {
         if (visible) {
             gameView.setVisible(true);

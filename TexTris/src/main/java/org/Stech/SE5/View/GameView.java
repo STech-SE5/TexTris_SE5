@@ -15,10 +15,14 @@ import java.util.ArrayList;
 
 public class GameView extends JFrame {
 
-    private final int VIEW_WIDTH = 400;
-    private final int VIEW_HEIGHT = 600;
-    static final int FONT_SIZE = 28;
-    static final float LINE_SPACING = -0.45f;
+    private  double Size;
+    private  int VIEW_WIDTH;
+    private  int VIEW_HEIGHT;
+    static  int FONT_SIZE;
+    static int LABEL_FONT;
+    static  float LINE_SPACING;
+    static  int PANE_WIDTH;
+    static  int PANE_HEIGHT;
     private JTextPane boardPane;
     private JTextPane nextBlockPane;
     private JTextPane scorePane;
@@ -45,7 +49,9 @@ public class GameView extends JFrame {
 
     public GameView(final GameController controller, boolean modeflag) {
         super("TETRIS");
+        setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
+        Font labelFont = new Font("Arial", Font.PLAIN, LABEL_FONT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gamecontroller = controller;
@@ -59,77 +65,80 @@ public class GameView extends JFrame {
             }
         };
         backgroundPanel.setLayout(null);
-        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
 
         JPanel nextPanel = new JPanel();
         nextPanel.setLayout(null);
-        nextPanel.setBounds(280, 54, 70, 120);
+        nextPanel.setBounds((int)(280 * Size), (int)(54 * Size), PANE_WIDTH,(int)(PANE_HEIGHT * 1.6));
         nextPanel.setBackground(Color.GRAY); // 패널의 배경색을 회색으로 설정
         JLabel nextLabel = new JLabel("next", SwingConstants.CENTER);    // nextPanel에 "next" 텍스트를 추가합니다.
         nextLabel.setForeground(Color.WHITE); // 텍스트 색상을 설정합니다.
-        nextLabel.setBounds(0, 0, 70, 20); // 라벨의 위치와 크기를 설정합니다.
+        nextLabel.setFont(labelFont); // 생성한 Font 객체를 JLabel에 설정
+        nextLabel.setBounds(0, 0, (int)(70 * Size), (int)(20 * Size)); // 라벨의 위치와 크기를 설정합니다.
 
         JPanel scorePanel = new JPanel();
         scorePanel.setLayout(null);
-        scorePanel.setBounds(280,260,70,75);
+        scorePanel.setBounds((int)(280 * Size),(int)(260 * Size),PANE_WIDTH,PANE_HEIGHT);
         scorePanel.setBackground(Color.GRAY);
         JLabel scoreLabel = new JLabel("score", SwingConstants.CENTER); // scorePanel에 "score" 텍스트를 추가합니다.
         scoreLabel.setForeground(Color.WHITE);
-        scoreLabel.setBounds(0, 0, 70, 20);
+        scoreLabel.setFont(labelFont);
+        scoreLabel.setBounds(0, 0, (int)(70 * Size), (int)(20 * Size));
 
         JPanel levelPanel = new JPanel();
         levelPanel.setLayout(null);
-        levelPanel.setBounds(280,340,70,75);
+        levelPanel.setBounds((int)(280 * Size),(int)(340 * Size),PANE_WIDTH,PANE_HEIGHT);
         levelPanel.setBackground(Color.GRAY);
         JLabel levelLabel = new JLabel("level", SwingConstants.CENTER); // levelPanel에 "level" 텍스트를 추가합니다.
         levelLabel.setForeground(Color.WHITE);
-        levelLabel.setBounds(0, 0, 70, 20);
+        levelLabel.setFont(labelFont);
+        levelLabel.setBounds(0, 0, (int)(70 * Size), (int)(20 * Size));
 
         JPanel itemcountpanel = new JPanel();
         itemcountpanel.setLayout(null);
-        itemcountpanel.setBounds(280,420,70,75);
+        itemcountpanel.setBounds((int)(280 * Size),(int)(420 * Size),PANE_WIDTH,PANE_HEIGHT);
         itemcountpanel.setBackground(Color.GRAY);
         JLabel itemcountLabel = new JLabel("ItemCounts", SwingConstants.CENTER);  // linesPanel에 "lines" 텍스트를 추가합니다.
         itemcountLabel.setForeground(Color.WHITE);
-        itemcountLabel.setBounds(0, 0, 70, 20);
+        itemcountLabel.setFont(labelFont);
+        itemcountLabel.setBounds(0, 0, (int)(70 * Size), (int)(20 * Size));
 
         boardPane = new JTextPane();
         boardPane.setEditable(false);
         boardPane.setOpaque(false);
         boardPane.setBorder(new TitledBorder(new LineBorder(Color.white,3)));
-        boardPane.setBounds(40,55, 220,440);
+        boardPane.setBounds((int)(40 * Size),(int)(55 * Size), (int)(220 * Size),(int)(440 * Size));
 
         nextBlockPane = new JTextPane();
         nextBlockPane.setEditable(false);
         nextBlockPane.setOpaque(true);
         nextBlockPane.setBackground(Color.BLACK);
-        nextBlockPane.setBounds(5, 20, 60, 95);
+        nextBlockPane.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(95 * Size));
 
         scorePane = new JTextPane();
         scorePane.setEditable(false);
         scorePane.setOpaque(true);
         scorePane.setBackground(Color.BLACK);
-        scorePane.setBounds(5, 20, 60, 50);
+        scorePane.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
 
         levelPane = new JTextPane();
         levelPane.setEditable(false);
         levelPane.setOpaque(true);
         levelPane.setBackground(Color.BLACK);
-        levelPane.setBounds(5, 20, 60, 50);
+        levelPane.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
 
         itemCountPane = new JTextPane();
         itemCountPane.setEditable(false);
         itemCountPane.setOpaque(true);
         itemCountPane.setBackground(Color.BLACK);
-        itemCountPane.setBounds(5, 20, 60, 50);
+        itemCountPane.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
 
-        pauseDialog.setBounds(100, 200, 200, 100);
+        pauseDialog.setBounds((int)(100 * Size), (int)(200 * Size), (int)(200 * Size), (int)(100 * Size));
         pauseDialog.setLayout(null);
         pauseDialog.setVisible(false);
         pauseDialog.setOpaque(true);
 
         JButton continueBtn = new JButton("Continue");
-        continueBtn.setBounds(10, 30, 80, 40);
+        continueBtn.setBounds((int)(10 * Size), (int)(30 * Size), (int)(80 * Size), (int)(40 * Size));
         continueBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
         continueBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
         continueBtn.setOpaque(true); // 불투명 설정을 통해 배경색이 보이게 합니다.
@@ -137,7 +146,7 @@ public class GameView extends JFrame {
         continueBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
         JButton exitBtn = new JButton("Exit");
-        exitBtn.setBounds(110, 30, 80, 40);
+        exitBtn.setBounds((int)(110 * Size), (int)(30 * Size), (int)(80 * Size), (int)(40 * Size));
         exitBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
         exitBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
         exitBtn.setOpaque(true); // 불투명 설정을 통해 배경색이 보이게 합니다.
@@ -332,6 +341,35 @@ public class GameView extends JFrame {
             e.printStackTrace();
         }
         levelPane.setStyledDocument(doc);
+    }
+
+    public void setSize() {
+        Size = 1.5;   //설정에서 받아와야함
+        if (Size == 1) {
+            VIEW_WIDTH = 400;
+            VIEW_HEIGHT = 600;
+            FONT_SIZE = 28;
+            LINE_SPACING = -0.45f;
+            PANE_WIDTH = 70;
+            PANE_HEIGHT = 75;
+            LABEL_FONT = 12;
+        } else if (Size == 1.25){
+            VIEW_WIDTH = 500;
+            VIEW_HEIGHT = 750;
+            FONT_SIZE = 35;
+            LINE_SPACING = -0.43f;
+            PANE_WIDTH = 87;
+            PANE_HEIGHT = 94;
+            LABEL_FONT = 15;
+        } else if (Size == 1.5) {
+            VIEW_WIDTH = 600;
+            VIEW_HEIGHT = 900;
+            FONT_SIZE = 42;
+            LINE_SPACING = -0.41f;
+            PANE_WIDTH = 105;
+            PANE_HEIGHT = 112;
+            LABEL_FONT = 18;
+        }
     }
 
     public final void drawItemCount(int ItemCount) {
