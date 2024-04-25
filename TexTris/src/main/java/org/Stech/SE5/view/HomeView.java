@@ -1,5 +1,7 @@
 package org.Stech.SE5.view;
 
+import org.Stech.SE5.controller.HomeController;
+
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +15,7 @@ public class HomeView extends JFrame {
     private JButton basicBtn, itemBtn;  // 게임 모드 버튼
     private JButton configBtn, exitBtn, scoreBrdBtn;    // 기타 버튼
 
-    public HomeView() {
+    public HomeView(final HomeController controller) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setSize(VIEW_WIDTH, VIEW_HEIGHT);

@@ -16,7 +16,7 @@ public class HomeController implements Controller { // Controller Interfaceì—ì„
 
     @Override
     public void initController() {
-        homeView = new HomeView();
+        homeView = new HomeView(this);
         HomeModel.initConfig();
     }
 
