@@ -3,6 +3,11 @@ package org.Stech.SE5;
 import org.Stech.SE5.controller.HomeController;
 import org.Stech.SE5.controller.Controller;
 
+/*
+    1) Main에 남은 navigate() 제거?
+    2) 각 컨트롤러를 어떻게 생성하고 활용할 것인지
+ */
+
 public class Main {
     private static HomeController homeController;
     private static Controller currentController;

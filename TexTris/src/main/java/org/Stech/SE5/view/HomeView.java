@@ -8,6 +8,18 @@ import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
+/*
+    1) 타이틀 표시 -> 완료
+    1-1) 타이틀 Label 가운데 정렬
+    2) 버튼 변경 (Images > JPanel) -> 완료
+    2-1) 버튼 생성 메소드 -> 완료
+    2-2) 메소드 내에서 newButton.setBackground()을 실행할 수 있게끔 수정 -> 완료
+    3) 해상도에 맞게 버튼 비율 변경
+    4) 액션리스너 파트를 키 리스너로 변경 -> 완료
+    4-1) Game/Setting/ScoreBoard 각 View로 넘기는 과정 완수
+    4-2) SelectView 호출 시 GameMode 인수가 바뀌지 않는 과정 해결 필요
+ */
+
 public class HomeView extends JFrame {
     private final int VIEW_WIDTH = 400;
     private final int VIEW_HEIGHT = 600;

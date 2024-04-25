@@ -8,6 +8,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+/*
+    1) 중간평가 이후, HomeView에서 상속? -> 일부 맴버 변수나 함수를 제외하면 HomeView와 동일한 과정을 거치는 중
+    2) 마찬가지로 중간평가 이후, 생성자에 너무 많은 작업이 할당되어 있는 상태... 이를 보완할 수 있도록 노력(5/7-5/10)
+ */
+
 public class SelectView extends JFrame {
     private HomeController homeController;
     private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
