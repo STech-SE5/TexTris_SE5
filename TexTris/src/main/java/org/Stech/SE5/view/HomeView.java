@@ -18,8 +18,13 @@ public class HomeView extends JFrame {
     private JButton configBtn, exitBtn, scoreBrdBtn;    // 기타 버튼
     private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
+    private HomeController homeController;
+    private PlayerKeyListener playerKeyListener;
+
     public HomeView(final HomeController controller) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        homeController = controller;
+        playerKeyListener = new PlayerKeyListener();
 
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         setTitle("SE5_TEXTRIS");
@@ -65,6 +70,13 @@ public class HomeView extends JFrame {
         // bgPanel에 모든 요소를 삽입
         this.setContentPane(bgPanel);
         setScreen(bgPanel, title);
+
+        buttonPtrIndex = 0; // 첫 인덱스를 0으로 초기화
+        highlightSelectedButton();
+
+        addKeyListener(playerKeyListener); // playerKeyListener를 이 프레임에 할당
+        setFocusable(true);
+        requestFocusInWindow();
     }
 
     public void setButton(JButton button, Font buttonFont, int x, int y, int width, int height) {
@@ -81,7 +93,16 @@ public class HomeView extends JFrame {
         for (JButton i : buttonList) buttonPanel.add(i); // ArrayList 내 모든 버튼을 btnPanel에 삽입
     }
 
-    class PlayerKeyListener implements KeyListener {
+    private void highlightSelectedButton() {    // 선택된 버튼을 강조하는 메소드
+        for (int i = 0; i < buttonList.size(); i++) {
+            if (i == buttonPtrIndex)
+                buttonList.get(i).setBackground(Color.WHITE); // 선택된 버튼을 하얀색으로 강조
+            else
+                buttonList.get(i).setBackground(Color.BLACK); // 나머지 버튼은 검정색으로 색칠
+        }
+    }
+
+    class PlayerKeyListener implements KeyListener {    // KeyListener를 상속하여 특정 기능을 활용하는 PlayerKeyListner 클래스
 
         @Override
         public void keyTyped(KeyEvent keyEvent) {   // 사용하지 않음
@@ -96,6 +117,7 @@ public class HomeView extends JFrame {
                         buttonPtrIndex = buttonList.size(); // 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
                     else {
                         buttonPtrIndex = (buttonPtrIndex + buttonList.size() - 1) % buttonList.size();
+                        highlightSelectedButton();
                     }
                     break;
                 case KeyEvent.VK_DOWN:
@@ -103,6 +125,7 @@ public class HomeView extends JFrame {
                         buttonPtrIndex = 0; // 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
                     else {
                         buttonPtrIndex = (buttonPtrIndex + 1) % buttonList.size();
+                        highlightSelectedButton();
                     }
                     break;
                 case KeyEvent.VK_ENTER:
@@ -110,7 +133,6 @@ public class HomeView extends JFrame {
                         case 0: // basicMode
                             break;
                         case 1: // itemMode
-                            setVisible(false);
                             break;
                         case 2: // scoreBoard
                             break;
