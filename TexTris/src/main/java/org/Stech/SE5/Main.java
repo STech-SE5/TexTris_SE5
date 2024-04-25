@@ -22,4 +22,13 @@ public class Main {
         currentController = homeController;
         currentController.setVisible(true);
     }
+
+    public static void navigate(final View view) {  // 추후 활용할 navigate()
+        currentController.setVisible(false);
+        switch (view) {
+            case HOME -> currentController = homeController;
+        }
+        currentController.initController();
+        currentController.setVisible(true);
+    }
 }
