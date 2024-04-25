@@ -339,8 +339,6 @@ public class ConfigView extends JFrame {
         rotationKeyPane.setForeground(Color.WHITE);
 
         this.setContentPane(configPanel);
-//        configPanel.add(upBtn);
-//        configPanel.add(downBtn);
 
         configPanel.add(smallBtn);
         configPanel.add(mediumBtn);

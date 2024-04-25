@@ -4,7 +4,7 @@ import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.View.ConfigView;
 
 
-public class ConfigController implements Controller {
+public class ConfigController{
     private ConfigView configView;
 
     int VIEW_WIDTH;
@@ -13,15 +13,13 @@ public class ConfigController implements Controller {
     double Size;
 
     public ConfigController() {
-        initPresent();
+        initController();
     }
 
-    @Override
-    public void initPresent() {
+    public void initController() {
         configView = new ConfigView(this);
     }
 
-    @Override
     public void setVisible(boolean visible) {
         if (visible) {
             setSize();

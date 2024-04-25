@@ -26,10 +26,6 @@ public class ConfigModel {
         }
     }
 
-    public enum GameBattleMode {
-        TIME, NORMAL, ITEM
-    }
-
     public enum BoardSize {
         SMALL(8, 20), MEDIUM(10, 20), LARGE(12, 20);
 
@@ -48,13 +44,11 @@ public class ConfigModel {
 
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
-    public static GameBattleMode gameBattleMode = GameBattleMode.NORMAL;
     public static BoardSize boardSize = BoardSize.MEDIUM;
     public static int boardWidth = 10;
     public static int boardHeight = 20;
     public static double gameSpeed = 1;
     public static boolean colorBlindMode = false;
-    public static boolean isTimeAttackMode = false;
     public static int[] keyBinding = {
             KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
             KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
@@ -75,29 +69,10 @@ public class ConfigModel {
         return PlayerKey.UNDEFINED;
     }
 
-    public static void changeGameMode(GameMode g) {
-        gameMode = g;
-        saveConfig();
-    }
-
-    public static void changeGameDifficulty(GameDifficulty d) {
-        gameDifficulty = d;
-        saveConfig();
-    }
-
-    public static void changeBattleMode(GameBattleMode b) {
-        gameBattleMode = b;
-    }
-
     public static void changeBoardSize(BoardSize b) {
         boardWidth = b.width;
         boardHeight = b.height;
         boardSize = b;
-        saveConfig();
-    }
-
-    public static void changeGameSpeed(double g) {
-        gameSpeed = g;
         saveConfig();
     }
 
@@ -178,24 +153,4 @@ public class ConfigModel {
             System.out.println("저장된 환경설정이 없습니다.");
         }
     }
-
-    public boolean getColorBlind(){
-        try{
-        File f = new File(path);
-        FileReader fStream = new FileReader(f);
-        BufferedReader bufReader = new BufferedReader(fStream);
-        String line = bufReader.readLine();
-        String[] configs = line.split(",");
-        colorBlindMode = Boolean.parseBoolean(configs[6]);
-        return colorBlindMode;
-    } catch (IOException e) {
-        System.out.println("저장된 환경설정이 없습니다.");
-    }
-        return colorBlindMode;
-    }
-
-    public static double getScoreRate() {
-        return gameSpeed * gameMode.rate * gameDifficulty.rate;
-    }
-
 }
