@@ -19,7 +19,7 @@ public class GameController{
     private GameView gameView;
     private GameModel gameModel;
 
-    GameEndView gameEnd;
+    private GameEndView gameEnd;
 
     private final Timer mainTimer;
     private final Timer deleteTimer;
