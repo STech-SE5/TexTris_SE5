@@ -1,5 +1,14 @@
 plugins {
     id 'java'
+    id 'application'
+}
+
+java {
+    sourceCompatibility = '21'
+}
+
+application {
+    mainClass = 'org.Stech.SE5.Main'
 }
 
 group = 'org.Stech.SE5'
@@ -12,6 +21,14 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+
+
 }
 
 test {
