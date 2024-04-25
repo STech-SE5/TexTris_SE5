@@ -1,11 +1,13 @@
 package org.Stech.SE5.view;
 
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
 public class HomeView extends JFrame {
     private final int VIEW_WIDTH = 400;
     private final int VIEW_HEIGHT = 600;
+    private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
     private JPanel bgPanel;    // 전체 버튼을 담을 패널
     private JLabel title;   // 패널에 들어갈 타이틀(TEXTRIS)
     private JButton basicBtn, itemBtn;  // 게임 모드 버튼
@@ -57,12 +59,7 @@ public class HomeView extends JFrame {
 
         // bgPanel에 모든 요소를 삽입
         this.setContentPane(bgPanel);
-        bgPanel.add(title);
-        bgPanel.add(basicBtn);
-        bgPanel.add(itemBtn);
-        bgPanel.add(scoreBrdBtn);
-        bgPanel.add(configBtn);
-        bgPanel.add(exitBtn);
+        setScreen(bgPanel, title);
     }
 
     public void setButton(JButton button, Font buttonFont, int x, int y, int width, int height) {
@@ -71,6 +68,11 @@ public class HomeView extends JFrame {
         button.setBounds(x, y, width, height);   // 버튼의 좌표, 너비, 높이 설정
         button.setFont(buttonFont);    // 버튼 내 글씨체 설정
         button.setBackground(Color.BLACK);   // 버튼의 배경색 설정
-        // 다만 게임 모드 버튼과 게임 난이도 버튼처럼, 조건에 따라 칠하는 색이 달라져야 하는 경우를 고려할 필요가 있음
+        buttonList.add(button); // 설정을 끝마친 버튼을 ArrayList에 삽입
+    }
+
+    public void setScreen(JPanel buttonPanel, JLabel title) {
+        buttonPanel.add(title); // title을 btnPanel에 삽입
+        for (JButton i : buttonList) buttonPanel.add(i); // ArrayList 내 모든 버튼을 btnPanel에 삽입
     }
 }
