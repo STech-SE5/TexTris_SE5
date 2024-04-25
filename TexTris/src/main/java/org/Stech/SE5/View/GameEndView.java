@@ -1,6 +1,7 @@
 package org.Stech.SE5.View;
 
 import org.Stech.SE5.Controller.RecordController;
+import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.Model.GameModel;
 import org.Stech.SE5.Model.RecordModel;
 
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 
 
 public class GameEndView extends JFrame {
+
+    int resolution;
     private JTextField userNameField;
 
     public GameEndView(int score, int gameMode, int gameDifficulty, int deletedLine) {
@@ -25,7 +28,7 @@ public class GameEndView extends JFrame {
         int currentGameDifficulty = gameDifficulty;
         int currentDeletedLine = deletedLine;
 
-        int resolution = 1; // 해상도 설정시 값을 불러와서 대입.
+        getsize(ConfigModel.boardSize); // 해상도 설정시 값을 불러와서 대입.
 
         int WIDTH;
         int HEIGHT;
@@ -131,5 +134,22 @@ public class GameEndView extends JFrame {
                                        });
 
         setVisible(true);
+    }
+
+    public void getsize(ConfigModel.BoardSize boardSize) {
+        switch (boardSize){
+            case LARGE -> {
+                resolution = 2;
+                break;
+            }
+            case MEDIUM -> {
+                resolution = 1;
+                break;
+            }
+            case SMALL -> {
+                resolution = 0;
+                break;
+            }
+        }
     }
 }

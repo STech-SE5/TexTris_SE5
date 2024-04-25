@@ -1,7 +1,9 @@
 package org.Stech.SE5.View;
 
+import org.Stech.SE5.Controller.ConfigController;
 import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Controller.RecordController;
+import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.Model.RecordModel;
 
 import java.awt.event.KeyEvent;
@@ -33,9 +35,11 @@ public class HomeView extends JFrame {
     private JButton configBtn, exitBtn, scoreBrdBtn;    // 기타 버튼
     private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
+    private ConfigController configController;
     private HomeController homeController;
     private PlayerKeyListener playerKeyListener;
     private SelectView selectView;
+    private ConfigModel configModel = new ConfigModel();
 
 
     public HomeView(final HomeController controller) {
@@ -168,7 +172,10 @@ public class HomeView extends JFrame {
                             record.setVisible(true);
                             setVisible(false);
                             break;
-                        case 3: // setting
+                        case 3:
+                            configController = new ConfigController();
+                            configController.setVisible(true);
+                            setVisible(false);
                             break;
                         case 4:
                             System.exit(0);
@@ -183,8 +190,25 @@ public class HomeView extends JFrame {
         public void keyReleased(KeyEvent keyEvent) {    // 사용하지 않음
         }
     }
+
+    public void getsize(ConfigModel.BoardSize boardSize) {
+        switch (boardSize){
+            case LARGE -> {
+                Size = 1.5;
+                break;
+            }
+            case MEDIUM -> {
+                Size = 1.25;
+                break;
+            }
+            case SMALL -> {
+                Size = 1;
+                break;
+            }
+        }
+    }
     public void setSize() {
-        Size = 1.5;   //설정에서 받아와야함
+        getsize(ConfigModel.boardSize);   //설정에서 받아와야함
         if (Size == 1) {
             VIEW_WIDTH = 400;
             VIEW_HEIGHT = 600;

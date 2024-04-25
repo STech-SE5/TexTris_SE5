@@ -1,6 +1,7 @@
 package org.Stech.SE5.Controller;
 
 import org.Stech.SE5.Data.Record;
+import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.Model.RecordModel;
 import org.Stech.SE5.View.RecordView;
 
@@ -20,6 +21,7 @@ public class RecordController {
     }
 
     private void initResolution() {
+        getsize(ConfigModel.boardSize);
         switch (resolution) {
             case 0:
                 WIDTH = 400;
@@ -36,6 +38,23 @@ public class RecordController {
             default:
                 WIDTH = 400;
                 HEIGHT = 600;
+        }
+    }
+
+    public void getsize(ConfigModel.BoardSize boardSize) {
+        switch (boardSize){
+            case LARGE -> {
+                resolution = 2;
+                break;
+            }
+            case MEDIUM -> {
+                resolution = 1;
+                break;
+            }
+            case SMALL -> {
+                resolution = 0;
+                break;
+            }
         }
     }
 

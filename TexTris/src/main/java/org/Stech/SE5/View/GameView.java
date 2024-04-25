@@ -4,6 +4,7 @@ import org.Stech.SE5.Block.Block;
 import org.Stech.SE5.Block.Element;
 import org.Stech.SE5.Controller.GameController;
 import org.Stech.SE5.Controller.HomeController;
+import org.Stech.SE5.Model.ConfigModel;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -387,8 +388,24 @@ public class GameView extends JFrame {
         levelPane.setStyledDocument(doc);
     }
 
+    public void getsize(ConfigModel.BoardSize boardSize) {
+        switch (boardSize){
+            case LARGE -> {
+                Size = 1.5;
+                break;
+            }
+            case MEDIUM -> {
+                Size = 1.25;
+                break;
+            }
+            case SMALL -> {
+                Size = 1;
+                break;
+            }
+        }
+    }
     public void setSize() {
-        Size = 1.5;   //설정에서 받아와야함
+        getsize(ConfigModel.boardSize);   //설정에서 받아와야함
         if (Size == 1) {
             VIEW_WIDTH = 400;
             VIEW_HEIGHT = 600;

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Controller.RecordController;
+import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.Model.RecordModel;
 
 
@@ -23,13 +24,15 @@ public class RecordView extends JFrame {
     private ArrayList<JTextPane> recordList;
     public PlayerKeyListener playerKeyListener;
 
+    int resolution;
+
     public RecordView(final RecordController controller) {
         super("Record");
         recordController = controller;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.playerKeyListener = new PlayerKeyListener();
 
-        int resolution = 1; // 해상도 설정시 값을 불러와서 대입.
+        getsize(ConfigModel.boardSize); // 해상도 설정시 값을 불러와서 대입.
 
         int WIDTH;
         int HEIGHT;
@@ -184,5 +187,21 @@ public class RecordView extends JFrame {
         homeController = new HomeController();
         homeController.setVisible(true);
         setVisible(false);
+    }
+    public void getsize(ConfigModel.BoardSize boardSize) {
+        switch (boardSize){
+            case LARGE -> {
+                resolution = 2;
+                break;
+            }
+            case MEDIUM -> {
+                resolution = 1;
+                break;
+            }
+            case SMALL -> {
+                resolution = 0;
+                break;
+            }
+        }
     }
 }

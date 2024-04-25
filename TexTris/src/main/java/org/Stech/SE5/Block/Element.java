@@ -1,14 +1,15 @@
 package org.Stech.SE5.Block;
 
+import org.Stech.SE5.Model.ConfigModel;
+
 import java.awt.*;
 
 public enum Element {
     EMPTY, BORDER, I_BLOCK, J_BLOCK, L_BLOCK, O_BLOCK, S_BLOCK, T_BLOCK, Z_BLOCK, DELETE,
     WEIGHT_BLOCK, LINE_CLEANER, BOMB, ITEM_BOOST, CROSS_DELETE;
 
-
     public static Color getElementColor(final Element element) {
-        if (true/*설정쪽에서 Blindmode에 관한 변수 받아오기*/) {
+        if (ConfigModel.colorBlindMode) {
             return switch (element) {
                 case EMPTY -> Color.BLACK;
                 case BORDER, DELETE, WEIGHT_BLOCK, LINE_CLEANER, BOMB, ITEM_BOOST, CROSS_DELETE -> Color.WHITE;

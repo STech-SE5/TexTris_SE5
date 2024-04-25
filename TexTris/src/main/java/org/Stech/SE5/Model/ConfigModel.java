@@ -61,7 +61,7 @@ public class ConfigModel {
     };
     private final static String path = "saved-config/config.txt";
 
-    private ConfigModel() {
+    public ConfigModel() {
 
     }
 
@@ -177,6 +177,21 @@ public class ConfigModel {
         } catch (IOException e) {
             System.out.println("저장된 환경설정이 없습니다.");
         }
+    }
+
+    public boolean getColorBlind(){
+        try{
+        File f = new File(path);
+        FileReader fStream = new FileReader(f);
+        BufferedReader bufReader = new BufferedReader(fStream);
+        String line = bufReader.readLine();
+        String[] configs = line.split(",");
+        colorBlindMode = Boolean.parseBoolean(configs[6]);
+        return colorBlindMode;
+    } catch (IOException e) {
+        System.out.println("저장된 환경설정이 없습니다.");
+    }
+        return colorBlindMode;
     }
 
     public static double getScoreRate() {
