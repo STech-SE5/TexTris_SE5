@@ -64,6 +64,15 @@ public class GameModel {
         }
     }
 
+    public int getMode(){
+        if (itemModeFlag){
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
     public int getDiff(){ return diff; }
 
     public int getLineCounts(){     //기록용

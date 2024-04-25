@@ -1,5 +1,6 @@
 package org.Stech.SE5.Controller;
 
+import org.Stech.SE5.View.GameEndView;
 import org.Stech.SE5.View.GameView;
 import org.Stech.SE5.Model.GameModel;
 
@@ -17,6 +18,8 @@ public class GameController{
 
     private GameView gameView;
     private GameModel gameModel;
+
+    GameEndView gameEnd;
 
     private final Timer mainTimer;
     private final Timer deleteTimer;
@@ -96,6 +99,9 @@ public class GameController{
         gameView.stopPlayerKeyListen();
         gameView.stopPauseKeyListen();
         mainTimer.stop();   //종료화면 불러와야함, 불러올때 게임난이도,점수 넘겨줘야함
+        gameEnd = new GameEndView((int)(gameModel.getScore()), gameModel.getMode(),gameModel.getDiff());
+        this.setVisible(false);
+        gameEnd.setVisible(true);
         deleteTimer.stop();
     }
 
