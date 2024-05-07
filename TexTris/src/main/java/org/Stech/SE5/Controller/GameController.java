@@ -69,7 +69,7 @@ public class GameController{
 
     public void initController(boolean itemmodeflag, int diff) {
         this.gameModel = new GameModel(this, itemmodeflag, diff);
-        this.gameView = new GameView(this, itemmodeflag, diff);
+        this.gameView = new GameView(this, itemmodeflag);
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 

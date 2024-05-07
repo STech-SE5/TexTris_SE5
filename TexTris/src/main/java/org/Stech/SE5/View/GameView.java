@@ -55,7 +55,7 @@ public class GameView extends JFrame {
         }
     };
 
-    public GameView(final GameController controller, boolean modeflag, int diff) {
+    public GameView(final GameController controller, boolean modeflag) {
         super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
