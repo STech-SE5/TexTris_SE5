@@ -3,6 +3,8 @@ package org.Stech.SE5.View;
 import org.Stech.SE5.Controller.GameController;
 import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Model.ConfigModel;
+import org.Stech.SE5.Block.Element;
+import org.Stech.SE5.Block.Block;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -305,6 +307,213 @@ public class BattleView extends JFrame{
         backgroundPanel.setFocusable(true);
         backgroundPanel.requestFocus();
         backgroundPanel.requestFocusInWindow();
+    }
+
+
+    class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+        @Override
+        public void keyTyped(final KeyEvent e) {}
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                    gamecontroller.gameStart();
+                    break;
+                case KeyEvent.VK_LEFT:
+                    buttoncount = !buttoncount;
+                    highlightSelectedButton(buttoncount);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    buttoncount = !buttoncount;
+                    highlightSelectedButton(buttoncount);
+                    break;
+                case KeyEvent.VK_ENTER:
+                    if (buttoncount){
+                        gamecontroller.gameStart();
+                    }else {
+                        exitGame();
+                    }
+            }
+        }
+        @Override
+        public void keyReleased(final KeyEvent e) {}
+    }
+
+    private void highlightSelectedButton(boolean count){
+        if (count){
+            continueBtn.setBackground(Color.YELLOW);
+            exitBtn.setBackground(Color.GRAY);
+        }else {
+            continueBtn.setBackground(Color.GRAY);
+            exitBtn.setBackground(Color.YELLOW);
+        }
+    }
+
+    public void setVisiblePauseDialog(boolean ifVisible) {
+        pauseDialog.setVisible(ifVisible);
+    }
+
+    public void exitGame(){
+        setVisible(false);
+        homeController = new HomeController();
+        homeController.setVisible(true);
+    }
+
+    public final void drawBoard(final ArrayList<Element[]> board, boolean isPlayer1) {
+        if(!isPlayer1) {
+            boardPaneP2.setText("");
+            Style style = boardPaneP2.addStyle("textStyle", null);
+            StyledDocument doc = boardPaneP2.getStyledDocument();
+
+            try {
+                for (int i = 0; i < board.size() + 2; i++) {
+                    for (int j = 0; j < board.get(0).length + 2; j++) {
+                        boolean isBorder = i == 0 || i == board.size() + 1 || j == 0 || j == board.get(0).length + 1;
+                        if (isBorder) {
+                            StyleConstants.setForeground(style, Element.getElementColor(Element.BORDER));
+                            doc.insertString(doc.getLength(), Element.getElementText(Element.BORDER), style);
+                        } else {
+                            StyleConstants.setForeground(style, Element.getElementColor(board.get(i - 1)[j - 1]));
+                            doc.insertString(doc.getLength(), Element.getElementText(board.get(i - 1)[j - 1]), style);
+                        }
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            boardPaneP2.setStyledDocument(doc);
+        } else {
+            boardPaneP1.setText("");
+            Style style = boardPaneP1.addStyle("textStyle", null);
+            StyledDocument doc = boardPaneP1.getStyledDocument();
+
+            try {
+                for (int i = 0; i < board.size() + 2; i++) {
+                    for (int j = 0; j < board.get(0).length + 2; j++) {
+                        boolean isBorder = i == 0 || i == board.size() + 1 || j == 0 || j == board.get(0).length + 1;
+                        if (isBorder) {
+                            StyleConstants.setForeground(style, Element.getElementColor(Element.BORDER));
+                            doc.insertString(doc.getLength(), Element.getElementText(Element.BORDER), style);
+                        } else {
+                            StyleConstants.setForeground(style, Element.getElementColor(board.get(i - 1)[j - 1]));
+                            doc.insertString(doc.getLength(), Element.getElementText(board.get(i - 1)[j - 1]), style);
+                        }
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            boardPaneP1.setStyledDocument(doc);
+        }
+    }
+
+    public final void drawNextBlock(Block nextBlock, boolean isPlayer1) {
+        if(!isPlayer1) {
+            nextBlockPaneP2.setText("");
+            Style style = nextBlockPaneP2.addStyle("textStyle", null);
+            StyledDocument doc = nextBlockPaneP2.getStyledDocument();
+
+            try {
+                for (int i = 0; i < nextBlock.width(); i++) {
+                    for (int j = 0; j < nextBlock.height(); j++) {
+                        Element currentElement = nextBlock.getShape(i, j);
+                        StyleConstants.setForeground(style, Element.getElementColor(currentElement));
+                        doc.insertString(doc.getLength(), Element.getElementText(currentElement), style);
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            nextBlockPaneP2.setStyledDocument(doc);
+        } else {
+            nextBlockPaneP1.setText("");
+            Style style = nextBlockPaneP1.addStyle("textStyle", null);
+            StyledDocument doc = nextBlockPaneP1.getStyledDocument();
+
+            try {
+                for (int i = 0; i < nextBlock.width(); i++) {
+                    for (int j = 0; j < nextBlock.height(); j++) {
+                        Element currentElement = nextBlock.getShape(i, j);
+                        StyleConstants.setForeground(style, Element.getElementColor(currentElement));
+                        doc.insertString(doc.getLength(), Element.getElementText(currentElement), style);
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            nextBlockPaneP1.setStyledDocument(doc);
+        }
+    }
+
+    public final void drawScore(double score, boolean isPlayer1) {
+        if(!isPlayer1) {
+            scorePaneP2.setText("");
+            Style style = scorePaneP2.addStyle("textStyle", null);
+            StyledDocument doc = scorePaneP2.getStyledDocument();
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            StyleConstants.setForeground(style, Color.WHITE);
+            StyleConstants.setFontSize(style, (int)(24 * Size));
+            try {
+                doc.insertString(doc.getLength(), Integer.toString((int) score), style);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            scorePaneP2.setStyledDocument(doc);
+        } else {
+            scorePaneP1.setText("");
+            Style style = scorePaneP1.addStyle("textStyle", null);
+            StyledDocument doc = scorePaneP1.getStyledDocument();
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            StyleConstants.setForeground(style, Color.WHITE);
+            StyleConstants.setFontSize(style, (int)(24 * Size));
+            try {
+                doc.insertString(doc.getLength(), Integer.toString((int) score), style);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            scorePaneP1.setStyledDocument(doc);
+        }
+    }
+
+    public final void drawDItemCount(int itemCount, boolean isPlayer1) {
+        if(!isPlayer1) {
+            itemCountPaneP2.setText("");
+            Style style = itemCountPaneP2.addStyle("textStyle", null);
+            StyledDocument doc = itemCountPaneP2.getStyledDocument();
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            StyleConstants.setForeground(style, Color.WHITE);
+            StyleConstants.setFontSize(style, (int)(30 * Size));
+            try {
+                doc.insertString(doc.getLength(), Integer.toString(itemCount), style);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            itemCountPaneP2.setStyledDocument(doc);
+        } else {
+            itemCountPaneP1.setText("");
+            Style style = itemCountPaneP1.addStyle("textStyle", null);
+            StyledDocument doc = itemCountPaneP1.getStyledDocument();
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            StyleConstants.setForeground(style, Color.WHITE);
+            StyleConstants.setFontSize(style, (int)(30 * Size));
+            try {
+                doc.insertString(doc.getLength(), Integer.toString(itemCount), style);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            itemCountPaneP1.setStyledDocument(doc);
+        }
+
     }
 
     public void getsize(ConfigModel.BoardSize boardSize) {

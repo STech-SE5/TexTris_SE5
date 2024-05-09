@@ -213,7 +213,6 @@ public class GameView extends JFrame {
             continueBtn.setBackground(Color.GRAY);
             exitBtn.setBackground(Color.YELLOW);
         }
-
     }
 
     class PlayerKeyListener implements KeyListener {
