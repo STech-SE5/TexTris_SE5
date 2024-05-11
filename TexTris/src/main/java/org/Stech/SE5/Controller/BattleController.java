@@ -18,9 +18,7 @@ public class BattleController {
     private final Timer weightItemTimerP2;
     private final Timer timeAttackTimer;
     private int seconds;
-
     private int Mode;
-
     private static final double INIT_INTERVAL = 1000;
 
     public BattleController(int mode) {
@@ -120,19 +118,19 @@ public class BattleController {
     }
 
     public final void gameStart() {
-        battleView.stopPauseKeyListen();
-        battleView.startPlayerKeyListen(true);
-        battleView.startPlayerKeyListen(false);
-        battleView.setVisiblePauseDialog(false);
-        battleView.drawBoard(gameModelP1.getBoard(), true);
-        battleView.drawBoard(gameModelP2.getBoard(), false);
-        mainTimerP1.start();
-        deleteTimerP1.start();
-        mainTimerP2.start();
-        deleteTimerP2.start();
-        if(Mode == 2) {
-            timeAttackTimer.start();
-        }
+            battleView.stopPauseKeyListen();
+            battleView.startPlayerKeyListen(true);
+            battleView.startPlayerKeyListen(false);
+            battleView.setVisiblePauseDialog(false);
+            battleView.drawBoard(gameModelP1.getBoard(), true);
+            battleView.drawBoard(gameModelP2.getBoard(), false);
+            mainTimerP1.start();
+            deleteTimerP1.start();
+            mainTimerP2.start();
+            deleteTimerP2.start();
+            if(Mode == 2) {
+                timeAttackTimer.start();
+            }
     }
 
     public final void gameStop() {

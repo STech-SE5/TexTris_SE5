@@ -230,7 +230,7 @@ public class BattleView extends JFrame{
         itemCountPaneP2.setBackground(Color.BLACK);
         itemCountPaneP2.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
 
-        pauseDialog.setBounds((int)(100 * Size), (int)(200 * Size), (int)(200 * Size), (int)(100 * Size));
+        pauseDialog.setBounds((int)(300 * Size), (int)(200 * Size), (int)(200 * Size), (int)(100 * Size));
         pauseDialog.setLayout(null);
         pauseDialog.setVisible(false);
         pauseDialog.setOpaque(true);
@@ -256,6 +256,8 @@ public class BattleView extends JFrame{
 
         add(backgroundPanel);
         backgroundPanel.add(pauseDialog);
+        pauseDialog.add(continueBtn);
+        pauseDialog.add(exitBtn);
         backgroundPanel.add(boardPaneP1);
         backgroundPanel.add(boardPaneP2);
 
@@ -333,7 +335,9 @@ public class BattleView extends JFrame{
                         battlecontroller.moveStraightDown(true);
                     }
                 }
-                case KeyEvent.VK_ESCAPE -> battlecontroller.gameStop();
+                case KeyEvent.VK_ESCAPE -> {battlecontroller.gameStop();
+                    highlightSelectedButton(buttoncount);
+                }
             }
         }
 
@@ -361,7 +365,9 @@ public class BattleView extends JFrame{
                         battlecontroller.moveStraightDown(false);
                     }
                 }
-                case KeyEvent.VK_ESCAPE -> battlecontroller.gameStop();
+                case KeyEvent.VK_P -> {battlecontroller.gameStop();
+                highlightSelectedButton(buttoncount);
+                }
             }
         }
 
@@ -376,7 +382,7 @@ public class BattleView extends JFrame{
         public void keyTyped(final KeyEvent e) {}
         @Override
         public void keyPressed(final KeyEvent e) {
-            switch (e.getKeyCode()) {
+             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     battlecontroller.gameStart();
                     break;
@@ -391,33 +397,15 @@ public class BattleView extends JFrame{
                 case KeyEvent.VK_ENTER:
                     if (buttoncount){
                         battlecontroller.gameStart();
+                        break;
                     }else {
                         exitGame();
+                        break;
                     }
             }
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
-    }
-
-    public void startPlayerKeyListen(boolean isPlayer1) {
-        if(isPlayer1) backgroundPanel.addKeyListener(this.player1KeyListener);
-        else backgroundPanel.addKeyListener(this.player2KeyListener);
-    }
-
-    public void stopPlayerKeyListen(boolean isPlayer1) {
-        if(isPlayer1) backgroundPanel.removeKeyListener(this.player1KeyListener);
-        else backgroundPanel.removeKeyListener(this.player2KeyListener);
-    }
-
-    public void startPauseKeyListen() {
-        backgroundPanel.addKeyListener(this.pauseKeyListener);
-        backgroundPanel.addKeyListener(this.pauseKeyListener);
-    }
-
-    public void stopPauseKeyListen() {
-        backgroundPanel.removeKeyListener(this.pauseKeyListener);
-        backgroundPanel.removeKeyListener(this.pauseKeyListener);
     }
 
     private void highlightSelectedButton(boolean count){
@@ -428,6 +416,28 @@ public class BattleView extends JFrame{
             continueBtn.setBackground(Color.GRAY);
             exitBtn.setBackground(Color.YELLOW);
         }
+    }
+
+    public void startPlayerKeyListen(boolean isPlayer1) {
+        if(isPlayer1) backgroundPanel.addKeyListener(player1KeyListener);
+        else backgroundPanel.addKeyListener(player2KeyListener);
+    }
+
+    public void stopPlayerKeyListen(boolean isPlayer1) {
+        if(isPlayer1) {
+            backgroundPanel.removeKeyListener(player1KeyListener);
+        }
+        else {
+            backgroundPanel.removeKeyListener(player2KeyListener);
+        }
+    }
+
+    public void startPauseKeyListen() {
+        backgroundPanel.addKeyListener(pauseKeyListener);
+    }
+
+    public void stopPauseKeyListen() {
+        backgroundPanel.removeKeyListener(pauseKeyListener);
     }
 
     public void setVisiblePauseDialog(boolean ifVisible) {
