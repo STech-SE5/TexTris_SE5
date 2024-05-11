@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         //HomeController homeController = new HomeController();
         //homeController.setVisible(true);
-        BattleController battleController = new BattleController(2);
+        BattleController battleController = new BattleController(0);
         battleController.setVisible(true);
     }
 }

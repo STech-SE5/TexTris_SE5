@@ -86,7 +86,7 @@ public class GameModel {
         diff = 1;  //난이도 고정
         bBattle = true;     //대전모드
         initBoard(10, 20);
-        //this.setRandomBlock();
+        this.setRandomBlock();
         this.isPlayer1 = bPlayer1;
         posX = DEFAULT_POS_X;
         posY = DEFAULT_POS_Y;
@@ -195,7 +195,11 @@ public class GameModel {
             placeBlock();
         }
         else {
-            gamecontroller.gameOver();
+            if (bBattle){
+                battlecontroller.gameOver();
+            }else {
+                gamecontroller.gameOver();
+            }
         }
         gameSpeedUp();
     }
@@ -204,7 +208,9 @@ public class GameModel {
         if(gameSpeed > 6) return;
         gameSpeed *= 1.01;
         scorerate *= 1.05;
-        gamecontroller.setTimeInterval((int)(1000 / gameSpeed));
+        if (!bBattle){
+            gamecontroller.setTimeInterval((int) (1000 / gameSpeed));
+        }
     }
 
     private enum Result {       //확인용
@@ -446,7 +452,11 @@ public class GameModel {
             Collections.reverse(attack);
             sendAttack(attack);
         }
-        gamecontroller.drawView();
+        if (bBattle) {
+            battlecontroller.drawView();
+        } else {
+            gamecontroller.drawView();
+        }
     }
 
     public final void runDelete() {
