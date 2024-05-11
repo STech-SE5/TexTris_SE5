@@ -196,7 +196,7 @@ public class GameModel {
         }
         else {
             if (bBattle){
-                battlecontroller.gameOver();
+                battlecontroller.gameOver(isPlayer1);
             }else {
                 gamecontroller.gameOver();
             }

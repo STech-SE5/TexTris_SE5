@@ -17,7 +17,7 @@ public class BattleController {
     private final Timer deleteTimerP2;
     private final Timer weightItemTimerP2;
     private final Timer timeAttackTimer;
-    private int seconds;
+    public int seconds;
     private int Mode;
     private static final double INIT_INTERVAL = 1000;
 
@@ -80,7 +80,7 @@ public class BattleController {
             seconds--;
             battleView.drawTimer(seconds);
             if(seconds == 0) {
-                gameOver();
+                gameOver(true);
             }
         }
     }
@@ -147,14 +147,21 @@ public class BattleController {
         }
     }
 
-    public final void gameOver() {
+    public final void gameOver(boolean isplayer1) {
         battleView.stopPlayerKeyListen(true);
         battleView.stopPlayerKeyListen(false);
         battleView.stopPauseKeyListen();
+        battleView.startEndKeyListen();
         battleView.setVisiblePauseDialog(false);
+        battleView.setVisibleFinishDialog(true);
+        drawEnd(isplayer1);
         mainTimerP1.stop();
         mainTimerP2.stop();
         timeAttackTimer.stop();
+    }
+
+    public final void drawEnd(boolean isplayer1){
+        battleView.drawFinishDialog((int) gameModelP1.getScore(), (int) gameModelP2.getScore(), isplayer1);
     }
 
     public final void weightItemStart(boolean isPlayer1) {

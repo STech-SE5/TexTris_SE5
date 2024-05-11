@@ -13,10 +13,12 @@ import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class BattleView extends JFrame{
     private HomeController homeController;
+    private int gamemodeflag;
     private  double Size;
     private  int VIEW_WIDTH;
     private  int VIEW_HEIGHT;
@@ -26,7 +28,6 @@ public class BattleView extends JFrame{
     static  int PANE_WIDTH;
     static  int PANE_HEIGHT;
     private boolean buttoncount = true;
-
     private JTextPane boardPaneP1;
     private JPanel nextPanelP1;
     private JTextPane nextBlockPaneP1;
@@ -51,6 +52,9 @@ public class BattleView extends JFrame{
     private JTextPane timerPane;
     private JButton exitBtn;
     private JButton continueBtn;
+
+    private JButton MainBtn;
+
     private SimpleAttributeSet styleSet;
 
     private JPanel backgroundPanel;
@@ -59,8 +63,23 @@ public class BattleView extends JFrame{
     private Player1KeyListener player1KeyListener;
     private Player2KeyListener player2KeyListener;
     private PauseKeyListener pauseKeyListener;
+    private EndKeyListener endKeyListener;
 
     private JPanel pauseDialog = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(Color.GRAY);
+            g2.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
+        }
+    };
+
+    private JTextPane resultPane;
+
+    private JPanel finishDialog = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -79,6 +98,7 @@ public class BattleView extends JFrame{
         Font labelFont = new Font("Arial", Font.PLAIN, LABEL_FONT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gamemodeflag = modeflag;
 
         this.battlecontroller = controller;
 
@@ -175,6 +195,25 @@ public class BattleView extends JFrame{
         timerPane.setBackground(Color.BLACK);
         timerPane.setBounds((int)(5 * Size), (int)(20 * Size), (int)(70 * Size), (int)(35 * Size));     //수정필요
 
+        resultPane = new JTextPane();
+        resultPane.setEditable(false);
+        resultPane.setOpaque(true);
+        resultPane.setBackground(Color.GRAY);
+        resultPane.setBounds((int)(10 * Size),(int)(10 * Size), (int)(180 * Size), (int)(60 * Size));
+
+        finishDialog.setBounds((int)(300 * Size), (int)(180 * Size), (int)(200 * Size), (int)(100 * Size));
+        finishDialog.setLayout(null);
+        finishDialog.setVisible(false);
+        finishDialog.setOpaque(true);
+
+        MainBtn = new JButton("Press Enter To Main");
+        MainBtn.setBounds((int)(10 * Size), (int)(75 * Size), (int)(180 * Size), (int)(20 * Size));
+        MainBtn.setBorderPainted(false); // 버튼 테두리를 그리지 않습니다.
+        MainBtn.setContentAreaFilled(true); // 버튼 배경을 그립니다.
+        MainBtn.setOpaque(true); // 불투명 설정을 통해 배경색이 보이게 합니다.
+        MainBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
+        MainBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
+
         boardPaneP1 = new JTextPane();
         boardPaneP1.setEditable(false);
         boardPaneP1.setOpaque(false);
@@ -253,8 +292,12 @@ public class BattleView extends JFrame{
 
         continueBtn.addActionListener(e -> battlecontroller.gameStart());
         exitBtn.addActionListener(e -> exitGame());
+        MainBtn.addActionListener(e -> exitGame());
 
         add(backgroundPanel);
+        backgroundPanel.add(finishDialog);
+        finishDialog.add(MainBtn);
+        finishDialog.add(resultPane);
         backgroundPanel.add(pauseDialog);
         pauseDialog.add(continueBtn);
         pauseDialog.add(exitBtn);
@@ -315,6 +358,7 @@ public class BattleView extends JFrame{
         this.player1KeyListener = new Player1KeyListener();
         this.player2KeyListener = new Player2KeyListener();
         this.pauseKeyListener = new PauseKeyListener();
+        this.endKeyListener = new EndKeyListener();
     }
 
     class Player1KeyListener implements KeyListener {
@@ -336,7 +380,7 @@ public class BattleView extends JFrame{
                     }
                 }
                 case KeyEvent.VK_ESCAPE -> {battlecontroller.gameStop();
-                    highlightSelectedButton(buttoncount);
+                    highlightPauseButton(buttoncount);
                 }
             }
         }
@@ -366,7 +410,7 @@ public class BattleView extends JFrame{
                     }
                 }
                 case KeyEvent.VK_P -> {battlecontroller.gameStop();
-                highlightSelectedButton(buttoncount);
+                highlightPauseButton(buttoncount);
                 }
             }
         }
@@ -388,11 +432,11 @@ public class BattleView extends JFrame{
                     break;
                 case KeyEvent.VK_LEFT:
                     buttoncount = !buttoncount;
-                    highlightSelectedButton(buttoncount);
+                    highlightPauseButton(buttoncount);
                     break;
                 case KeyEvent.VK_RIGHT:
                     buttoncount = !buttoncount;
-                    highlightSelectedButton(buttoncount);
+                    highlightPauseButton(buttoncount);
                     break;
                 case KeyEvent.VK_ENTER:
                     if (buttoncount){
@@ -408,7 +452,22 @@ public class BattleView extends JFrame{
         public void keyReleased(final KeyEvent e) {}
     }
 
-    private void highlightSelectedButton(boolean count){
+    class EndKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+        @Override
+        public void keyTyped(final KeyEvent e) {}
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER:
+                        exitGame();
+                        break;
+            }
+        }
+        @Override
+        public void keyReleased(final KeyEvent e) {}
+    }
+
+    private void highlightPauseButton(boolean count){
         if (count){
             continueBtn.setBackground(Color.YELLOW);
             exitBtn.setBackground(Color.GRAY);
@@ -438,6 +497,10 @@ public class BattleView extends JFrame{
 
     public void stopPauseKeyListen() {
         backgroundPanel.removeKeyListener(pauseKeyListener);
+    }
+
+    public void startEndKeyListen() {
+        backgroundPanel.addKeyListener(endKeyListener);
     }
 
     public void setVisiblePauseDialog(boolean ifVisible) {
@@ -663,6 +726,34 @@ public class BattleView extends JFrame{
             doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
             attackPaneP2.setStyledDocument(doc);
         }
+    }
+
+    public void setVisibleFinishDialog(boolean ifVisible) {
+        finishDialog.setVisible(ifVisible);
+    }
+
+    public final void drawFinishDialog(int player1Score, int player2Score, boolean bPlayer1) {
+        resultPane.setText("");
+        Style style = resultPane.addStyle("textStyle", null);
+        StyledDocument doc = resultPane.getStyledDocument();
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+        StyleConstants.setForeground(style, Color.WHITE);
+        StyleConstants.setFontSize(style, (int)(28 * Size));
+        try {
+            if (gamemodeflag == 2 && battlecontroller.seconds == 0){
+                if(player1Score > player2Score) doc.insertString(doc.getLength(), "Player1 Win!", style);
+                else doc.insertString(doc.getLength(), "Player2 Win!", style);
+            } else {
+                if (bPlayer1){
+                    doc.insertString(doc.getLength(), "Player2 Win!", style);
+                } else {
+                    doc.insertString(doc.getLength(), "Player1 Win!", style);
+                }
+            }
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        resultPane.setStyledDocument(doc);
     }
 
     public void getsize(ConfigModel.BoardSize boardSize) {
