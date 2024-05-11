@@ -24,9 +24,6 @@ public class BattleController {
     private static final double INIT_INTERVAL = 1000;
 
     public BattleController(int mode) {
-        Mode = mode;
-        initController(Mode);
-
         mainTimerP1 = new Timer((int)INIT_INTERVAL, new MainTimerActionListener(true));
         deleteTimerP1 = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener(true));
         weightItemTimerP1 = new Timer((int)INIT_INTERVAL / 5, new WeightItemTimerActionListener(true));
@@ -34,6 +31,9 @@ public class BattleController {
         deleteTimerP2 = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener(false));
         weightItemTimerP2 = new Timer((int)INIT_INTERVAL / 5, new WeightItemTimerActionListener(false));
         timeAttackTimer = new Timer(1000, new TimeAttackActionListener());
+
+        Mode = mode;
+        initController(Mode);
     }
 
     public class MainTimerActionListener implements ActionListener {
@@ -97,6 +97,16 @@ public class BattleController {
         this.battleView = new BattleView(this, mode);
         this.battleView.drawBoard(this.gameModelP1.getBoard(), true);
         this.battleView.drawBoard(this.gameModelP2.getBoard(), false);
+    }
+
+    public final void setTimeIntervalP1(int interval) {
+        mainTimerP1.setDelay(interval);
+        deleteTimerP1.setDelay(Math.max(interval/3, 200));
+    }
+
+    public final void setTimeIntervalP2(int interval) {
+        mainTimerP2.setDelay(interval);
+        deleteTimerP2.setDelay(Math.max(interval/3, 200));
     }
 
     public final void setVisible(final boolean visible) {

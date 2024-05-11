@@ -34,11 +34,11 @@ public class GameModel {
     private int posX;
     private int posY;
 
-    private boolean bBattle;
+    private boolean bBattle = false;
     private ArrayList<Element[]> attack = new ArrayList<>();    //공격줄
 
     private GameModel opposite; //상대방
-    private boolean isPlayer1;  //true - p1, false = p2
+    private boolean isPlayer1 = true;  //true - p1, false = p2
 
     public void setOpposite(GameModel oppositeModel) {
         this.opposite = oppositeModel;
@@ -208,7 +208,11 @@ public class GameModel {
         if(gameSpeed > 6) return;
         gameSpeed *= 1.01;
         scorerate *= 1.05;
-        if (!bBattle){
+        if (bBattle && isPlayer1){
+            battlecontroller.setTimeIntervalP1((int) (1000 / gameSpeed));
+        } else if (bBattle && !isPlayer1) {
+            battlecontroller.setTimeIntervalP2((int) (1000 / gameSpeed));
+        } else {
             gamecontroller.setTimeInterval((int) (1000 / gameSpeed));
         }
     }
