@@ -18,14 +18,11 @@ public class GameController{
 
     private GameView gameView;
     private GameModel gameModel;
-
     private GameEndView gameEnd;
-
     private final Timer mainTimer;
     private final Timer deleteTimer;
     private final Timer weightBlockTimer;
-
-    private static final double INIT_INTERVAL = 1000 / 1;       //추후 1자리에 설정에서 speed 받아와서 넣기
+    private static final double INIT_INTERVAL = 1000;
 
     public GameController(boolean itemmodeflag, int diff) {
         mainTimer = new Timer((int)INIT_INTERVAL, new MainTimerActionListener());
