@@ -1,13 +1,16 @@
 package org.Stech.SE5.Model;
 
+import org.Stech.SE5.Controller.BattleController;
 import  org.Stech.SE5.Controller.GameController;
 import  org.Stech.SE5.Block.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class GameModel {
     private GameController gamecontroller;
+    private BattleController battlecontroller;
     private ArrayList<Element[]> board;
     private Block currentBlock;
     private Block nextBlock;
@@ -26,16 +29,75 @@ public class GameModel {
 
     private final int DEFAULT_POS_X = 3;
     private final int DEFAULT_POS_Y = 0;
-    private double gameSpeed = 1;       //추후 설정에서 받아오기
+    private double gameSpeed = 1;
 
     private int posX;
     private int posY;
 
-    public GameModel(final GameController controller, boolean itemFlag, int difficulty) {
+    private boolean bBattle;
+    private ArrayList<Element[]> attack = new ArrayList<>();    //공격줄
+
+    private GameModel opposite; //상대방
+    private boolean isPlayer1;  //true - p1, false = p2
+
+    public void setOpposite(GameModel oppositeModel) {
+        this.opposite = oppositeModel;
+    }
+
+    public void sendAttack(ArrayList<Element[]> myAttack) {
+        opposite.receiveAttack(myAttack);
+        System.out.println(myAttack);
+    }
+
+    public void receiveAttack(ArrayList<Element[]> receiveAttack) {
+        for(int i=0; i<receiveAttack.size(); i++) {
+            if(this.attack.size() == 10) return;
+            this.attack.add(receiveAttack.get(i));
+        }
+    }
+
+    public ArrayList<Element[]> getAttack() {
+        return attack;
+    }
+
+    private void attackToBoard() {
+        if(attack.size() == 0) return;
+        for(int k=0; k < 20 - attack.size(); k++) {
+            for (int i = 0; i < 10; i++) {
+                board.get(k)[i] = board.get(k + attack.size())[i];
+            }
+        }
+
+        for(int k = attack.size(); k > 0; k--) {
+            for (int i = 0; i < 10; i++) {
+                board.get(20 - k)[i] = attack.get(k - 1)[i];
+            }
+        }
+        attack = new ArrayList<>();
+    }
+
+    public GameModel(final BattleController controller, int mode/*0,1,2로 일반, 아이템, 시간제한*/, boolean bPlayer1) {   //2인모드 생성자
+        this.battlecontroller = controller;
+        if (mode == 1){
+            itemModeFlag = true;
+        } else {
+            itemModeFlag = false;
+        }
+        diff = 1;  //난이도 고정
+        bBattle = true;     //대전모드
+        initBoard(10, 20);
+        //this.setRandomBlock();
+        this.isPlayer1 = bPlayer1;
+        posX = DEFAULT_POS_X;
+        posY = DEFAULT_POS_Y;
+    }
+
+    public GameModel(final GameController controller, boolean itemFlag, int difficulty) {   //1인모드 생성자
         this.gamecontroller = controller;
         itemModeFlag = itemFlag;
         diff = difficulty;
-        initBoard(10, 20);  //나중에 설정쪽에서 받아올 수 있게 변경 필요
+        bBattle = false;
+        initBoard(10, 20);
         this.setRandomBlock();
         posX = DEFAULT_POS_X;
         posY = DEFAULT_POS_Y;
@@ -196,7 +258,7 @@ public class GameModel {
 
     class Rotate extends Act {
         public boolean ifBoundaryGoOver() {
-            return (posY + currentBlock.height() > 20)  //설정에서 20이랑 10에 바뀌는 보드 높이 연동해야함
+            return (posY + currentBlock.height() > 20)
                     || (posX + currentBlock.width() > 10);
         }
 
@@ -217,7 +279,7 @@ public class GameModel {
     class Down extends Act {
         public boolean ifBoundaryGoOver() {
             return posY + currentBlock.height() > 20;
-        }       //20자리에 설정에서 바뀌는 보드높이 받아와야함
+        }
 
         public void move() {
             posY++;
@@ -234,6 +296,7 @@ public class GameModel {
             }
             else {
                 checkRaw();
+                attackToBoard();
                 setRandomBlock();
             }
         }
@@ -242,7 +305,7 @@ public class GameModel {
     class Right extends Act {
         public boolean ifBoundaryGoOver() {
             return posX + currentBlock.width() > 10;
-        }   //설정에서 보드 너비 받아와야함
+        }
 
         public void move() {
             posX++;
@@ -282,7 +345,7 @@ public class GameModel {
                 break;
             }
         }
-        score += cnt * scorerate;   //1자리에 설정에서 난이도 점수 가중치 받아와서 넣어야함
+        score += cnt * scorerate;
     }
 
     class GameOver extends Act {
@@ -345,28 +408,49 @@ public class GameModel {
     }
 
     public final void checkRaw() {
-        for (int i = 0; i < 20/*설정에서 크기에 따른 보드 높이 받아와야함*/; i++) {
+            int temp = lineCounts;
+            ArrayList<Element[]> attack = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
             boolean isRaw = true;
-            for (int j = 0; j < 10/*설정에서 크기에 따른 보드 넓이 받아와야함*/; j++) {
+            for (int j = 0; j < 10; j++) {
                 if (board.get(i)[j] == Element.EMPTY) {
                     isRaw = false;
                     break;
                 }
             }
             if (isRaw) {
-                for (int j = 0; j < 10/*설정에서 크기에 따른 보드 넓이 받아와야함*/; j++) {
+                for (int j = 0; j < 10; j++) {
                     board.get(i)[j] = Element.DELETE;
                 }
                 score += 100 * scorerate;       //추후 난이도 따른 가중치 추가
                 increaseItemcount();
                 lineCounts++;
+                if (bBattle){
+                    Element[] tempRaw = new Element[10];
+
+                    for(int k=0; k<10; k++) {
+                        if(k - posX < 0 || i - posY < 0 || k - posX >= currentBlock.width() || i - posY >= currentBlock.height()) {
+                            tempRaw[k] = Element.ATTACK;
+                        } else if(currentBlock.getShape(k - posX, i - posY) != Element.EMPTY) {
+                            tempRaw[k] = Element.EMPTY;
+                        } else {
+                            tempRaw[k] = Element.ATTACK;
+                        }
+                    }
+                    attack.add(tempRaw);
+                }
             }
+        }
+        if (bBattle && lineCounts - temp >= 2){
+            Collections.reverse(attack);
+            sendAttack(attack);
         }
         gamecontroller.drawView();
     }
 
     public final void runDelete() {
-        for (int i = 0; i < 20; i++) {      //20,10 각각 설정에서 보드 높이, 너비 받아와야함
+        for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
                 if (board.get(i)[j] == Element.DELETE) {
                     shiftDown(i-1, j);
@@ -386,10 +470,14 @@ public class GameModel {
     public final void moveWeightBlockDown() {
         eraseCurr();
         posY++;
-        if (posY + currentBlock.height() > 20/*설정에서 높이 받기*/) {
+        if (posY + currentBlock.height() > 20) {
             posY--;
             placeBlock();
-            gamecontroller.weightBlockStop();;
+            if (bBattle){
+                battlecontroller.weightItemStop(isPlayer1);
+            } else {
+                gamecontroller.weightBlockStop();
+            }
             checkRaw();
             setRandomBlock();
             return;
@@ -400,7 +488,11 @@ public class GameModel {
     public final void triggerItem() {
         switch (currentBlock.getKind()) {
             case WEIGHT_BLOCK -> {
-                gamecontroller.weightBlockStart();
+                if (bBattle){
+                    battlecontroller.weightItemStart(isPlayer1);
+                } else {
+                    gamecontroller.weightBlockStart();
+                }
             }
             case LINE_CLEANER -> {
                 for (int j = 0; j < 10/*설정에서 받아오기*/; j++) {

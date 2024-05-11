@@ -1,6 +1,6 @@
 package org.Stech.SE5.View;
 
-import org.Stech.SE5.Controller.GameController;
+import org.Stech.SE5.Controller.BattleController;
 import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.Block.Element;
@@ -54,11 +54,11 @@ public class BattleView extends JFrame{
     private SimpleAttributeSet styleSet;
 
     private JPanel backgroundPanel;
-    private GameController gamecontroller;
+    private BattleController battlecontroller;
 
-    //private Player1KeyListener player1KeyListener;        나중에 추가
-    //private Player2KeyListener player2KeyListener;
-    //private PauseKeyListener pauseKeyListener;
+    private Player1KeyListener player1KeyListener;
+    private Player2KeyListener player2KeyListener;
+    private PauseKeyListener pauseKeyListener;
 
     private JPanel pauseDialog = new JPanel() {
         @Override
@@ -72,13 +72,15 @@ public class BattleView extends JFrame{
         }
     };
 
-    public BattleView(/*final GameController controller, */int modeflag/*0,1,2 각 normal, item, time*/) {
+    public BattleView(final BattleController controller, int modeflag/*0,1,2 각 normal, item, time*/) {
         super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         Font labelFont = new Font("Arial", Font.PLAIN, LABEL_FONT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.battlecontroller = controller;
 
         backgroundPanel = new JPanel() {
             @Override
@@ -249,8 +251,8 @@ public class BattleView extends JFrame{
         exitBtn.setBackground(Color.GRAY); // 버튼 배경색을 회색으로 설정합니다.
         exitBtn.setForeground(Color.WHITE); // 버튼 텍스트 색상을 흰색으로 설정합니다.
 
-        //continueBtn.addActionListener(e -> gamecontroller.gameStart());   나중에 추가
-        //exitBtn.addActionListener(e -> exitGame());
+        continueBtn.addActionListener(e -> battlecontroller.gameStart());
+        exitBtn.addActionListener(e -> exitGame());
 
         add(backgroundPanel);
         backgroundPanel.add(pauseDialog);
@@ -307,8 +309,67 @@ public class BattleView extends JFrame{
         backgroundPanel.setFocusable(true);
         backgroundPanel.requestFocus();
         backgroundPanel.requestFocusInWindow();
+
+        this.player1KeyListener = new Player1KeyListener();
+        this.player2KeyListener = new Player2KeyListener();
+        this.pauseKeyListener = new PauseKeyListener();
     }
 
+    class Player1KeyListener implements KeyListener {
+        @Override
+        public void keyTyped(final KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_S -> battlecontroller.moveDown(true);
+                case KeyEvent.VK_D -> battlecontroller.moveRight(true);
+                case KeyEvent.VK_A -> battlecontroller.moveLeft(true);
+                case KeyEvent.VK_W -> battlecontroller.moveRotate(true);
+                case KeyEvent.VK_SHIFT -> {
+                    if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_LEFT) {
+                        battlecontroller.moveStraightDown(true);
+                    }
+                }
+                case KeyEvent.VK_ESCAPE -> battlecontroller.gameStop();
+            }
+        }
+
+        @Override
+        public void keyReleased(final KeyEvent e) {
+
+        }
+    }
+
+    class Player2KeyListener implements KeyListener {
+        @Override
+        public void keyTyped(final KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(final KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_DOWN -> battlecontroller.moveDown(false);
+                case KeyEvent.VK_RIGHT -> battlecontroller.moveRight(false);
+                case KeyEvent.VK_LEFT -> battlecontroller.moveLeft(false);
+                case KeyEvent.VK_UP -> battlecontroller.moveRotate(false);
+                case KeyEvent.VK_SHIFT -> {
+                    if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_RIGHT) {
+                        battlecontroller.moveStraightDown(false);
+                    }
+                }
+                case KeyEvent.VK_ESCAPE -> battlecontroller.gameStop();
+            }
+        }
+
+        @Override
+        public void keyReleased(final KeyEvent e) {
+
+        }
+    }
 
     class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
         @Override
@@ -317,7 +378,7 @@ public class BattleView extends JFrame{
         public void keyPressed(final KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
-                    gamecontroller.gameStart();
+                    battlecontroller.gameStart();
                     break;
                 case KeyEvent.VK_LEFT:
                     buttoncount = !buttoncount;
@@ -329,7 +390,7 @@ public class BattleView extends JFrame{
                     break;
                 case KeyEvent.VK_ENTER:
                     if (buttoncount){
-                        gamecontroller.gameStart();
+                        battlecontroller.gameStart();
                     }else {
                         exitGame();
                     }
@@ -337,6 +398,26 @@ public class BattleView extends JFrame{
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
+    }
+
+    public void startPlayerKeyListen(boolean isPlayer1) {
+        if(isPlayer1) backgroundPanel.addKeyListener(this.player1KeyListener);
+        else backgroundPanel.addKeyListener(this.player2KeyListener);
+    }
+
+    public void stopPlayerKeyListen(boolean isPlayer1) {
+        if(isPlayer1) backgroundPanel.removeKeyListener(this.player1KeyListener);
+        else backgroundPanel.removeKeyListener(this.player2KeyListener);
+    }
+
+    public void startPauseKeyListen() {
+        backgroundPanel.addKeyListener(this.pauseKeyListener);
+        backgroundPanel.addKeyListener(this.pauseKeyListener);
+    }
+
+    public void stopPauseKeyListen() {
+        backgroundPanel.removeKeyListener(this.pauseKeyListener);
+        backgroundPanel.removeKeyListener(this.pauseKeyListener);
     }
 
     private void highlightSelectedButton(boolean count){
@@ -485,7 +566,7 @@ public class BattleView extends JFrame{
         }
     }
 
-    public final void drawDItemCount(int itemCount, boolean isPlayer1) {
+    public final void drawItemCount(int itemCount, boolean isPlayer1) {
         if(!isPlayer1) {
             itemCountPaneP2.setText("");
             Style style = itemCountPaneP2.addStyle("textStyle", null);
@@ -516,6 +597,64 @@ public class BattleView extends JFrame{
 
     }
 
+    public final void drawTimer(int second) {
+        timerPane.setText("");
+        Style style = timerPane.addStyle("textStyle", null);
+        StyledDocument doc = timerPane.getStyledDocument();
+        doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+        StyleConstants.setForeground(style, Color.WHITE);
+        StyleConstants.setFontSize(style, 25);
+        try {
+            doc.insertString(doc.getLength(), Integer.toString(second/60) + ":" + Integer.toString(second%60), style);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        timerPane.setStyledDocument(doc);
+    }
+
+    public final void drawAttack(ArrayList<Element[]> attack, boolean isPlayer1) {
+        if(attack.size() != 0) System.out.println(attack);
+        if(isPlayer1) {
+            attackPaneP1.setText("");
+            Style style = attackPaneP1.addStyle("textStyle", null);
+            StyledDocument doc = attackPaneP1.getStyledDocument();
+            StyleConstants.setFontSize(style, 12);
+
+            try {
+                for (int i = 0; i < attack.size(); i++) {
+                    for (int j = 0; j < attack.get(0).length; j++) {
+                        StyleConstants.setForeground(style, Element.getElementColor(attack.get(i)[j]));
+                        doc.insertString(doc.getLength(), Element.getElementText(attack.get(i)[j]), style);
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            attackPaneP1.setStyledDocument(doc);
+        } else {
+            attackPaneP2.setText("");
+            Style style = attackPaneP2.addStyle("textStyle", null);
+            StyledDocument doc = attackPaneP2.getStyledDocument();
+            StyleConstants.setFontSize(style, 12);
+
+            try {
+                for (int i = 0; i < attack.size(); i++) {
+                    for (int j = 0; j < attack.get(0).length; j++) {
+                        StyleConstants.setForeground(style, Element.getElementColor(attack.get(i)[j]));
+                        doc.insertString(doc.getLength(), Element.getElementText(attack.get(i)[j]), style);
+                    }
+                    doc.insertString(doc.getLength(), "\n", style);
+                }
+            } catch (BadLocationException e) {
+            }
+
+            doc.setParagraphAttributes(0, doc.getLength(), styleSet, false);
+            attackPaneP2.setStyledDocument(doc);
+        }
+    }
+
     public void getsize(ConfigModel.BoardSize boardSize) {
         switch (boardSize){
             case LARGE -> {
@@ -532,6 +671,7 @@ public class BattleView extends JFrame{
             }
         }
     }
+
     public void setSize() {
         getsize(ConfigModel.boardSize);   //설정에서 받아와야함
         if (Size == 1) {
