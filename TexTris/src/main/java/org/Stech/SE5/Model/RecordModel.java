@@ -26,6 +26,13 @@ public class RecordModel {
         Collections.sort(rankedRecords);
 
         saveRecord();
+
+        // todo -> 런타임중에 이 메소드가 호출되어 실행되었을때 lastID와 record의 전체 파라미터를 콘솔에 출력.
+
+        // Add code to print lastID and parameters of the last record
+        System.out.println("Last ID: " + lastID);
+        Record lastRecord = rankedRecords.get(rankedRecords.size() - 1);
+        System.out.println("Last Record Parameters:" + lastRecord.score + lastRecord.deletedLine + lastRecord.gameMode + lastRecord.gameDifficulty + lastRecord.createdAt + lastRecord.name);
     }
 
     public static void saveRecord() {
@@ -52,6 +59,7 @@ public class RecordModel {
 
 
     public static void loadRecord() {
+        rankedRecords.clear(); // 기존 기록 초기화
         Random rnd = new Random(System.currentTimeMillis());
         try {
             File f = new File(path);
