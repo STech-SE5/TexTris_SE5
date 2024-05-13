@@ -205,18 +205,22 @@ public class GameEndView extends JFrame {
                 backgroundPanel.add(showRecordButton);
 
                 // 엔터키 입력을 처리하기 위한 KeyListener 추가
-                KeyAdapter enterKeyListener = new KeyAdapter() {
+                showRecordButton.addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                             // Score Board 화면으로 이동하는 로직
+                            //RecordModel.loadRecord();
+                            //RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                             RecordController record = new RecordController();
                             record.setVisible(true);
+
                             // 현재 창을 숨김
                             setVisible(false);
                         }
                     }
-                };
+                });
+
                 // 버튼 클릭 이벤트 처리
                 showRecordButton.addActionListener(new ActionListener() {
                     @Override
