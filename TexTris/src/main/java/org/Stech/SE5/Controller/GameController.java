@@ -38,7 +38,7 @@ public class GameController{
         }
     }
 
-    public class DeleteTimerActionListener implements ActionListener {      //메인하고나서
+    public class DeleteTimerActionListener implements ActionListener {
         @Override
         public final void actionPerformed(final ActionEvent e) {
             gameModel.runDelete();
@@ -46,7 +46,7 @@ public class GameController{
         }
     }
 
-    public class WeightBlockTimerActionListener implements ActionListener {      //아이템 나중에
+    public class WeightBlockTimerActionListener implements ActionListener {
         @Override
         public final void actionPerformed(final ActionEvent e) {
             gameModel.moveWeightBlockDown();

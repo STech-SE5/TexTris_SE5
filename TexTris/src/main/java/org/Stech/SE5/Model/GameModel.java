@@ -11,7 +11,7 @@ import java.util.Random;
 public class GameModel {
     private GameController gamecontroller;
     private BattleController battlecontroller;
-    private ArrayList<Element[]> board;
+    private ArrayList<Element[]> board = null;
     private Block currentBlock = null;
     private Block nextBlock = null;
     private double score = 0;
@@ -21,7 +21,7 @@ public class GameModel {
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private final int ITEM_GENERATE_INTERVAL = 2;
+    private int ITEM_GENERATE_INTERVAL = 10;
 
     private boolean itemModeFlag;        //시작화면에서 정보 넘겨받아야 함
 
@@ -145,7 +145,7 @@ public class GameModel {
         return itemCount;
     }
 
-    private void increaseItemcount(){
+    public void increaseItemcount(){
         if (boostturn > 0){
             itemCount = itemCount + 3;
             boostturn--;
@@ -214,6 +214,12 @@ public class GameModel {
             battlecontroller.setTimeIntervalP2((int) (1000 / gameSpeed));
         } else {
             gamecontroller.setTimeInterval((int) (1000 / gameSpeed));
+        }
+    }
+
+    private void getBonusScore(){
+    if ((lineCounts & 10) == 0){
+        score += 500 * scorerate;
         }
     }
 
@@ -436,6 +442,7 @@ public class GameModel {
                 score += 100 * scorerate;       //추후 난이도 따른 가중치 추가
                 increaseItemcount();
                 lineCounts++;
+                getBonusScore();
                 if (bBattle){
                     Element[] tempRaw = new Element[10];
 
@@ -500,7 +507,7 @@ public class GameModel {
     }
 
     public final void triggerItem() {
-        switch (currentBlock.getKind()) {
+        switch (currentBlock.getType()) {
             case WEIGHT_BLOCK -> {
                 if (bBattle){
                     battlecontroller.weightItemStart(isPlayer1);
@@ -516,6 +523,7 @@ public class GameModel {
                 score += 100 * scorerate;
                 increaseItemcount();
                 lineCounts++;
+                getBonusScore();
                 gameSpeedUp();
                 setRandomBlock();
             }
@@ -560,4 +568,8 @@ public class GameModel {
             }
         }
     }
+    //test용
+    public double getGameSpeed(){ return gameSpeed;}
+    public double getScorerate(){return scorerate;}
+    public void setITEM_GENERATE_INTERVAL0(){ITEM_GENERATE_INTERVAL = 0;}
 }
