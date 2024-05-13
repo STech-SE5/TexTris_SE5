@@ -3,9 +3,11 @@ package org.Stech.SE5.Controller;
 import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.View.ConfigView;
 
+// New config view - prototype
+import org.Stech.SE5.View.ConfigViewNew;
 
 public class ConfigController{
-    private ConfigView configView;
+    private ConfigViewNew configView;
 
     int VIEW_WIDTH;
     int VIEW_HEIGHT;
@@ -17,7 +19,7 @@ public class ConfigController{
     }
 
     public void initController() {
-        configView = new ConfigView(this);
+        configView = new ConfigViewNew(this);
     }
 
     public void setVisible(boolean visible) {
