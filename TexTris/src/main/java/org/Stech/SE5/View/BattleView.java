@@ -370,18 +370,29 @@ public class BattleView extends JFrame{
         @Override
         public void keyPressed(final KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_S -> battlecontroller.moveDown(true);
-                case KeyEvent.VK_D -> battlecontroller.moveRight(true);
-                case KeyEvent.VK_A -> battlecontroller.moveLeft(true);
-                case KeyEvent.VK_W -> battlecontroller.moveRotate(true);
-                case KeyEvent.VK_SHIFT -> {
+                case KeyEvent.VK_S:
+                    battlecontroller.moveDown(true);
+                    break;
+                case KeyEvent.VK_D:
+                    battlecontroller.moveRight(true);
+                    break;
+                case KeyEvent.VK_A:
+                    battlecontroller.moveLeft(true);
+                    break;
+                case KeyEvent.VK_W:
+                    battlecontroller.moveRotate(true);
+                    break;
+                case KeyEvent.VK_SHIFT:
                     if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_LEFT) {
                         battlecontroller.moveStraightDown(true);
+                        break;
                     }
-                }
-                case KeyEvent.VK_ESCAPE -> {battlecontroller.gameStop();
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    battlecontroller.gameStop();
                     highlightPauseButton(buttoncount);
-                }
+                    break;
+
             }
         }
 
@@ -400,18 +411,29 @@ public class BattleView extends JFrame{
         @Override
         public void keyPressed(final KeyEvent e) {
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_DOWN -> battlecontroller.moveDown(false);
-                case KeyEvent.VK_RIGHT -> battlecontroller.moveRight(false);
-                case KeyEvent.VK_LEFT -> battlecontroller.moveLeft(false);
-                case KeyEvent.VK_UP -> battlecontroller.moveRotate(false);
-                case KeyEvent.VK_SHIFT -> {
+                case KeyEvent.VK_DOWN:
+                    battlecontroller.moveDown(false);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    battlecontroller.moveRight(false);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    battlecontroller.moveLeft(false);
+                    break;
+                case KeyEvent.VK_UP:
+                    battlecontroller.moveRotate(false);
+                    break;
+                case KeyEvent.VK_SHIFT:
                     if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_RIGHT) {
                         battlecontroller.moveStraightDown(false);
+                        break;
                     }
-                }
-                case KeyEvent.VK_P -> {battlecontroller.gameStop();
+                    break;
+
+                case KeyEvent.VK_P:
+                battlecontroller.gameStop();
                 highlightPauseButton(buttoncount);
-                }
+                    break;
             }
         }
 

@@ -95,7 +95,7 @@ public class GameController{
     public final void gameOver() {
         gameView.stopPlayerKeyListen();
         gameView.stopPauseKeyListen();
-        mainTimer.stop();   //종료화면 불러와야함, 불러올때 게임난이도,점수 넘겨줘야함
+        mainTimer.stop();
         gameEnd = new GameEndView((int)(gameModel.getScore()), gameModel.getMode(),gameModel.getDiff(), gameModel.getLineCounts());
         this.setVisible(false);
         gameEnd.setVisible(true);

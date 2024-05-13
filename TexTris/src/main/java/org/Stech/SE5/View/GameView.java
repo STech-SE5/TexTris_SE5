@@ -269,8 +269,10 @@ public class GameView extends JFrame {
                 case KeyEvent.VK_ENTER:
                     if (buttoncount){
                         gamecontroller.gameStart();
+                        break;
                     }else {
                         exitGame();
+                        break;
                     }
             }
         }

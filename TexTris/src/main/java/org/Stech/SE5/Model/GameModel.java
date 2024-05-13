@@ -12,8 +12,8 @@ public class GameModel {
     private GameController gamecontroller;
     private BattleController battlecontroller;
     private ArrayList<Element[]> board;
-    private Block currentBlock;
-    private Block nextBlock;
+    private Block currentBlock = null;
+    private Block nextBlock = null;
     private double score = 0;
     private double scorerate = 1;
     private int lineCounts = 0;
@@ -21,7 +21,7 @@ public class GameModel {
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private final int ITEM_GENERATE_INTERVAL = 10;
+    private final int ITEM_GENERATE_INTERVAL = 2;
 
     private boolean itemModeFlag;        //시작화면에서 정보 넘겨받아야 함
 
