@@ -85,12 +85,12 @@ public class GameEndView extends JFrame {
 
         //이전 레코드와 비교하여 현재 레코드가 순위권 내에 진입했을 경우에만 사용자 이름을 입력받아 점수를 기록함.
         RecordModel.loadRecord();
-        int recordSize = Math.min((RecordModel.rankedRecords.size()),15);
+        int recordSize = Math.min((RecordModel.rankedRecords.size()),14);
 
         System.out.println(recordSize);
 
         //15개 이상일때만 비교해서 넣도록 변경해보자.
-        if(recordSize <= 14) {
+        if(recordSize <= 13) {
             // 사용자 이름 입력 필드
             userNameField = new JTextField();
             userNameField.setBounds(98, 150, WIDTH - 200, 50);
