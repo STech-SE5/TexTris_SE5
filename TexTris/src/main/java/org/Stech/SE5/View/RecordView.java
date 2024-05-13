@@ -116,7 +116,7 @@ public class RecordView extends JFrame {
 
         recordList = new ArrayList<>();
 
-        System.out.println(RecordModel.rankedRecords.size());
+        //System.out.println(RecordModel.rankedRecords.size());
         for(int i=0; i<Math.min(RecordModel.rankedRecords.size(), (10+resolution*4)); i++) {
             recordList.add(new JTextPane());
 
