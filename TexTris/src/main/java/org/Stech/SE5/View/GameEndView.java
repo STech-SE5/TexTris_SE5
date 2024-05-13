@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 
 public class GameEndView extends JFrame {
@@ -110,6 +111,8 @@ public class GameEndView extends JFrame {
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         String userName = userNameField.getText();
+                        if(Objects.equals(userName, ""))
+                            userName = "default";
 
                         // Score Board 화면으로 이동하는 로직
                         //RecordModel.loadRecord();
@@ -143,7 +146,7 @@ public class GameEndView extends JFrame {
             setVisible(true);
         }
         else{
-            if(currentScore >= RecordModel.rankedRecords.get(recordSize-1).score){
+            if(currentScore >= RecordModel.rankedRecords.get(13).score){
                 System.out.println("executed else");
                 // 사용자 이름 입력 필드
                 userNameField = new JTextField();
@@ -164,6 +167,8 @@ public class GameEndView extends JFrame {
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                             String userName = userNameField.getText();
+                            if(Objects.equals(userName, ""))
+                                userName = "default";
 
                             // Score Board 화면으로 이동하는 로직
                             //RecordModel.loadRecord();
