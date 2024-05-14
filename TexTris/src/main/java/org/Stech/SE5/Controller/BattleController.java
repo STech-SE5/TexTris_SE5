@@ -164,7 +164,7 @@ public class BattleController {
         battleView.drawFinishDialog((int) gameModelP1.getScore(), (int) gameModelP2.getScore(), isplayer1);
     }
 
-    public final void weightItemStart(boolean isPlayer1) {
+    public final void weightBlockStart(boolean isPlayer1) {
         if(isPlayer1) {
             battleView.stopPlayerKeyListen(true);
             mainTimerP1.stop();
@@ -176,7 +176,7 @@ public class BattleController {
         }
     }
 
-    public final void weightItemStop(boolean isPlayer1) {
+    public final void weightBlockStop(boolean isPlayer1) {
         if(isPlayer1) {
             battleView.startPlayerKeyListen(true);
             mainTimerP1.start();
@@ -244,5 +244,14 @@ public class BattleController {
             gameModelP2.moveStraightDown();
         }
         drawView();
+    }
+
+    //테스트용
+    public boolean P1MainTimerisRunning(){
+        return mainTimerP1.isRunning();
+    }
+
+    public boolean P2MainTimerisRunning(){
+        return mainTimerP2.isRunning();
     }
 }

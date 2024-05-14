@@ -218,8 +218,8 @@ public class GameModel {
     }
 
     private void getBonusScore(){
-    if ((lineCounts & 10) == 0){
-        score += 500 * scorerate;
+    if ((lineCounts % 2) == 0){
+        score += 600 * scorerate;
         }
     }
 
@@ -495,7 +495,7 @@ public class GameModel {
             posY--;
             placeBlock();
             if (bBattle){
-                battlecontroller.weightItemStop(isPlayer1);
+                battlecontroller.weightBlockStop(isPlayer1);
             } else {
                 gamecontroller.weightBlockStop();
             }
@@ -510,7 +510,7 @@ public class GameModel {
         switch (currentBlock.getType()) {
             case WEIGHT_BLOCK -> {
                 if (bBattle){
-                    battlecontroller.weightItemStart(isPlayer1);
+                    battlecontroller.weightBlockStart(isPlayer1);
                 } else {
                     gamecontroller.weightBlockStart();
                 }
@@ -572,4 +572,52 @@ public class GameModel {
     public double getGameSpeed(){ return gameSpeed;}
     public double getScorerate(){return scorerate;}
     public void setITEM_GENERATE_INTERVAL0(){ITEM_GENERATE_INTERVAL = 0;}
+    public final void setRandomBlock_test() {
+        Random rnd = new Random(System.currentTimeMillis());
+        BlockType blocktype;
+        int rndNum = 0;
+
+        if (nextBlock == null) {
+            rndNum = rnd.nextInt(BlockType.getTetrominoSize());
+            blocktype = BlockType.values()[rndNum];
+            currentBlock = BlockType.getBlockInstance(blocktype);
+        }
+        else {
+            currentBlock = nextBlock;
+        }
+        if (itemModeFlag && itemCount >= ITEM_GENERATE_INTERVAL){
+            itemCount = Math.max(0, itemCount - ITEM_GENERATE_INTERVAL);
+            rndNum = rnd.nextInt(BlockType.getItemSize()) + BlockType.getTetrominoSize();
+        }
+        else {
+            if (diff == 0){
+                rndNum = rnd.nextInt(72) / 10;
+                if(rndNum > 6) rndNum = 6;
+            }
+            else if (diff == 1) {
+                rndNum = rnd.nextInt(70) / 10;
+            }
+            else if (diff == 2) {
+                rndNum = rnd.nextInt(68) / 10;
+            }
+        }
+        blocktype = BlockType.values()[rndNum];
+        nextBlock = BlockType.getBlockInstance(blocktype);
+
+        posX = DEFAULT_POS_X;
+        posY = DEFAULT_POS_Y;
+
+        GameOver gameOver = new GameOver();
+        if (gameOver.canPlaceBlock()) {
+            placeBlock();
+        }
+        else {
+            if (bBattle){
+                battlecontroller.gameOver(isPlayer1);
+            }else {
+                gamecontroller.gameOver();
+            }
+        }
+        gameSpeedUp();
+    }
 }
