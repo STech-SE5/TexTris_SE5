@@ -110,6 +110,7 @@ public class SelectView extends JFrame {
 
         //updateLabelTitle(title, titleText);
         titleText = "Battle";
+        title = new JLabel(titleText);
 
         // 게임 난이도 버튼
         JButton easyLvBtn = new JButton("Basic");
@@ -205,6 +206,8 @@ public class SelectView extends JFrame {
                         case 0: // easyMode
                             if (bBattle){
                                 battleController = new BattleController(0);
+                                battleController.setVisible(true);
+                                setVisible(false);
                                 break;
                             }else {
                                 gameController = new GameController(itemModeflag, 0);
@@ -215,6 +218,8 @@ public class SelectView extends JFrame {
                         case 1: // normalMode
                             if (bBattle){
                                 battleController = new BattleController(1);
+                                battleController.setVisible(true);
+                                setVisible(false);
                                 break;
                             }else {
                                 gameController = new GameController(itemModeflag, 1);
@@ -225,6 +230,8 @@ public class SelectView extends JFrame {
                         case 2: // hardMode
                             if (bBattle){
                                 battleController = new BattleController(2);
+                                battleController.setVisible(true);
+                                setVisible(false);
                                 break;
                             }else {
                                 gameController = new GameController(itemModeflag, 2);
