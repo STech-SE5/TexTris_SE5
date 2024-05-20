@@ -93,10 +93,10 @@ public class BattleView extends JFrame{
     };
 
     public BattleView(final BattleController controller, int modeflag/*0,1,2 각 normal, item, time*/) {
+        super("TETRIS");
         if (modeflag < 0 || modeflag > 2){
             throw new IllegalArgumentException("Invalid mode data");
         }
-        super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         Font labelFont = new Font("Arial", Font.PLAIN, LABEL_FONT);
