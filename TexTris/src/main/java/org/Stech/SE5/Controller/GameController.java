@@ -1,5 +1,7 @@
 package org.Stech.SE5.Controller;
 
+import org.Stech.SE5.Block.BlockType;
+import org.Stech.SE5.Item.WeightBlock;
 import org.Stech.SE5.View.GameEndView;
 import org.Stech.SE5.View.GameView;
 import org.Stech.SE5.Model.GameModel;
@@ -65,8 +67,8 @@ public class GameController{
     }
 
     public void initController(boolean itemmodeflag, int diff) {
-        this.gameModel = new GameModel(this, itemmodeflag, diff);
         this.gameView = new GameView(this, itemmodeflag);
+        this.gameModel = new GameModel(this, itemmodeflag, diff);
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 
@@ -123,8 +125,10 @@ public class GameController{
     }
 
     public final void actRotate() {
-        gameModel.actRotate();
-        drawView();
+        if (gameModel.getCurrentBlock().getType() != BlockType.WEIGHT_BLOCK) {
+            gameModel.actRotate();
+            drawView();
+        }
     }
 
     public final void moveLeft() {

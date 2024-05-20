@@ -21,7 +21,7 @@ public class GameModel {
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private int ITEM_GENERATE_INTERVAL = 10;
+    private int ITEM_GENERATE_INTERVAL = 1;
 
     private boolean itemModeFlag;        //시작화면에서 정보 넘겨받아야 함
 
@@ -37,7 +37,7 @@ public class GameModel {
     private boolean bBattle = false;
     private ArrayList<Element[]> attack = new ArrayList<>();    //공격줄
 
-    private GameModel opposite; //상대방
+    private GameModel opposite = null; //상대방
     private boolean isPlayer1 = true;  //true - p1, false = p2
 
     public void setOpposite(GameModel oppositeModel) {
@@ -74,6 +74,10 @@ public class GameModel {
             }
         }
         attack = new ArrayList<>();
+    }
+
+    public Block getCurrentBlock(){
+        return currentBlock;
     }
 
     public GameModel(final BattleController controller, int mode/*0,1,2로 일반, 아이템, 시간제한*/, boolean bPlayer1) {   //2인모드 생성자
@@ -516,7 +520,7 @@ public class GameModel {
                 }
             }
             case LINE_CLEANER -> {
-                for (int j = 0; j < 10/*설정에서 받아오기*/; j++) {
+                for (int j = 0; j < 10; j++) {
                     board.get(posY + currentBlock.getItemPosY())[j] = Element.DELETE;
                 }
                 checkRaw();

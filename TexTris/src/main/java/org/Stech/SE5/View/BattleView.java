@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class BattleView extends JFrame{
     private HomeController homeController;
@@ -362,6 +363,7 @@ public class BattleView extends JFrame{
     }
 
     class Player1KeyListener implements KeyListener {
+        private static final Logger logger = Logger.getLogger(BattleView.Player1KeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -369,6 +371,7 @@ public class BattleView extends JFrame{
 
         @Override
         public void keyPressed(final KeyEvent e) {
+            long startTime = System.nanoTime();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
                     battlecontroller.moveDown(true);
@@ -394,6 +397,9 @@ public class BattleView extends JFrame{
                     break;
 
             }
+            long endTime = System.nanoTime();
+            long responseTime = endTime - startTime;
+            logger.info("Response Time (ns): " + responseTime);
         }
 
         @Override
@@ -403,6 +409,7 @@ public class BattleView extends JFrame{
     }
 
     class Player2KeyListener implements KeyListener {
+        private static final Logger logger = Logger.getLogger(BattleView.Player2KeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -410,6 +417,7 @@ public class BattleView extends JFrame{
 
         @Override
         public void keyPressed(final KeyEvent e) {
+            long startTime = System.nanoTime();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_DOWN:
                     battlecontroller.moveDown(false);
@@ -435,6 +443,9 @@ public class BattleView extends JFrame{
                 highlightPauseButton(buttoncount);
                     break;
             }
+            long endTime = System.nanoTime();
+            long responseTime = endTime - startTime;
+            logger.info("Response Time (ns): " + responseTime);
         }
 
         @Override
@@ -444,10 +455,12 @@ public class BattleView extends JFrame{
     }
 
     class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+        private static final Logger logger = Logger.getLogger(BattleView.PauseKeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {}
         @Override
         public void keyPressed(final KeyEvent e) {
+            long startTime = System.nanoTime();
              switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     battlecontroller.gameStart();
@@ -469,12 +482,15 @@ public class BattleView extends JFrame{
                         break;
                     }
             }
+            long endTime = System.nanoTime();
+            long responseTime = endTime - startTime;
+            logger.info("Response Time (ns): " + responseTime);
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
     }
 
-    class EndKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+    class EndKeyListener implements KeyListener {
         @Override
         public void keyTyped(final KeyEvent e) {}
         @Override
