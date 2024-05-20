@@ -93,6 +93,9 @@ public class BattleView extends JFrame{
     };
 
     public BattleView(final BattleController controller, int modeflag/*0,1,2 각 normal, item, time*/) {
+        if (modeflag < 0 || modeflag > 2){
+            throw new IllegalArgumentException("Invalid mode data");
+        }
         super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
@@ -158,7 +161,7 @@ public class BattleView extends JFrame{
 
         attackPanelP1 = new JPanel();
         attackPanelP1.setLayout(null);
-        attackPanelP1.setBounds((int)(280 * Size),(int)(340 * Size),PANE_WIDTH,PANE_HEIGHT);
+        attackPanelP1.setBounds((int)(280 * Size),(int)(340 * Size),(int) (100 * Size),PANE_HEIGHT);
         attackPanelP1.setBackground(Color.GRAY);
         JLabel attackLabel1 = new JLabel("attack", SwingConstants.CENTER); // attackPanel에 "level" 텍스트를 추가합니다.
         attackLabel1.setForeground(Color.WHITE);
@@ -166,7 +169,7 @@ public class BattleView extends JFrame{
         attackLabel1.setBounds(0, 0, (int)(70 * Size), (int)(20 * Size));
         attackPanelP2 = new JPanel();
         attackPanelP2.setLayout(null);
-        attackPanelP2.setBounds((int)(680 * Size),(int)(340 * Size),PANE_WIDTH,PANE_HEIGHT);
+        attackPanelP2.setBounds((int)(680 * Size),(int)(340 * Size),(int) (100 * Size),PANE_HEIGHT);
         attackPanelP2.setBackground(Color.GRAY);
         JLabel attackLabel2 = new JLabel("attack", SwingConstants.CENTER); // attackPanel에 "level" 텍스트를 추가합니다.
         attackLabel2.setForeground(Color.WHITE);
@@ -252,12 +255,12 @@ public class BattleView extends JFrame{
         attackPaneP1.setEditable(false);
         attackPaneP1.setOpaque(true);
         attackPaneP1.setBackground(Color.BLACK);
-        attackPaneP1.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
+        attackPaneP1.setBounds((int)(5 * Size), (int)(20 * Size), (int)(90 * Size), (int)(50 * Size));
         attackPaneP2 = new JTextPane();
         attackPaneP2.setEditable(false);
         attackPaneP2.setOpaque(true);
         attackPaneP2.setBackground(Color.BLACK);
-        attackPaneP2.setBounds((int)(5 * Size), (int)(20 * Size), (int)(60 * Size), (int)(50 * Size));
+        attackPaneP2.setBounds((int)(5 * Size), (int)(20 * Size), (int)(90 * Size), (int)(50 * Size));
 
         itemCountPaneP1 = new JTextPane();
         itemCountPaneP1.setEditable(false);

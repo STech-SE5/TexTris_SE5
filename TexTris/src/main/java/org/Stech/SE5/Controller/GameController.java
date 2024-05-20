@@ -27,6 +27,9 @@ public class GameController{
     private static final double INIT_INTERVAL = 1000;
 
     public GameController(boolean itemmodeflag, int diff) {
+        if (diff < 0 || diff > 2){
+            throw new IllegalArgumentException("Invalid Difficulty Data!");
+        }
         mainTimer = new Timer((int)INIT_INTERVAL, new MainTimerActionListener());
         deleteTimer = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener());
         weightBlockTimer = new Timer((int)INIT_INTERVAL / 5, new WeightBlockTimerActionListener());
@@ -67,6 +70,9 @@ public class GameController{
     }
 
     public void initController(boolean itemmodeflag, int diff) {
+        if (diff < 0 || diff > 2){
+            throw new IllegalArgumentException("Invalid Difficulty Data!");
+        }
         this.gameView = new GameView(this, itemmodeflag);
         this.gameModel = new GameModel(this, itemmodeflag, diff);
         this.gameView.drawBoard(this.gameModel.getBoard());

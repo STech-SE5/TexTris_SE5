@@ -18,7 +18,7 @@ public class BattleController {
     private final Timer weightItemTimerP2;
     private final Timer timeAttackTimer;
     public int seconds;
-    private int Mode;
+    private int Mode;   //0, 1, 2로 일반, 아이템, 타이머 모드 설정
     private static final double INIT_INTERVAL = 1000;
 
     public BattleController(int mode) {
@@ -30,6 +30,9 @@ public class BattleController {
         weightItemTimerP2 = new Timer((int)INIT_INTERVAL / 5, new WeightItemTimerActionListener(false));
         timeAttackTimer = new Timer(1000, new TimeAttackActionListener());
 
+        if (mode < 0 || mode > 2){
+            throw new IllegalArgumentException("Invalid Mode Data!");
+        }
         Mode = mode;
         initController(Mode);
     }
@@ -86,6 +89,9 @@ public class BattleController {
     }
 
     public void initController(int mode) {
+        if (mode < 0 || mode > 2){
+            throw new IllegalArgumentException("Invalid Mode Data!");
+        }
         this.seconds = 180;
         this.gameModelP1 = new GameModel(this, mode, true);
         this.gameModelP2 = new GameModel(this, mode, false);

@@ -442,6 +442,8 @@ public class GameView extends JFrame {
             PANE_WIDTH = 105;
             PANE_HEIGHT = 112;
             LABEL_FONT = 18;
+        } else{
+            throw new IllegalArgumentException("Invalid Size");
         }
     }
 

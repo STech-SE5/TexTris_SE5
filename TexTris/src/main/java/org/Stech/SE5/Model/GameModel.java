@@ -21,7 +21,7 @@ public class GameModel {
 
     private int boostturn = 0;  //아이템부스트 아이템이 켜져있는지 관리할 변수
 
-    private int ITEM_GENERATE_INTERVAL = 1;
+    private int ITEM_GENERATE_INTERVAL = 10;
 
     private boolean itemModeFlag;        //시작화면에서 정보 넘겨받아야 함
 
@@ -51,7 +51,8 @@ public class GameModel {
 
     public void receiveAttack(ArrayList<Element[]> receiveAttack) {
         for(int i=0; i<receiveAttack.size(); i++) {
-            if(this.attack.size() == 10) return;
+            if (i >= receiveAttack.size() || i < 0){throw new ArrayIndexOutOfBoundsException("Invalid index");}
+            if(this.attack.size() >= 10) return;
             this.attack.add(receiveAttack.get(i));
         }
     }
@@ -64,12 +65,16 @@ public class GameModel {
         if(attack.size() == 0) return;
         for(int k=0; k < 20 - attack.size(); k++) {
             for (int i = 0; i < 10; i++) {
+                if (k >= board.size() || i >= board.get(k).length || k + attack.size() >= board.size() || i >= board.get(k + attack.size()).length){
+                    throw new ArrayIndexOutOfBoundsException("Invalid index");}
                 board.get(k)[i] = board.get(k + attack.size())[i];
             }
         }
 
         for(int k = attack.size(); k > 0; k--) {
             for (int i = 0; i < 10; i++) {
+                if (20 - k >= board.size() || 20 - k < 0 || i >= board.get(20 - k).length || k - 1 >= board.size() || i >= board.get(k - 1).length){
+                    throw new ArrayIndexOutOfBoundsException("Invalid index");}
                 board.get(20 - k)[i] = attack.get(k - 1)[i];
             }
         }
@@ -81,6 +86,9 @@ public class GameModel {
     }
 
     public GameModel(final BattleController controller, int mode/*0,1,2로 일반, 아이템, 시간제한*/, boolean bPlayer1) {   //2인모드 생성자
+        if (mode < 0 || mode > 2){
+            throw new IllegalArgumentException("Invalid mode data");
+        }
         this.battlecontroller = controller;
         if (mode == 1){
             itemModeFlag = true;
@@ -97,6 +105,9 @@ public class GameModel {
     }
 
     public GameModel(final GameController controller, boolean itemFlag, int difficulty) {   //1인모드 생성자
+        if (difficulty < 0 || difficulty > 2){
+            throw new IllegalArgumentException("Invalid difficulty data");
+        }
         this.gamecontroller = controller;
         itemModeFlag = itemFlag;
         diff = difficulty;
@@ -124,6 +135,9 @@ public class GameModel {
         for (int i = 0; i < height; i++) {
             Element[] row = new Element[width];
             for (int j = 0; j < width; j++) {
+                if ( j >= row.length){
+                    throw new ArrayIndexOutOfBoundsException("Invalid index");
+                }
                 row[j] = Element.EMPTY;
             }
             board.add(row);
@@ -258,6 +272,8 @@ public class GameModel {
             }
             for (int i = 0; i < currentBlock.width(); i++) {
                 for (int j = 0; j < currentBlock.height(); j++) {
+                    if (posY + j >= board.size() || posX + i >= board.get(posY + j).length){
+                        throw new ArrayIndexOutOfBoundsException("Invalid index");}
                     if (board.get(posY + j)[posX + i] != Element.EMPTY
                             && currentBlock.getShape(i, j) != Element.EMPTY) {
                         return false;
@@ -535,14 +551,14 @@ public class GameModel {
                 int cnt = 0;
                 for (int i = -2; i <= 2; i++) { // 중심점에서 위로 2칸, 아래로 2칸
                     int currentY = posY + i;
-                    if (currentY < 0 || currentY >= 20/*높이 받아와서 수정*/) continue; // 게임보드 범위를 벗어나면 무시
+                    if (currentY < 0 || currentY >= 20) continue; // 게임보드 범위를 벗어나면 무시
                     // 각 줄마다 영향을 받는 X 범위의 너비를 계산
                     int width = 5 - Math.abs(i) * 2; // 1, 3, 5, 3, 1 패턴에 맞게 너비를 계산
                     int startX = posX - (width / 2); // 시작 X 좌표
                     int endX = startX + width - 1; // 종료 X 좌표
 
                     for (int j = startX; j <= endX; j++) {
-                        if (j < 0 || j >= 10/*너비 받아와서 수정*/) continue; // 게임보드 범위를 벗어나면 무시
+                        if (j < 0 || j >= 10) continue; // 게임보드 범위를 벗어나면 무시
                         if (board.get(currentY)[j] != Element.EMPTY) {
                             board.get(currentY)[j] = Element.DELETE;
                             cnt++;
@@ -559,8 +575,8 @@ public class GameModel {
             }
             case CROSS_DELETE -> {
                 int cnt = 0;
-                for (int i = 0; i < 20/*높이 받아오기*/; i++) {
-                    for (int j = 0; j < 10/*너비 받아오기*/; j++) {
+                for (int i = 0; i < 20; i++) {
+                    for (int j = 0; j < 10; j++) {
                         if(Math.abs(posX - j) == Math.abs(posY - i) && board.get(i)[j] != Element.EMPTY) {
                             board.get(i)[j] = Element.DELETE;
                             cnt++;

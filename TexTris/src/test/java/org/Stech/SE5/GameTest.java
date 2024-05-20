@@ -21,8 +21,8 @@ public class GameTest {
 
     @Test
     public void testBlocks_normal() {
-        GameController gameController = new GameController(false, 1);
-        GameModel gameModel = new GameModel(gameController, false, 1);
+        BattleController battleController = new BattleController(0);
+        GameModel gameModel = new GameModel(battleController, 0, true);
         gameModel.setRandomBlock_test();
         int I = 0;
         int J = 0;
