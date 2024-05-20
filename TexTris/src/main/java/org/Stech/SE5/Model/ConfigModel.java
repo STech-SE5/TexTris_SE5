@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigModel {
+    public ConfigModel() {
+
+    }
+
     public enum GameMode {
         BASIC(1), ITEM(0.5);
 
@@ -38,9 +42,14 @@ public class ConfigModel {
         }
     }
 
-    public enum PlayerKey {
-        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
-    }
+
+//    public enum PlayerKey {
+//        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
+//    }
+//    public static int[] keyBinding = {
+//            KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+//            KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
+//    };
 
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
@@ -49,25 +58,59 @@ public class ConfigModel {
     public static int boardHeight = 20;
     public static double gameSpeed = 1;
     public static boolean colorBlindMode = false;
-    public static int[] keyBinding = {
-            KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-            KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-    };
+
     private final static String path = "saved-config/config.txt";
 
-    public ConfigModel() {
 
+//    public static PlayerKey getPlayerKey(final KeyEvent e) {
+//        PlayerKey[] values = PlayerKey.values();
+//        for (int i = 0; i < values.length; i++) {
+//            if (keyBinding[i] == e.getKeyCode()) {
+//                return values[i];
+//            }
+//        }
+//        return PlayerKey.UNDEFINED;
+//    }
+
+    // Update Keyboard Part
+    private PlayerKey lastKey = PlayerKey.UNDEFINED;
+
+    public PlayerKey getLastKey() {
+        return lastKey;
     }
 
-    public static PlayerKey getPlayerKey(final KeyEvent e) {
-        PlayerKey[] values = PlayerKey.values();
-        for (int i = 0; i < values.length; i++) {
-            if (keyBinding[i] == e.getKeyCode()) {
-                return values[i];
+    public void setLastKey(PlayerKey lastKey) {
+        this.lastKey = lastKey;
+    }
+
+    public boolean getColorblindState() {
+        return colorBlindMode;
+    }
+
+    public enum PlayerKey {
+        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED;
+
+        // Method to get PlayerKey based on KeyEvent
+        public static PlayerKey getPlayerKey(final KeyEvent e) {
+            for (int i = 0; i < keyBinding.length; i++) {
+                if (keyBinding[i] == e.getKeyCode()) {
+                    return values()[i];
+                }
             }
+            return PlayerKey.UNDEFINED;
         }
-        return PlayerKey.UNDEFINED;
     }
+
+    // Static array to hold key bindings
+    // Default key bindings:
+    public static int[] keyBinding = {KeyEvent.VK_UP,    // ROTATE
+            KeyEvent.VK_LEFT,  // LEFT
+            KeyEvent.VK_RIGHT, // RIGHT
+            KeyEvent.VK_DOWN,  // DOWN
+            KeyEvent.VK_SPACE, // DROP
+            KeyEvent.VK_ESCAPE // ESC
+    };
+
 
     public static void changeBoardSize(BoardSize b) {
         boardWidth = b.width;
@@ -81,11 +124,13 @@ public class ConfigModel {
         saveConfig();
     }
 
+
     public static void changeKeyBinding(PlayerKey playerKey, KeyEvent e) {
         keyBinding[playerKey.ordinal()] = e.getKeyCode();
         saveConfig();
     }
 
+    // Config 초기화 - 게임 모드, 난이도, 보드 사이즈, 게임 속도, 컬러블라인 모드, 키 바인딩 초기 설정으로 초기화
     public static void initConfig() {
         gameMode = GameMode.BASIC;
         gameDifficulty = GameDifficulty.NORMAL;
@@ -94,13 +139,11 @@ public class ConfigModel {
         boardHeight = 20;
         gameSpeed = 1;
         colorBlindMode = false;
-        keyBinding = new int[]{
-                KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-                KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-        };
+        keyBinding = new int[]{KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0};
         saveConfig();
     }
 
+    // Config 설정 파일 저장
     public static void saveConfig() {
         BufferedWriter out = null;
         List<String> strList = new ArrayList<>();
@@ -130,6 +173,7 @@ public class ConfigModel {
 
     }
 
+    // Config 설정 파일 불러오기
     public static void loadConfig() {
         try {
             File f = new File(path);
