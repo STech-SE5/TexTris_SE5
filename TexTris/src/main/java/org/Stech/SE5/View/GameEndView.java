@@ -16,6 +16,8 @@ import java.util.Objects;
 
 public class GameEndView extends JFrame {
 
+    public RecordController recordController;
+    //public AbstractButton recordButton;
     int resolution;
     private JTextField userNameField;
 
@@ -90,7 +92,7 @@ public class GameEndView extends JFrame {
 
         System.out.println(recordSize);
 
-        //15개 이상일때만 비교해서 넣도록 변경해보자.
+        //15개 이상일때만 비교해서 넣도록 변경
         if(recordSize <= 13) {
             // 사용자 이름 입력 필드
             userNameField = new JTextField();
@@ -147,7 +149,7 @@ public class GameEndView extends JFrame {
         }
         else{
             if(currentScore >= RecordModel.rankedRecords.get(13).score){
-                System.out.println("executed else");
+                //System.out.println("executed else");
                 // 사용자 이름 입력 필드
                 userNameField = new JTextField();
                 userNameField.setBounds(98, 150, WIDTH - 200, 50);

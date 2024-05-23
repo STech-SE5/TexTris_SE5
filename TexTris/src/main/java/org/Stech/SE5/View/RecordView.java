@@ -183,7 +183,7 @@ public class RecordView extends JFrame {
         @Override
         public void keyReleased(KeyEvent e) {}
     }
-    private void gotoMain(){
+    void gotoMain(){
         homeController = new HomeController();
         homeController.setVisible(true);
         setVisible(false);

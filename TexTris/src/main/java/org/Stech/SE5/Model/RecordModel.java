@@ -8,8 +8,8 @@ import java.util.Random;
 import org.Stech.SE5.Data.Record;
 
 public class RecordModel {
-    public static ArrayList<Record> rankedRecords = new ArrayList<Record>();
-    private final static String path = "Data/record.txt";
+    public static ArrayList<Record> rankedRecords = new ArrayList<Record>(); //record 자체의 조작이 외부에서 불가능 하도록 수정 필요..?
+    final static String path = "Data/record.txt";
     public static int lastID = -1;
 
     public static void initRecord() {
@@ -26,15 +26,6 @@ public class RecordModel {
         Collections.sort(rankedRecords);
 
         saveRecord();
-
-        // todo -> 런타임중에 이 메소드가 호출되어 실행되었을때 lastID와 record의 전체 파라미터를 콘솔에 출력.
-
-        // Add code to print lastID and parameters of the last record
-        /*
-        System.out.println("Last ID: " + lastID);
-        Record lastRecord = rankedRecords.get(rankedRecords.size() - 1);
-        System.out.println("Last Record Parameters:" + lastRecord.score + lastRecord.deletedLine + lastRecord.gameMode + lastRecord.gameDifficulty + lastRecord.createdAt + lastRecord.name);
-        */
     }
 
     public static void saveRecord() {
