@@ -31,7 +31,7 @@ public class HomeView extends JFrame {
     private final ArrayList<JButton> buttonList = new ArrayList<>();  // 만든 버튼을 저장할 ArrayList
     private JPanel bgPanel;    // 전체 버튼을 담을 패널
     private JLabel title;   // 패널에 들어갈 타이틀(TEXTRIS)
-    private JButton basicBtn, itemBtn;  // 게임 모드 버튼
+    private JButton basicBtn, itemBtn, battleBtn;  // 게임 모드 버튼
     private JButton configBtn, exitBtn, scoreBrdBtn;    // 기타 버튼
     private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
@@ -62,12 +62,13 @@ public class HomeView extends JFrame {
         // 제목 레이블 객체 생성
         title = new JLabel("TEXTRIS");
         // 게임 모드 버튼 객체 생성
-        basicBtn = new JButton("Basic Mode");
-        itemBtn = new JButton("Item Mode");
+        basicBtn = new JButton("Basic Mode");   // 일반 모드 버튼
+        itemBtn = new JButton("Item Mode"); // 아이템 모드 버튼
+        battleBtn = new JButton("Battle Mode"); // 대전 모드 버튼
         // 기타 버튼 객체 생성
         configBtn = new JButton("Setting"); // 설정 화면으로 이동하는 버튼
+        scoreBrdBtn = new JButton("RECORD");    // 스코어 보드로 이동하는 버튼
         exitBtn = new JButton("X");  // 게임 종료 버튼
-        scoreBrdBtn = new JButton("Score Board");    // 스코어 보드로 이동하는 버튼
 
         // 폰트 설정
         Font titleFont = new Font("Arial", Font.BOLD, (int)(60 * Size));
@@ -79,10 +80,11 @@ public class HomeView extends JFrame {
         // 모드 버튼
         setButton(basicBtn, buttonFont, (int)(30 * Size), (int)(200 * Size), (int)(320 * Size), (int)(60 * Size));    // 일반 모드 버튼
         setButton(itemBtn, buttonFont, (int)(30 * Size), (int)(270 * Size), (int)(320 * Size), (int)(60 * Size));    // 아이템 모드 버튼
+        setButton(battleBtn, buttonFont, (int) (30 * Size), (int) (340 * Size), (int) (320 * Size), (int) (60 * Size));
 
         // 기타 버튼
-        setButton(scoreBrdBtn, buttonFont, (int)(30 * Size), (int)(340 * Size), (int)(320 * Size), (int)(60 * Size));   // 스코어보드 버튼
-        setButton(configBtn, buttonFont, (int)(30 * Size), (int)(410 * Size), (int)(320 * Size), (int)(60 * Size));    // 설정 버튼
+        setButton(configBtn, buttonFont, (int) (30 * Size), (int) (410 * Size), (int) (320 * Size), (int) (60 * Size));    // 설정 버튼
+        setButton(scoreBrdBtn, new Font("Arial", Font.BOLD, (int)(11 * Size)), (int) (30 * Size), (int) (485 * Size), (int) (80 * Size), (int) (46 * Size));   // 스코어보드 버튼
         setButton(exitBtn, new Font("Arial", Font.BOLD, (int)(11 * Size)), (int)(305 * Size), (int)(485 * Size), (int)(46 * Size), (int)(46 * Size));  // 종료버튼
 
         // bgPanel에 모든 요소를 삽입
