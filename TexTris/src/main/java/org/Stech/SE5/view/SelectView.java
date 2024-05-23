@@ -185,8 +185,10 @@ public class SelectView extends JFrame {
             int key = e.getKeyCode();
             switch (key) {
                 case KeyEvent.VK_UP, KeyEvent.VK_LEFT:
-                    if (buttonPtrIndex == 0)
-                        buttonPtrIndex = buttonList.size();
+                    if (buttonPtrIndex == 0) {
+                        buttonPtrIndex = buttonList.size() - 1;
+                        highlightSelectedButton();
+                    }
                     else {
                         buttonPtrIndex = (buttonPtrIndex - 1 + buttonList.size()) % buttonList.size();
                         highlightSelectedButton();
