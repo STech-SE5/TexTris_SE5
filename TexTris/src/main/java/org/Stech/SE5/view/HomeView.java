@@ -15,7 +15,10 @@ import java.awt.*;
 /*
     1) UI를 설정하는 부분을 하나의 메소드로 분리하기
     2) Model-View-Controller에 맞게 메소드 분리하고, 관리하기
-    3) Enter를 누르고 다른 화면을 호출할 때, 오류 메시지를 출력하는 문제 해결 요망
+    3) Enter를 누르고 다른 화면을 호출할 때, 오류 메시지를 출력하는 문제 해결 요망 -> 해결, break; 안 넣었잖아 바보야
+    4) ButtonList에서 버튼 선택하는 방식 정형화; KeyListener에도 버퍼가 있나?
+        4-1) 종료 버튼에서 설정 버튼으로 올라왔다면, 설정에서 아래 방향키를 누를 때, 스코어보드가 아닌 종료 버튼으로 돌아가면 좋겠음
+        4-2) 반대도 마찬가지; 종료 버튼에서 일반 모드 버튼으로 내려갔다면, 위 방향키를 누를 때도 종료 버튼을 가리키면 좋겠음
  */
 
 public class HomeView extends JFrame {
@@ -126,9 +129,22 @@ public class HomeView extends JFrame {
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_UP, KeyEvent.VK_LEFT:
-                    if (buttonPtrIndex == 0)    // 현재 선택된 버튼이 첫번째 버튼일 경우
-                        buttonPtrIndex = buttonList.size(); // 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
+                case KeyEvent.VK_UP, KeyEvent.VK_LEFT:  // 이동 가능한 키를 설정에서 받아올 수 있도록 변경해야 함
+                    if (buttonPtrIndex == 0) { // 현재 선택된 버튼이 첫번째 버튼일 경우
+                        buttonPtrIndex = buttonList.size() - 1; // 위 화살표를 누르면, 맨 마지막 버튼을 선택
+                        highlightSelectedButton();
+                    }
+                    else if(buttonPtrIndex == buttonList.size() - 1) {  // 사용자 편의성을 위해 추가한 부분, 현재 유저가 게임 종료 버튼을 선택했다고 가정
+                        if (key == KeyEvent.VK_LEFT) {  // 게임 종료 버튼(buttonPtrIndex == 5)이 선택된 상태에서 왼쪽 방향키(설정에 따라 달라지는)를 눌렀을 때
+                            --buttonPtrIndex;   // Index 값을 1 줄임`-> 스코어보드 버튼 선택
+                            highlightSelectedButton();
+                        }
+                        else { // 게임 종료 버튼(buttonPtrIndex == 5)이 선택된 상태에서 위쪽 방향키(설정에 따라 달라지는)를 눌렀을 때
+                            --buttonPtrIndex;
+                            --buttonPtrIndex;   // Index 값을 2 줄임 -> 설정 버튼 선택
+                            highlightSelectedButton();
+                        }
+                    }
                     else {
                         buttonPtrIndex = (buttonPtrIndex + buttonList.size() - 1) % buttonList.size();
                         highlightSelectedButton();
@@ -136,7 +152,17 @@ public class HomeView extends JFrame {
                     break;
                 case KeyEvent.VK_DOWN, KeyEvent.VK_RIGHT:
                     if (buttonPtrIndex == buttonList.size())    // 현재 선택된 버튼이 마지막 버튼일 경우
-                        buttonPtrIndex = 0; // 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
+                        buttonPtrIndex = 0; // 아래 화살표를 누르면, 맨 처음 버튼을 선택
+                    else if(buttonPtrIndex == buttonList.size() - 2) {  // 사용자 편의성을 위해 추가한 부분, 현재 유저가 스코어보드 버튼을 선택했다고 가정
+                        if (key == KeyEvent.VK_DOWN) {  // 게임 종료 버튼(buttonPtrIndex == 5)이 선택된 상태에서 아래쪽 방향키(설정에 따라 달라지는)를 눌렀을 때
+                            buttonPtrIndex = 0;   // Index 값을 0으로 초기화함 -> 일반 모드 버튼 선택
+                            highlightSelectedButton();
+                        }
+                        else { // 스코어 보드 버튼(buttonPtrIndex == 4)이 선택된 상태에서 아래쪽 방향키(설정에 따라 달라지는)를 눌렀을 때
+                            ++buttonPtrIndex /*buttonPtrIndex = (buttonPtrIndex + 1) % buttonList.size()*/;  // Index 값을 1 늘림 -> 게임 종료 버튼 선택
+                            highlightSelectedButton();
+                        }
+                    }
                     else {
                         buttonPtrIndex = (buttonPtrIndex + 1) % buttonList.size();
                         highlightSelectedButton();
@@ -183,6 +209,7 @@ public class HomeView extends JFrame {
                         default:
                             break;
                     }
+                    break;
                 default:    // 설정에서 정의되지 않은 키를 눌렀을 때, 메시지를 출력
                     JOptionPane.showMessageDialog(null, "다음 키만 사용하실 수 있습니다:\n↑, ↓, ←, →, Enter"/*나중에 이 부분 변경 필요, 설정에서 변경한 키에 맞게끔 출력해야 함*/, "ERROR!", JOptionPane.ERROR_MESSAGE);
                     break;

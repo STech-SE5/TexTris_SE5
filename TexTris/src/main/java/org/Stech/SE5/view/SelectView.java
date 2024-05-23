@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 /*
     1) 중간평가 이후, HomeView에서 상속? -> 일부 맴버 변수나 함수를 제외하면 HomeView와 동일한 과정을 거치는 중
-    2) 마찬가지로 중간평가 이후, 생성자에 너무 많은 작업이 할당되어 있는 상태... 이를 보완할 수 있도록 노력(5/7-5/10)
  */
 
 public class SelectView extends JFrame {
@@ -246,7 +245,9 @@ public class SelectView extends JFrame {
                         default:
                             throw new IllegalStateException("Unexpected value: " + buttonPtrIndex);
                     }
-                    // 선택된 버튼에 해당하는 Controller나 View 호출
+                    break;
+                default:    // 설정에서 정의되지 않은 키를 눌렀을 때, 메시지를 출력
+                    JOptionPane.showMessageDialog(null, "다음 키만 사용하실 수 있습니다:\n↑, ↓, ←, →, Enter"/*나중에 이 부분 변경 필요, 설정에서 변경한 키에 맞게끔 출력해야 함*/, "ERROR!", JOptionPane.ERROR_MESSAGE);
                     break;
             }
         }
