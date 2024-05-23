@@ -13,12 +13,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
-    1) UI를 설정하는 부분을 하나의 메소드로 분리하기
+    1) UI를 설정하는 부분을 하나의 메소드로 분리하기 -> 해결
     2) Model-View-Controller에 맞게 메소드 분리하고, 관리하기
-    3) Enter를 누르고 다른 화면을 호출할 때, 오류 메시지를 출력하는 문제 해결 요망 -> 해결, break; 안 넣었잖아 바보야
-    4) ButtonList에서 버튼 선택하는 방식 정형화; KeyListener에도 버퍼가 있나?
-        4-1) 종료 버튼에서 설정 버튼으로 올라왔다면, 설정에서 아래 방향키를 누를 때, 스코어보드가 아닌 종료 버튼으로 돌아가면 좋겠음
-        4-2) 반대도 마찬가지; 종료 버튼에서 일반 모드 버튼으로 내려갔다면, 위 방향키를 누를 때도 종료 버튼을 가리키면 좋겠음
+    3) ButtonList에서 버튼 선택하는 방식 정형화; KeyListener에도 버퍼가 있나?
+        3-1) 종료 버튼에서 설정 버튼으로 올라왔다면, 설정에서 아래 방향키를 누를 때, 스코어보드가 아닌 종료 버튼으로 돌아가면 좋겠음
+        3-2) 반대도 마찬가지; 종료 버튼에서 일반 모드 버튼으로 내려갔다면, 위 방향키를 누를 때도 종료 버튼을 가리키면 좋겠음
  */
 
 public class HomeView extends JFrame {
@@ -47,17 +46,19 @@ public class HomeView extends JFrame {
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
         setTitle("SE5_TEXTRIS");
 
-        // FlowLayout 적용
-        FlowLayout fl = new FlowLayout();
-        fl.setAlignment(FlowLayout.RIGHT);
-        bgPanel = new JPanel(); // HomeView 내 모든 요소를 올릴 배경 패널
+        initializeUI();
 
+        addKeyListener(playerKeyListener); // playerKeyListener를 이 프레임에 할당
+        setFocusable(true);
+        requestFocusInWindow();
+    }
+
+    private void initializeUI() {
+        // HomeView 내 모든 요소를 올릴 배경 패널
+        bgPanel = new JPanel();
         bgPanel.setBackground(new Color(20, 20, 20));
         bgPanel.setLayout(null);
-        //bgPanel.setBorder(BorderFactory.createEmptyBorder(200, 0, 0, 25));
 
-        // 제목 레이블 객체 생성
-        title = new JLabel("TEXTRIS");
         // 게임 모드 버튼 객체 생성
         basicBtn = new JButton("Basic Mode");   // 일반 모드 버튼
         itemBtn = new JButton("Item Mode"); // 아이템 모드 버튼
@@ -68,32 +69,32 @@ public class HomeView extends JFrame {
         exitBtn = new JButton("X");  // 게임 종료 버튼
 
         // 폰트 설정
-        Font titleFont = new Font("Arial", Font.BOLD, (int)(60 * Size));
-        Font buttonFont = new Font("Arial", Font.BOLD, (int)(24 * Size));
+        Font titleFont = new Font("Arial", Font.BOLD, (int) (60 * Size));
+        Font buttonFont = new Font("Arial", Font.BOLD, (int) (24 * Size));
+        Font trivialFont = new Font("Arial", Font.BOLD, (int) (11 * Size));
+
+        // 제목 레이블 객체 생성
+        title = new JLabel("TEXTRIS");
 
         title.setFont(titleFont);
-        title.setBounds((int)(30 * Size), (int)(50 * Size), (int)(320 * Size), (int)(90 * Size));
+        title.setBounds((int) (30 * Size), (int) (50 * Size), (int) (320 * Size), (int) (90 * Size));
 
         // 모드 버튼
-        setButton(basicBtn, buttonFont, (int)(30 * Size), (int)(200 * Size), (int)(320 * Size), (int)(60 * Size));    // 일반 모드 버튼
-        setButton(itemBtn, buttonFont, (int)(30 * Size), (int)(270 * Size), (int)(320 * Size), (int)(60 * Size));    // 아이템 모드 버튼
+        setButton(basicBtn, buttonFont, (int) (30 * Size), (int) (200 * Size), (int) (320 * Size), (int) (60 * Size));    // 일반 모드 버튼
+        setButton(itemBtn, buttonFont, (int) (30 * Size), (int) (270 * Size), (int) (320 * Size), (int) (60 * Size));    // 아이템 모드 버튼
         setButton(battleBtn, buttonFont, (int) (30 * Size), (int) (340 * Size), (int) (320 * Size), (int) (60 * Size));
 
         // 기타 버튼
         setButton(configBtn, buttonFont, (int) (30 * Size), (int) (410 * Size), (int) (320 * Size), (int) (60 * Size));    // 설정 버튼
-        setButton(scoreBrdBtn, new Font("Arial", Font.BOLD, (int)(11 * Size)), (int) (30 * Size), (int) (485 * Size), (int) (80 * Size), (int) (46 * Size));   // 스코어보드 버튼
-        setButton(exitBtn, new Font("Arial", Font.BOLD, (int)(11 * Size)), (int)(305 * Size), (int)(485 * Size), (int)(46 * Size), (int)(46 * Size));  // 종료버튼
+        setButton(scoreBrdBtn, trivialFont, (int) (30 * Size), (int) (485 * Size), (int) (80 * Size), (int) (46 * Size));   // 스코어보드 버튼
+        setButton(exitBtn, trivialFont, (int) (305 * Size), (int) (485 * Size), (int) (46 * Size), (int) (46 * Size));  // 종료버튼
 
-        // bgPanel에 모든 요소를 삽입
-        this.setContentPane(bgPanel);
-        setScreen(bgPanel, title);
+        setScreen(bgPanel, title);  // bgPanel에 모든 요소를 삽입
 
         buttonPtrIndex = 0; // 첫 인덱스를 0으로 초기화
-        highlightSelectedButton();
+        highlightSelectedButton();  // 선택된 첫 번째 버튼을 강조
 
-        addKeyListener(playerKeyListener); // playerKeyListener를 이 프레임에 할당
-        setFocusable(true);
-        requestFocusInWindow();
+        this.setContentPane(bgPanel);   // 이 UI의 콘텐츠 패널을 bgPanel로 설정
     }
 
     public void setButton(JButton button, Font buttonFont, int x, int y, int width, int height) {
