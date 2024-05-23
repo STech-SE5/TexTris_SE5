@@ -15,6 +15,7 @@ import java.awt.*;
 /*
     1) UI를 설정하는 부분을 하나의 메소드로 분리하기
     2) Model-View-Controller에 맞게 메소드 분리하고, 관리하기
+    3) Enter를 누르고 다른 화면을 호출할 때, 오류 메시지를 출력하는 문제 해결 요망
  */
 
 public class HomeView extends JFrame {
@@ -125,7 +126,7 @@ public class HomeView extends JFrame {
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             switch (key) {
-                case KeyEvent.VK_UP:
+                case KeyEvent.VK_UP, KeyEvent.VK_LEFT:
                     if (buttonPtrIndex == 0)    // 현재 선택된 버튼이 첫번째 버튼일 경우
                         buttonPtrIndex = buttonList.size(); // 위 화살표를 누르면, 맨 마지막 버튼을 선택 -> 문제는 이 과정에서 버튼 입력이 2번 요구됨
                     else {
@@ -133,7 +134,7 @@ public class HomeView extends JFrame {
                         highlightSelectedButton();
                     }
                     break;
-                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_DOWN, KeyEvent.VK_RIGHT:
                     if (buttonPtrIndex == buttonList.size())    // 현재 선택된 버튼이 마지막 버튼일 경우
                         buttonPtrIndex = 0; // 아래 화살표를 누르면, 맨 처음 버튼을 선택 -> 이 과정은 잘 작동됨
                     else {
@@ -182,6 +183,9 @@ public class HomeView extends JFrame {
                         default:
                             break;
                     }
+                default:    // 설정에서 정의되지 않은 키를 눌렀을 때, 메시지를 출력
+                    JOptionPane.showMessageDialog(null, "다음 키만 사용하실 수 있습니다:\n↑, ↓, ←, →, Enter"/*나중에 이 부분 변경 필요, 설정에서 변경한 키에 맞게끔 출력해야 함*/, "ERROR!", JOptionPane.ERROR_MESSAGE);
+                    break;
             }
         }
 
