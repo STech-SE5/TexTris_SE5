@@ -148,7 +148,7 @@ public class GameEndView extends JFrame {
             setVisible(true);
         }
         else{
-            if(currentScore >= RecordModel.rankedRecords.get(13).score){
+            if(currentScore >= RecordModel.rankedRecords.get(13).getScore()){
                 //System.out.println("executed else");
                 // 사용자 이름 입력 필드
                 userNameField = new JTextField();

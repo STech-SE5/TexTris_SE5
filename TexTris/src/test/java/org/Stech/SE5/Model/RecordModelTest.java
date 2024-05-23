@@ -1,32 +1,4 @@
 package org.Stech.SE5.Model;
-/*
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class RecordModelTest {
-
-    @Test
-    void initRecord() {
-    }
-
-    @Test
-    void addRecord() {
-    }
-
-    @Test
-    void saveRecord() {
-    }
-
-    @Test
-    void loadRecord() {
-    }
-
-    @Test
-    void clearRecord() {
-    }
-}
-*/
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,10 +13,11 @@ class RecordModelTest {
     @Test
     void testInitRecord() {
         // Given
+        RecordModel.clearRecord();
         RecordModel.initRecord();
 
         // When
-        int recordSize = RecordModel.rankedRecords.size();
+        int recordSize = RecordModel.getRankedRecords().size();
 
         // Then
         assertEquals(0, recordSize); // 초기화 후 레코드 크기가 0인지 확인
@@ -54,6 +27,7 @@ class RecordModelTest {
     @Test
     void testAddRecord() {
         // Given
+        RecordModel.clearRecord();
         RecordModel.initRecord();
         int score = 100;
         int deletedLine = 5;
@@ -64,7 +38,7 @@ class RecordModelTest {
 
         // When
         RecordModel.addRecord(score, deletedLine, gameMode, gameDifficulty, createdAt, name);
-        int recordSize = RecordModel.rankedRecords.size();
+        int recordSize = RecordModel.getRankedRecords().size();
 
         // Then
         assertEquals(1, recordSize); // 레코드가 추가되었는지 확인
@@ -74,6 +48,7 @@ class RecordModelTest {
     @Test
     void testSaveRecord() {
         // Given
+        RecordModel.clearRecord();
         RecordModel.initRecord();
         int score = 100;
         int deletedLine = 5;
@@ -87,7 +62,7 @@ class RecordModelTest {
         RecordModel.saveRecord();
 
         // Then
-        File file = new File(RecordModel.path);
+        File file = new File(RecordModel.RECORD_FILE_PATH);
         assertTrue(file.exists()); // 파일이 존재하는지 확인
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -105,24 +80,25 @@ class RecordModelTest {
         }
     }
 
-    /*
+
     @Test
     void testLoadRecord() {
         // Given
         RecordModel.initRecord();
+        RecordModel.addRecord(100,5,1,2,"2024-05-18","TestUser");
         RecordModel.saveRecord();
 
         // When
         RecordModel.loadRecord();
 
         // Then
-        assertEquals(1, RecordModel.rankedRecords.size()); // 레코드가 읽혀졌는지 확인
-        assertEquals(100, RecordModel.rankedRecords.get(0).score); // 읽어온 레코드의 score가 올바른지 확인
-        assertEquals(5, RecordModel.rankedRecords.get(0).deletedLine); // 읽어온 레코드의 deletedLine이 올바른지 확인
-        assertEquals(1, RecordModel.rankedRecords.get(0).gameMode); // 읽어온 레코드의 gameMode가 올바른지 확인
-        assertEquals(2, RecordModel.rankedRecords.get(0).gameDifficulty); // 읽어온 레코드의 gameDifficulty가 올바른지 확인
-        assertEquals("2024-05-18", RecordModel.rankedRecords.get(0).createdAt); // 읽어온 레코드의 createdAt이 올바른지 확인
-        assertEquals("TestUser", RecordModel.rankedRecords.get(0).name); // 읽어온 레코드의 name이 올바른지 확인
+        assertEquals(1, RecordModel.getRankedRecords().size()); // 레코드가 읽혀졌는지 확인
+        assertEquals(100, RecordModel.getRankedRecords().get(0).getScore()); // 읽어온 레코드의 score가 올바른지 확인
+        assertEquals(5, RecordModel.getRankedRecords().get(0).getDeletedLine()); // 읽어온 레코드의 deletedLine이 올바른지 확인
+        assertEquals(1, RecordModel.getRankedRecords().get(0).getGameMode()); // 읽어온 레코드의 gameMode가 올바른지 확인
+        assertEquals(2, RecordModel.getRankedRecords().get(0).getGameDifficulty()); // 읽어온 레코드의 gameDifficulty가 올바른지 확인
+        assertEquals("2024-05-18", RecordModel.getRankedRecords().get(0).getCreatedAt()); // 읽어온 레코드의 createdAt이 올바른지 확인
+        assertEquals("TestUser", RecordModel.getRankedRecords().get(0).getName()); // 읽어온 레코드의 name이 올바른지 확인
     }
 
 
@@ -130,18 +106,24 @@ class RecordModelTest {
     void testClearRecord() {
         // Given
         RecordModel.initRecord();
-        RecordModel.addRecord(100, 1, 1, 1, "2024-05-18", "TestUser");
-        RecordModel.addRecord(200, 2, 0, 2, "2024-05-19", "TestUser2");
+        RecordModel.addRecord(100, 1, 1, 1, "2024-05-18", "TestUser2");
+        RecordModel.addRecord(200, 2, 0, 2, "2024-05-19", "TestUser3");
         RecordModel.saveRecord();
 
         // When
+        RecordModel.initRecord();
         RecordModel.clearRecord();
 
         // Then
-        assertEquals(0, RecordModel.rankedRecords.size()); // 레코드가 모두 삭제되었는지 확인
-        // 파일에 저장된 내용이 모두 삭제되었는지도 확인 가능
-        File file = new File(RecordModel.path);
-        assertFalse(file.exists()); // 파일이 존재하지 않아야 함
+        assertEquals(0, RecordModel.getRankedRecords().size()); // 레코드가 모두 삭제되었는지 확인
+        // 파일이 비어 있는지 확인
+        File file = new File(RecordModel.RECORD_FILE_PATH);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            assertNull(line); // 파일이 비어 있어야 함
+        } catch (IOException e) {
+            fail("IOException occurred while reading the file: " + e.getMessage());
+        }
     }
-    */
+
 }
