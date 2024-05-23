@@ -13,15 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /*
-    1) 타이틀 표시 -> 완료
-    1-1) 타이틀 Label 가운데 정렬
-    2) 버튼 변경 (Images > JPanel) -> 완료
-    2-1) 버튼 생성 메소드 -> 완료
-    2-2) 메소드 내에서 newButton.setBackground()을 실행할 수 있게끔 수정 -> 완료
-    3) 해상도에 맞게 버튼 비율 변경
-    4) 액션리스너 파트를 키 리스너로 변경 -> 완료
-    4-1) Game/Setting/ScoreBoard 각 View로 넘기는 과정 완수
-    4-2) SelectView 호출 시 GameMode 인수가 바뀌지 않는 과정 해결 필요
+    1) UI를 설정하는 부분을 하나의 메소드로 분리하기
+    2) Model-View-Controller에 맞게 메소드 분리하고, 관리하기
  */
 
 public class HomeView extends JFrame {
@@ -150,36 +143,40 @@ public class HomeView extends JFrame {
                     break;
                 case KeyEvent.VK_ENTER:
                     switch (buttonPtrIndex) {
-                        case 0: // basicMode
+                        case 0: // 일반 모드
                             setVisible(false);
-                            //selectView.setGameMode(0);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
-                            //selectView.updateTitle();
                             selectView = new SelectView(homeController, false, Size);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
                             break;
-                        case 1: // itemMode
+                        case 1: // 아이템 모드
                             setVisible(false);
-                            //selectView.setGameMode(1);  // 호출은 잘 하고 있으나, 전달하는 매개변수가 selectView의 itemModeFlag에 반영되지 않는 중
-                            //selectView.updateTitle();
                             selectView = new SelectView(homeController, true, Size);
                             selectView.setVisible(true);
                             selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
                             selectView.setLocationRelativeTo(null);
                             break;
-                        case 2:
+                        case 2: // 대전 모드
+                            /*대전 모드 생성자 호출*/
+                            setVisible(false);
+                            selectView = new SelectView(homeController, Size);
+                            selectView.setVisible(true);
+                            selectView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
+                            selectView.setLocationRelativeTo(null);
+                            break;
+                        case 3: // 설정 화면
+                            configController = new ConfigController();
+                            configController.setVisible(true);
+                            setVisible(false);
+                            break;
+                        case 4: // 스코어 보드
                             RecordModel.loadRecord();
                             RecordController record = new RecordController();
                             record.setVisible(true);
                             setVisible(false);
                             break;
-                        case 3:
-                            configController = new ConfigController();
-                            configController.setVisible(true);
-                            setVisible(false);
-                            break;
-                        case 4:
+                        case 5: // 게임 종료
                             System.exit(0);
                             break;
                         default:
