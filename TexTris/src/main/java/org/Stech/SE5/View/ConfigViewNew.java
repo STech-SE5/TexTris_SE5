@@ -16,7 +16,7 @@ public class ConfigViewNew extends JFrame {
     private static final long serialVersionUID = 1L;
     private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
-    private ConfigModel configModel;
+    private ConfigModel configModel = new ConfigModel();
     private ConfigController configController;
 
     // Key Bindings
@@ -50,6 +50,7 @@ public class ConfigViewNew extends JFrame {
 
     // Navigation
     private final ArrayList<JButton> buttonList; // 만든 버튼을 저장할 ArrayList
+
 
     public ConfigViewNew(final ConfigController controller) {
         setTitle("Tetris Settings");

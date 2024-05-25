@@ -1,12 +1,18 @@
 package org.Stech.SE5.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class ConfigModel {
     public ConfigModel() {
+        loadConfig();
 
     }
 
@@ -42,14 +48,13 @@ public class ConfigModel {
         }
     }
 
-
-//    public enum PlayerKey {
-//        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
-//    }
-//    public static int[] keyBinding = {
-//            KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-//            KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-//    };
+    // public enum PlayerKey {
+    // ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
+    // }
+    // public static int[] keyBinding = {
+    // KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+    // KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
+    // };
 
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
@@ -61,31 +66,32 @@ public class ConfigModel {
 
     private final static String path = "saved-config/config.txt";
 
-
-//    public static PlayerKey getPlayerKey(final KeyEvent e) {
-//        PlayerKey[] values = PlayerKey.values();
-//        for (int i = 0; i < values.length; i++) {
-//            if (keyBinding[i] == e.getKeyCode()) {
-//                return values[i];
-//            }
-//        }
-//        return PlayerKey.UNDEFINED;
-//    }
+    // public static PlayerKey getPlayerKey(final KeyEvent e) {
+    // PlayerKey[] values = PlayerKey.values();
+    // for (int i = 0; i < values.length; i++) {
+    // if (keyBinding[i] == e.getKeyCode()) {
+    // return values[i];
+    // }
+    // }
+    // return PlayerKey.UNDEFINED;
+    // }
 
     // Update Keyboard Part
     private PlayerKey lastKey = PlayerKey.UNDEFINED;
 
-    public PlayerKey getLastKey() {
-        return lastKey;
-    }
-
-    public void setLastKey(PlayerKey lastKey) {
-        this.lastKey = lastKey;
-    }
-
     public boolean getColorblindState() {
         return colorBlindMode;
     }
+
+    // Static array to hold key bindings
+    // Default key bindings:
+    public static int[] keyBinding = { KeyEvent.VK_UP, // ROTATE
+            KeyEvent.VK_LEFT, // LEFT
+            KeyEvent.VK_RIGHT, // RIGHT
+            KeyEvent.VK_DOWN, // DOWN
+            KeyEvent.VK_SPACE, // DROP
+            KeyEvent.VK_ESCAPE // ESC
+    };
 
     public enum PlayerKey {
         ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED;
@@ -101,17 +107,6 @@ public class ConfigModel {
         }
     }
 
-    // Static array to hold key bindings
-    // Default key bindings:
-    public static int[] keyBinding = {KeyEvent.VK_UP,    // ROTATE
-            KeyEvent.VK_LEFT,  // LEFT
-            KeyEvent.VK_RIGHT, // RIGHT
-            KeyEvent.VK_DOWN,  // DOWN
-            KeyEvent.VK_SPACE, // DROP
-            KeyEvent.VK_ESCAPE // ESC
-    };
-
-
     public static void changeBoardSize(BoardSize b) {
         boardWidth = b.width;
         boardHeight = b.height;
@@ -123,7 +118,6 @@ public class ConfigModel {
         colorBlindMode = g;
         saveConfig();
     }
-
 
     public static void changeKeyBinding(PlayerKey playerKey, KeyEvent e) {
         keyBinding[playerKey.ordinal()] = e.getKeyCode();
@@ -139,7 +133,8 @@ public class ConfigModel {
         boardHeight = 20;
         gameSpeed = 1;
         colorBlindMode = false;
-        keyBinding = new int[]{KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0};
+        keyBinding = new int[] { KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN,
+                KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0 };
         saveConfig();
     }
 
@@ -150,6 +145,10 @@ public class ConfigModel {
         for (Integer integer : keyBinding) {
             strList.add(String.valueOf(integer));
         }
+//        // Traversing the PlayerKey enum
+//        for (PlayerKey key : PlayerKey.values()) {
+//            strList.add(String.valueOf(key.getPlayerKey(null));
+//        }
 
         try {
             File f = new File(path);

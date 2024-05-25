@@ -7,13 +7,14 @@ import org.Stech.SE5.View.ConfigViewNew;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ObjectInputFilter;
+import java.security.Key;
 
 public class KeyListenConfigView extends JFrame {
     private JLabel label;
     private Timer timer;
     private ConfigController configController;
     private ConfigModel configModel;
-
 
     public KeyListenConfigView(ConfigController controller, ConfigModel model, ConfigModel.PlayerKey currentKey) {
         this.configController = controller;
@@ -39,7 +40,7 @@ public class KeyListenConfigView extends JFrame {
         add(label, BorderLayout.CENTER);
 
         // Configure the key listener
-        setupKeyListener(currentKey);
+        setupKeyListener(currentKey, model);
 
         // Timer to clear the "Saved" message
         timer = new Timer(3000, e -> label.setText("Press any key"));
@@ -48,45 +49,50 @@ public class KeyListenConfigView extends JFrame {
         setVisible(true);
     }
 
-    private void setupKeyListener(ConfigModel.PlayerKey keyToChange) {
+    private ConfigModel.PlayerKey tempPlayerKey = ConfigModel.PlayerKey.UNDEFINED;
+    private KeyEvent tempKeyEvent = null;
+
+    private void setupKeyListener(ConfigModel.PlayerKey keyToChange, ConfigModel currentModel) {
         // Adding key listener to the whole JFrame content pane
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                System.out.printf("KeyText: %s, KeyCode: %d%n", KeyEvent.getKeyText(e.getKeyCode()), e.getKeyCode());
-
-                // Temporary storage for the last pressed key that is not Enter or Escape
-                ConfigModel.PlayerKey tempKey = ConfigModel.PlayerKey.UNDEFINED;
-
+                KeyEvent tempKey = null; //
                 // Ignore Escape key for updating the model, handle Enter separately
-                if (e.getKeyCode() != KeyEvent.VK_ESCAPE) {
+                if (e.getKeyCode() != KeyEvent.VK_ESCAPE && e.getKeyCode() != KeyEvent.VK_ENTER) {
                     // Update temporary key state
-                    tempKey = ConfigModel.PlayerKey.getPlayerKey(e);
-                    label.setText("Pressed: " + KeyEvent.getKeyText(e.getKeyCode()));
+                    tempPlayerKey = ConfigModel.PlayerKey.getPlayerKey(e);
+                    tempKeyEvent = e;
+                    label.setText("Pressed: " + KeyEvent.getKeyText(tempKeyEvent.getKeyCode()));
                 }
 
                 // Finalize and update model when Enter is pressed
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    // Update the model with the accumulated key
-                    if (tempKey != ConfigModel.PlayerKey.UNDEFINED) {
-                        ConfigModel.changeKeyBinding(keyToChange, e);
-                        System.out.printf("Key Setting of %s - KeyText: %s, KeyCode: %d%n", keyToChange, KeyEvent.getKeyText(e.getKeyCode()), e.getKeyCode());
+                else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+                    if (tempKeyEvent != null) {
+
+                        System.out.printf("Temp Key : %s, %d%n", KeyEvent.getKeyText(tempKeyEvent.getKeyCode()), tempKeyEvent.getKeyCode());
+                        System.out.printf("Key Setting of %s - KeyText: %s, KeyCode: %d%n", keyToChange, KeyEvent.getKeyText(tempKeyEvent.getKeyCode()), tempKeyEvent.getKeyCode());
+
+                        ConfigModel.changeKeyBinding(keyToChange, tempKeyEvent);
+                        label.setText("Saved");
+
+                        timer.restart();
+                    } else {
+                        System.out.println("No valid key to bind.");
                     }
-
-                    label.setText("Saved");
-
-                    timer.restart();
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     setVisible(false);
                     configController.setVisible(true);
                 }
-
             }
+
         });
 
         // Ensure the JFrame can receive the key events
         setFocusable(true);
+
         requestFocusInWindow();
     }
 

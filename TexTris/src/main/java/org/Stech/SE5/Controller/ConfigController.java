@@ -78,11 +78,11 @@ public class ConfigController {
         }
     }
 
-    public void updateModelWithKeyEvent(KeyEvent e) {
-        ConfigModel.PlayerKey key = ConfigModel.PlayerKey.getPlayerKey(e);
-        // Update the model with the prepared key (could be based on tempKey logic)
-        configModel.setLastKey(key);
-        System.out.println("Model updated with PlayerKey: " + key); // Debug information
-    }
+//    public void updateModelWithKeyEvent(KeyEvent e) {
+//        ConfigModel.PlayerKey key = ConfigModel.PlayerKey.getPlayerKey(e);
+//        // Update the model with the prepared key (could be based on tempKey logic)
+//        configModel.setLastKey(key);
+//        System.out.println("Model updated with PlayerKey: " + key); // Debug information
+//    }
 
 }
