@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class GameView extends JFrame {
 
@@ -55,7 +56,7 @@ public class GameView extends JFrame {
         }
     };
 
-    public GameView(final GameController controller, boolean modeflag, int diff) {
+    public GameView(final GameController controller, boolean modeflag) {
         super("TETRIS");
         setSize();
         setSize(VIEW_WIDTH, VIEW_HEIGHT);
@@ -213,10 +214,10 @@ public class GameView extends JFrame {
             continueBtn.setBackground(Color.GRAY);
             exitBtn.setBackground(Color.YELLOW);
         }
-
     }
 
     class PlayerKeyListener implements KeyListener {
+        private static final Logger logger = Logger.getLogger(PlayerKeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -224,12 +225,13 @@ public class GameView extends JFrame {
 
         @Override
         public void keyPressed(final KeyEvent e) {          //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+            long startTime = System.nanoTime();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_DOWN:
                    gamecontroller.moveDown();
                    break;
                 case KeyEvent.VK_RIGHT:
-                    gamecontroller.moveRight();    //각 case에 맞는 이동 구현해서 넣어야함
+                    gamecontroller.moveRight();
                     break;
                 case KeyEvent.VK_LEFT:
                     gamecontroller.moveLeft();
@@ -245,16 +247,21 @@ public class GameView extends JFrame {
                     highlightSelectedButton(buttoncount);
                     break;
             }
+            long endTime = System.nanoTime();
+            long responseTime = endTime - startTime;
+            logger.info("Response Time (ns): " + responseTime);
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
     }
 
     class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+        private static final Logger logger = Logger.getLogger(PauseKeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {}
         @Override
         public void keyPressed(final KeyEvent e) {
+            long startTime = System.nanoTime();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ESCAPE:
                     gamecontroller.gameStart();
@@ -270,10 +277,15 @@ public class GameView extends JFrame {
                 case KeyEvent.VK_ENTER:
                     if (buttoncount){
                         gamecontroller.gameStart();
+                        break;
                     }else {
                         exitGame();
+                        break;
                     }
             }
+            long endTime = System.nanoTime();
+            long responseTime = endTime - startTime;
+            logger.info("Response Time (ns): " + responseTime);
         }
         @Override
         public void keyReleased(final KeyEvent e) {}
@@ -430,6 +442,8 @@ public class GameView extends JFrame {
             PANE_WIDTH = 105;
             PANE_HEIGHT = 112;
             LABEL_FONT = 18;
+        } else{
+            throw new IllegalArgumentException("Invalid Size");
         }
     }
 
