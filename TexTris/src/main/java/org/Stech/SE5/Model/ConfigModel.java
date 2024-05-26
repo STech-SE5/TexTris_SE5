@@ -90,11 +90,16 @@ public class ConfigModel {
             KeyEvent.VK_RIGHT, // RIGHT
             KeyEvent.VK_DOWN, // DOWN
             KeyEvent.VK_SPACE, // DROP
+            KeyEvent.VK_U, // ROTATE_2P
+            KeyEvent.VK_H, // LEFT_2P
+            KeyEvent.VK_K, // RIGHT_2P
+            KeyEvent.VK_J, // DOWN_2P
+            KeyEvent.VK_P, // DROP_2P
             KeyEvent.VK_ESCAPE // ESC
     };
 
     public enum PlayerKey {
-        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED;
+        ROTATE, LEFT, RIGHT, DOWN, DROP, ROTATE_2P, LEFT_2P, RIGHT_2P, DOWN_2P, DROP_2P, ESC, UNDEFINED;
 
         // Method to get PlayerKey based on KeyEvent
         public static PlayerKey getPlayerKey(final KeyEvent e) {
@@ -141,13 +146,13 @@ public class ConfigModel {
     // Config 설정 파일 저장
     public static void saveConfig() {
         BufferedWriter out = null;
-        List<String> strList = new ArrayList<>();
+        List<String> lisfOfKeyBindingStr = new ArrayList<>();
         for (Integer integer : keyBinding) {
-            strList.add(String.valueOf(integer));
+            lisfOfKeyBindingStr.add(String.valueOf(integer));
         }
 //        // Traversing the PlayerKey enum
 //        for (PlayerKey key : PlayerKey.values()) {
-//            strList.add(String.valueOf(key.getPlayerKey(null));
+//            lisfOfKeyBindingStr.add(String.valueOf(key.getPlayerKey(null));
 //        }
 
         try {
@@ -164,7 +169,7 @@ public class ConfigModel {
             out.write(Double.toString(gameSpeed) + ",");
             out.write(Boolean.toString(colorBlindMode) + ",");
             out.write(Integer.toString(keyBinding.length) + ",");
-            out.write(String.join(",", strList));
+            out.write(String.join(",", lisfOfKeyBindingStr));
             out.close();
         } catch (IOException e) {
             e.printStackTrace();

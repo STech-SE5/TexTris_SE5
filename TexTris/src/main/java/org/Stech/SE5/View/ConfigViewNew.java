@@ -31,12 +31,19 @@ public class ConfigViewNew extends JFrame {
     private JButton bordersizeButton = new JButton("Border Size");
 
     // Key Setting
+    //Show button names and their current key bindings - 1P
+    private JButton setDownKeyButton = new JButton("1P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
+    private JButton setLeftKeyButton = new JButton("1P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
+    private JButton setRightKeyButton = new JButton("1P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
+    private JButton setDropKeyButton = new JButton("1P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
+    private JButton setRotateKeyButton = new JButton("1P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
+
     //Show button names and their current key bindings
-    private JButton setDownKeyButton = new JButton("Set Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
-    private JButton setLeftKeyButton = new JButton("Set Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
-    private JButton setRightKeyButton = new JButton("Set Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
-    private JButton setDropKeyButton = new JButton("Set Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
-    private JButton setRotateKeyButton = new JButton("Set Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
+    private JButton setDownKeyButton2P = new JButton("2P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN_2P.ordinal()]));
+    private JButton setLeftKeyButton2P = new JButton("2P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT_2P.ordinal()]));
+    private JButton setRightKeyButton2P = new JButton("2P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT_2P.ordinal()]));
+    private JButton setDropKeyButton2P = new JButton("2P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP_2P.ordinal()]));
+    private JButton setRotateKeyButton2P = new JButton("2P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE_2P.ordinal()]));
 
     // UI Setting
 
@@ -55,7 +62,7 @@ public class ConfigViewNew extends JFrame {
     public ConfigViewNew(final ConfigController controller) {
         setTitle("Tetris Settings");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(0, 1));
+        setLayout(new GridLayout(0, 2));
         setSize(300, 400);
 
         // Initialize button array for navigation
@@ -70,12 +77,21 @@ public class ConfigViewNew extends JFrame {
         // 창 크 기설정
         buttonList.add(bordersizeButton);
 
-        // 게임 플레이 키보드 키 설정
+        // 게임 플레이 키보드 키 설정 - 1P
         buttonList.add(setDownKeyButton);
         buttonList.add(setLeftKeyButton);
         buttonList.add(setRightKeyButton);
         buttonList.add(setDropKeyButton);
         buttonList.add(setRotateKeyButton);
+
+        // 게임 플레이 키보드 키 설정 - 2P
+        buttonList.add(setDownKeyButton2P);
+        buttonList.add(setLeftKeyButton2P);
+        buttonList.add(setRightKeyButton2P);
+        buttonList.add(setDropKeyButton2P);
+        buttonList.add(setRotateKeyButton2P);
+
+        // 색맹 버튼
         buttonList.add(colorBlindToggleButton);
 
         // 초기화
