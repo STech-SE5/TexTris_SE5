@@ -8,7 +8,8 @@ import org.Stech.SE5.View.RecordView;
 import java.util.ArrayList;
 
 public class RecordController {
-    private RecordView recordView;
+    final RecordView recordView;
+    private final HomeController homeController;
 
     int resolution = 1; // 해상도 설정시 값을 불러와서 대입.
 
@@ -17,11 +18,12 @@ public class RecordController {
 
     public RecordController() {
         initResolution();
-        initController();
+        this.recordView = new RecordView(this);
+        this.homeController = new HomeController();
     }
 
-    private void initResolution() {
-        getsize(ConfigModel.boardSize);
+    void initResolution() {
+        ConfigModel.BoardSize boardSize = ConfigModel.boardSize;
         switch (resolution) {
             case 0:
                 WIDTH = 400;
@@ -58,10 +60,6 @@ public class RecordController {
         }
     }
 
-    public void initController() {
-        recordView = new RecordView(this);
-    }
-
     public void setVisible(boolean visible) {
         if (visible) {
             recordView.setSize(WIDTH, HEIGHT);
@@ -73,6 +71,6 @@ public class RecordController {
     }
 
     public ArrayList<Record> getRecords() {
-        return RecordModel.rankedRecords;
+        return RecordModel.getRankedRecords();
     }
 }

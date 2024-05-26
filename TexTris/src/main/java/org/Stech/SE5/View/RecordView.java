@@ -2,7 +2,6 @@ package org.Stech.SE5.View;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -33,6 +32,8 @@ public class RecordView extends JFrame {
         this.playerKeyListener = new PlayerKeyListener();
 
         getsize(ConfigModel.boardSize); // 해상도 설정시 값을 불러와서 대입.
+
+        resolution = 1;
 
         int WIDTH;
         int HEIGHT;
@@ -116,13 +117,13 @@ public class RecordView extends JFrame {
 
         recordList = new ArrayList<>();
 
-        System.out.println(RecordModel.rankedRecords.size());
+        //System.out.println(RecordModel.rankedRecords.size());
         for(int i=0; i<Math.min(RecordModel.rankedRecords.size(), (10+resolution*4)); i++) {
             recordList.add(new JTextPane());
 
             // gameDifficulty 값을 문자열로 변환하여 저장
             String difficultyString;
-            switch (RecordModel.rankedRecords.get(i).gameDifficulty) {
+            switch (RecordModel.rankedRecords.get(i).getGameDifficulty()) {
                 case 0:
                     difficultyString = "EASY";
                     break;
@@ -138,17 +139,17 @@ public class RecordView extends JFrame {
 
             JTextPane individualRecord = new JTextPane();
             individualRecord.setText((i+1) + " | " +
-                    RecordModel.rankedRecords.get(i).name + " | " +
-                    RecordModel.rankedRecords.get(i).score + " | " +
-                    RecordModel.rankedRecords.get(i).deletedLine + " | " +
-                    (RecordModel.rankedRecords.get(i).gameMode  == 0 ? "BASIC" : "ITEM" )+ " | " +
+                    RecordModel.rankedRecords.get(i).getName() + " | " +
+                    RecordModel.rankedRecords.get(i).getScore() + " | " +
+                    RecordModel.rankedRecords.get(i).getDeletedLine() + " | " +
+                    (RecordModel.rankedRecords.get(i).getGameMode() == 0 ? "BASIC" : "ITEM" )+ " | " +
                     difficultyString + " | " +
-                    RecordModel.rankedRecords.get(i).createdAt);
+                    RecordModel.rankedRecords.get(i).getCreatedAt());
             individualRecord.setBounds(30,(110+(i*40)), WIDTH-74, 40);
             individualRecord.setEditable(false);
             individualRecord.setBackground(Color.DARK_GRAY);
             individualRecord.setForeground(Color.GREEN);
-            if(RecordModel.rankedRecords.get(i).id == RecordModel.lastID)
+            if(RecordModel.rankedRecords.get(i).getId() == RecordModel.lastID)
                 individualRecord.setForeground(Color.PINK);
             individualRecord.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 
@@ -183,7 +184,7 @@ public class RecordView extends JFrame {
         @Override
         public void keyReleased(KeyEvent e) {}
     }
-    private void gotoMain(){
+    void gotoMain(){
         homeController = new HomeController();
         homeController.setVisible(true);
         setVisible(false);

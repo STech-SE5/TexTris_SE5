@@ -2,9 +2,7 @@ package org.Stech.SE5;
 
 import org.Stech.SE5.Controller.BattleController;
 import org.Stech.SE5.Controller.HomeController;
-import org.Stech.SE5.Model.GameModel;
-import org.Stech.SE5.View.BattleView;
-import org.Stech.SE5.View.SelectView;
+
 
 public class Main {
     public static void main(String[] args) {

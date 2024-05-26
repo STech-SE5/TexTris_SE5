@@ -8,14 +8,20 @@ import java.util.Random;
 import org.Stech.SE5.Data.Record;
 
 public class RecordModel {
-    public static ArrayList<Record> rankedRecords = new ArrayList<Record>();
-    private final static String path = "Data/record.txt";
+
+    final static String RECORD_FILE_PATH = "Data/record.txt";
     public static int lastID = -1;
 
+    public static ArrayList<Record> rankedRecords = new ArrayList<>(); //record 자체의 조작이 외부에서 불가능 하도록 수정 필요..?
+
     public static void initRecord() {
-        rankedRecords = new ArrayList<Record>();
-        saveRecord();
+        loadRecord();
     }
+
+    public static int getLastID() {
+        return lastID;
+    }
+
     // 여기서 점수, 게임모드, 게임 난이도 불러오는 메소드 호출.
     public static void addRecord(int score, int deletedLine, int gameMode, int gameDifficulty, String createdAt, String name) {
         Random rnd = new Random(System.currentTimeMillis());
@@ -24,40 +30,30 @@ public class RecordModel {
 
         rankedRecords.add(new Record(id, score, deletedLine, gameMode, gameDifficulty, createdAt, name));
         Collections.sort(rankedRecords);
-
         saveRecord();
     }
 
-    public static void saveRecord() {
-        BufferedWriter out = null;
-        try {
-            File f = new File(path);
-            f.getParentFile().mkdir();
-            f.createNewFile();
-            FileWriter fStream = new FileWriter(f, false);
-            out = new BufferedWriter(fStream);
-            for (int i = 0; i < rankedRecords.size(); i++) {
-                out.write(rankedRecords.get(i).score + ",");
-                out.write(rankedRecords.get(i).deletedLine + ",");
-                out.write(rankedRecords.get(i).gameMode + ",");
-                out.write(rankedRecords.get(i).gameDifficulty + ",");
-                out.write(rankedRecords.get(i).createdAt + ",");
-                out.write(rankedRecords.get(i).name + "\n");
+    public static ArrayList<Record> getRankedRecords() {
+        return rankedRecords;
+    }
+
+    static void saveRecord() {
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(RECORD_FILE_PATH))) {
+            for (Record record : rankedRecords) {
+                out.write(String.format("%d,%d,%d,%d,%s,%s\n",
+                        record.getScore(), record.getDeletedLine(), record.getGameMode(),
+                        record.getGameDifficulty(), record.getCreatedAt(), record.getName()));
             }
-            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
     public static void loadRecord() {
-        Random rnd = new Random(System.currentTimeMillis());
-        try {
-            File f = new File(path);
-            FileReader fStream = new FileReader(f);
-            BufferedReader bufReader = new BufferedReader(fStream);
-            String line = "";
+        rankedRecords.clear(); // 기존 기록 초기화
+        try (BufferedReader bufReader = new BufferedReader(new FileReader(RECORD_FILE_PATH))) {
+            String line;
+            Random rnd = new Random(System.currentTimeMillis());
             while ((line = bufReader.readLine()) != null) {
                 String[] record = line.split(",");
                 rankedRecords.add(new Record(
@@ -70,7 +66,6 @@ public class RecordModel {
                         record[5])
                 );
             }
-            bufReader.close();
         } catch (IOException e) {
             System.out.println("저장된 기록이 없습니다.");
         }
@@ -78,9 +73,10 @@ public class RecordModel {
 
     public static void clearRecord() {
         try {
-            FileWriter fw = new FileWriter(path, false); // 파일을 덮어쓰기 모드로 열기
+            FileWriter fw = new FileWriter(RECORD_FILE_PATH, false); // 파일을 덮어쓰기 모드로 열기
             fw.write(""); // 파일에 빈 문자열 쓰기
             fw.close(); // 파일 닫기
+            rankedRecords.clear(); // rankedRecords 리스트 초기화
         } catch (IOException e) {
             e.printStackTrace();
         }
