@@ -1,6 +1,7 @@
 package org.Stech.SE5.View.ConfigViews;
 
 import org.Stech.SE5.Controller.ConfigController;
+import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.View.ConfigViewNew;
 
@@ -84,6 +85,7 @@ public class KeyListenConfigView extends JFrame {
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     setVisible(false);
+                    configController = new ConfigController();
                     configController.setVisible(true);
                 }
             }

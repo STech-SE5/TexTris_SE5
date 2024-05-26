@@ -85,7 +85,7 @@ public class ConfigModel {
 
     // Static array to hold key bindings
     // Default key bindings:
-    public static int[] keyBinding = { KeyEvent.VK_UP, // ROTATE
+    public static int[] keyBinding = {KeyEvent.VK_UP, // ROTATE
             KeyEvent.VK_LEFT, // LEFT
             KeyEvent.VK_RIGHT, // RIGHT
             KeyEvent.VK_DOWN, // DOWN
@@ -138,8 +138,10 @@ public class ConfigModel {
         boardHeight = 20;
         gameSpeed = 1;
         colorBlindMode = false;
-        keyBinding = new int[] { KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN,
-                KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0 };
+        keyBinding = new int[]{
+                KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_SPACE,
+                KeyEvent.VK_U, KeyEvent.VK_H, KeyEvent.VK_K, KeyEvent.VK_J, KeyEvent.VK_P,
+                KeyEvent.VK_ESCAPE, 0};
         saveConfig();
     }
 
@@ -150,10 +152,6 @@ public class ConfigModel {
         for (Integer integer : keyBinding) {
             lisfOfKeyBindingStr.add(String.valueOf(integer));
         }
-//        // Traversing the PlayerKey enum
-//        for (PlayerKey key : PlayerKey.values()) {
-//            lisfOfKeyBindingStr.add(String.valueOf(key.getPlayerKey(null));
-//        }
 
         try {
             File f = new File(path);

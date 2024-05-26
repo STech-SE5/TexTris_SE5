@@ -9,10 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 
 public class ConfigViewNew extends JFrame {
+    private int focusedButtonIndex = 0;
+    private int columns = 2; // Number of the columns
+
     private static final long serialVersionUID = 1L;
     private int buttonPtrIndex; // buttonList의 인덱스를 가리킬 변수
 
@@ -31,14 +33,14 @@ public class ConfigViewNew extends JFrame {
     private JButton bordersizeButton = new JButton("Border Size");
 
     // Key Setting
-    //Show button names and their current key bindings - 1P
+    // Show button names and their current key bindings - 1P
     private JButton setDownKeyButton = new JButton("1P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
     private JButton setLeftKeyButton = new JButton("1P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
     private JButton setRightKeyButton = new JButton("1P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
     private JButton setDropKeyButton = new JButton("1P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
     private JButton setRotateKeyButton = new JButton("1P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
 
-    //Show button names and their current key bindings
+    // Show button names and their current key bindings
     private JButton setDownKeyButton2P = new JButton("2P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN_2P.ordinal()]));
     private JButton setLeftKeyButton2P = new JButton("2P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT_2P.ordinal()]));
     private JButton setRightKeyButton2P = new JButton("2P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT_2P.ordinal()]));
@@ -52,12 +54,11 @@ public class ConfigViewNew extends JFrame {
     // Colorblind Mode Toggle
     private JButton colorBlindToggleButton = new JButton("Colorblind: Deactivated");
 
+
     // Initialize Settings
     private JButton initializeSettingsButton = new JButton("Initialize Settings");
-
-    // Navigation
+    
     private final ArrayList<JButton> buttonList; // 만든 버튼을 저장할 ArrayList
-
 
     public ConfigViewNew(final ConfigController controller) {
         setTitle("Tetris Settings");
@@ -135,6 +136,38 @@ public class ConfigViewNew extends JFrame {
             keyListenConfigView.setVisible(true);
         });
 
+        // Key binding - 2P 게임 조작 방향키 설정 뷰 접근
+
+        setDownKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DOWN_2P);
+            keyListenConfigView.setVisible(true);
+        });
+
+        setRotateKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.ROTATE_2P);
+            keyListenConfigView.setVisible(true);
+        });
+
+        setDropKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DROP_2P);
+            keyListenConfigView.setVisible(true);
+        });
+
+        setRightKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.RIGHT_2P);
+            keyListenConfigView.setVisible(true);
+        });
+
+        setLeftKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.LEFT_2P);
+            keyListenConfigView.setVisible(true);
+        });
+
         colorBlindToggleButton.addActionListener(e -> {
             ConfigModel.changeColorBlindMode(!ConfigModel.colorBlindMode);
             colorBlindToggleButton.setText(ColorBlindStatusText());
@@ -144,6 +177,24 @@ public class ConfigViewNew extends JFrame {
 
         });
 
+        initializeSettingsButton.addActionListener(e -> {
+            ConfigModel.initConfig();
+
+            setDownKeyButton.setText("1P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
+            setLeftKeyButton.setText("1P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
+            setRightKeyButton.setText("1P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
+            setDropKeyButton.setText("1P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
+            setRotateKeyButton.setText("1P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
+
+            setDownKeyButton2P.setText("2P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN_2P.ordinal()]));
+            setLeftKeyButton2P.setText("2P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT_2P.ordinal()]));
+            setRightKeyButton2P.setText("2P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT_2P.ordinal()]));
+            setDropKeyButton2P.setText("2P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP_2P.ordinal()]));
+            setRotateKeyButton2P.setText("2P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE_2P.ordinal()]));
+
+            colorBlindToggleButton.setText("Colorblind: " + (ConfigModel.colorBlindMode ? "Activated" : "Deactivated"));
+            
+        });
 
         // Add buttonList to the frame
         for (JButton button : buttonList) {
@@ -153,18 +204,17 @@ public class ConfigViewNew extends JFrame {
             button.setFocusable(true);
         }
 
-
         // Set up key bindings for navigation
         setupKeyboardNavigation();
 
         setVisible(true);
     }
 
+    // 키보드 네비게이션 설정
     private void setupKeyboardNavigation() {
         ActionMap actionMap = getRootPane().getActionMap();
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-        // Navigate down
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "navigateDown");
         actionMap.put("navigateDown", new AbstractAction() {
             @Override
@@ -172,17 +222,39 @@ public class ConfigViewNew extends JFrame {
                 moveFocusAndUpdateHighlight(1);
             }
         });
+ 
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "navigateDown");
+        actionMap.put("navigateDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(columns);
+            }
+        });
 
-        // Navigate up
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "navigateUp");
         actionMap.put("navigateUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(-columns);
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "navigateRight");
+        actionMap.put("navigateRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(1);
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "navigateLeft");
+        actionMap.put("navigateLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 moveFocusAndUpdateHighlight(-1);
             }
         });
 
-        // Activate button
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "activate");
         actionMap.put("activate", new AbstractAction() {
             @Override
@@ -191,13 +263,11 @@ public class ConfigViewNew extends JFrame {
             }
         });
 
-        // Exit settings
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "exit");
         actionMap.put("exit", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 exitSettings();
-
             }
         });
     }
@@ -215,32 +285,26 @@ public class ConfigViewNew extends JFrame {
         }
     }
 
+    // 버튼 포커스 이동
     private void moveFocusAndUpdateHighlight(int direction) {
-        Component focused = getFocusOwner();
-        if (focused != null) {
-            int nextIndex = -1;
-            for (int i = 0; i < buttonList.size(); i++) {
-                if (buttonList.get(i).isFocusOwner()) {
-                    nextIndex = i + direction;
-                    break;
-                }
-            }
+        int newFocusedButtonIndex = (focusedButtonIndex + direction + buttonList.size()) % buttonList.size();
+        highlightButton(newFocusedButtonIndex);
+        focusedButtonIndex = newFocusedButtonIndex;
+    }
 
-            // Check and correct the index to stay within valid range
-            if (nextIndex >= 0 && nextIndex < buttonList.size()) {
-                // Move focus to the next button
-                buttonList.get(nextIndex).requestFocusInWindow();
 
-                // Highlight the newly focused button and unhighlight others
-                for (int i = 0; i < buttonList.size(); i++) {
-                    if (i == nextIndex) {
-                        buttonList.get(i).setBackground(Color.WHITE); // Highlight the new button
-                    } else {
-                        buttonList.get(i).setBackground(Color.BLACK); // Unhighlight the rest
-                    }
-                }
+    // 버튼 하이라이트
+    private void highlightButton(int index) {
+        for (int i = 0; i < buttonList.size(); i++) {
+            if (i == index) {
+                buttonList.get(i).setBackground(new Color(180, 180, 180));
+                buttonList.get(i).setForeground(new Color(20, 20, 20));
+            } else {
+                buttonList.get(i).setBackground(new Color(20, 20, 20));
+                buttonList.get(i).setForeground(new Color(180, 180, 180));
             }
         }
+        buttonList.get(index).requestFocusInWindow();
     }
 
     private void exitSettings() {
