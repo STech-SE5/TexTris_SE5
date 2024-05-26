@@ -8,11 +8,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
 public class ConfigModel {
     public ConfigModel() {
-        loadConfig();
 
     }
 
@@ -48,13 +45,14 @@ public class ConfigModel {
         }
     }
 
-    // public enum PlayerKey {
-    // ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
-    // }
-    // public static int[] keyBinding = {
-    // KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-    // KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-    // };
+
+//    public enum PlayerKey {
+//        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
+//    }
+//    public static int[] keyBinding = {
+//            KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+//            KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
+//    };
 
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
@@ -66,18 +64,27 @@ public class ConfigModel {
 
     private final static String path = "saved-config/config.txt";
 
-    // public static PlayerKey getPlayerKey(final KeyEvent e) {
-    // PlayerKey[] values = PlayerKey.values();
-    // for (int i = 0; i < values.length; i++) {
-    // if (keyBinding[i] == e.getKeyCode()) {
-    // return values[i];
-    // }
-    // }
-    // return PlayerKey.UNDEFINED;
-    // }
+
+//    public static PlayerKey getPlayerKey(final KeyEvent e) {
+//        PlayerKey[] values = PlayerKey.values();
+//        for (int i = 0; i < values.length; i++) {
+//            if (keyBinding[i] == e.getKeyCode()) {
+//                return values[i];
+//            }
+//        }
+//        return PlayerKey.UNDEFINED;
+//    }
 
     // Update Keyboard Part
     private PlayerKey lastKey = PlayerKey.UNDEFINED;
+
+    public PlayerKey getLastKey() {
+        return lastKey;
+    }
+
+    public void setLastKey(PlayerKey lastKey) {
+        this.lastKey = lastKey;
+    }
 
     public boolean getColorblindState() {
         return colorBlindMode;
@@ -111,6 +118,7 @@ public class ConfigModel {
             return PlayerKey.UNDEFINED;
         }
     }
+
 
     public static void changeBoardSize(BoardSize b) {
         boardWidth = b.width;
