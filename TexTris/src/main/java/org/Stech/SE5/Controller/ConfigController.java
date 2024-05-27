@@ -3,9 +3,20 @@ package org.Stech.SE5.Controller;
 import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.View.ConfigView;
 
+// New config view - prototype
+import org.Stech.SE5.View.ConfigViewNew;
 
-public class ConfigController{
-    private ConfigView configView;
+import java.awt.event.KeyEvent;
+
+public class ConfigController {
+
+    private ConfigModel configModel;
+
+    public ConfigController(ConfigModel configModel) {
+        this.configModel = configModel;
+    }
+
+    private ConfigViewNew configView;
 
     int VIEW_WIDTH;
     int VIEW_HEIGHT;
@@ -17,7 +28,7 @@ public class ConfigController{
     }
 
     public void initController() {
-        configView = new ConfigView(this);
+        configView = new ConfigViewNew(this);
     }
 
     public void setVisible(boolean visible) {
@@ -25,13 +36,16 @@ public class ConfigController{
             setSize();
             configView.setSize(VIEW_WIDTH, VIEW_HEIGHT);
             configView.setLocationRelativeTo(null);
+            configView.revalidate();
+            configView.repaint();
             configView.setVisible(true);
         } else {
             configView.setVisible(false);
         }
     }
+
     public void getsize(ConfigModel.BoardSize boardSize) {
-        switch (boardSize){
+        switch (boardSize) {
             case LARGE -> {
                 Size = 1.5;
                 break;
@@ -53,7 +67,7 @@ public class ConfigController{
             VIEW_WIDTH = 400;
             VIEW_HEIGHT = 600;
 
-        } else if (Size == 1.25){
+        } else if (Size == 1.25) {
             VIEW_WIDTH = 500;
             VIEW_HEIGHT = 750;
 
@@ -63,4 +77,12 @@ public class ConfigController{
 
         }
     }
+
+//    public void updateModelWithKeyEvent(KeyEvent e) {
+//        ConfigModel.PlayerKey key = ConfigModel.PlayerKey.getPlayerKey(e);
+//        // Update the model with the prepared key (could be based on tempKey logic)
+//        configModel.setLastKey(key);
+//        System.out.println("Model updated with PlayerKey: " + key); // Debug information
+//    }
+
 }

@@ -1,11 +1,21 @@
 package org.Stech.SE5.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class ConfigModel {
+    public ConfigModel() {
+        loadConfig();
+
+    }
+
     public enum GameMode {
         BASIC(1), ITEM(0.5);
 
@@ -38,9 +48,13 @@ public class ConfigModel {
         }
     }
 
-    public enum PlayerKey {
-        ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
-    }
+    // public enum PlayerKey {
+    // ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
+    // }
+    // public static int[] keyBinding = {
+    // KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+    // KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
+    // };
 
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
@@ -49,24 +63,53 @@ public class ConfigModel {
     public static int boardHeight = 20;
     public static double gameSpeed = 1;
     public static boolean colorBlindMode = false;
-    public static int[] keyBinding = {
-            KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-            KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-    };
+
     private final static String path = "saved-config/config.txt";
 
-    public ConfigModel() {
+    // public static PlayerKey getPlayerKey(final KeyEvent e) {
+    // PlayerKey[] values = PlayerKey.values();
+    // for (int i = 0; i < values.length; i++) {
+    // if (keyBinding[i] == e.getKeyCode()) {
+    // return values[i];
+    // }
+    // }
+    // return PlayerKey.UNDEFINED;
+    // }
 
+    // Update Keyboard Part
+    private PlayerKey lastKey = PlayerKey.UNDEFINED;
+
+    public boolean getColorblindState() {
+        return colorBlindMode;
     }
 
-    public static PlayerKey getPlayerKey(final KeyEvent e) {
-        PlayerKey[] values = PlayerKey.values();
-        for (int i = 0; i < values.length; i++) {
-            if (keyBinding[i] == e.getKeyCode()) {
-                return values[i];
+    // Static array to hold key bindings
+    // Default key bindings:
+    public static int[] keyBinding = {KeyEvent.VK_UP, // ROTATE
+            KeyEvent.VK_LEFT, // LEFT
+            KeyEvent.VK_RIGHT, // RIGHT
+            KeyEvent.VK_DOWN, // DOWN
+            KeyEvent.VK_SPACE, // DROP
+            KeyEvent.VK_U, // ROTATE_2P
+            KeyEvent.VK_H, // LEFT_2P
+            KeyEvent.VK_K, // RIGHT_2P
+            KeyEvent.VK_J, // DOWN_2P
+            KeyEvent.VK_P, // DROP_2P
+            KeyEvent.VK_ESCAPE // ESC
+    };
+
+    public enum PlayerKey {
+        ROTATE, LEFT, RIGHT, DOWN, DROP, ROTATE_2P, LEFT_2P, RIGHT_2P, DOWN_2P, DROP_2P, ESC, UNDEFINED;
+
+        // Method to get PlayerKey based on KeyEvent
+        public static PlayerKey getPlayerKey(final KeyEvent e) {
+            for (int i = 0; i < keyBinding.length; i++) {
+                if (keyBinding[i] == e.getKeyCode()) {
+                    return values()[i];
+                }
             }
+            return PlayerKey.UNDEFINED;
         }
-        return PlayerKey.UNDEFINED;
     }
 
     public static void changeBoardSize(BoardSize b) {
@@ -86,6 +129,7 @@ public class ConfigModel {
         saveConfig();
     }
 
+    // Config 초기화 - 게임 모드, 난이도, 보드 사이즈, 게임 속도, 컬러블라인 모드, 키 바인딩 초기 설정으로 초기화
     public static void initConfig() {
         gameMode = GameMode.BASIC;
         gameDifficulty = GameDifficulty.NORMAL;
@@ -95,17 +139,18 @@ public class ConfigModel {
         gameSpeed = 1;
         colorBlindMode = false;
         keyBinding = new int[]{
-                KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-                KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-        };
+                KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_SPACE,
+                KeyEvent.VK_U, KeyEvent.VK_H, KeyEvent.VK_K, KeyEvent.VK_J, KeyEvent.VK_P,
+                KeyEvent.VK_ESCAPE, 0};
         saveConfig();
     }
 
+    // Config 설정 파일 저장
     public static void saveConfig() {
         BufferedWriter out = null;
-        List<String> strList = new ArrayList<>();
+        List<String> lisfOfKeyBindingStr = new ArrayList<>();
         for (Integer integer : keyBinding) {
-            strList.add(String.valueOf(integer));
+            lisfOfKeyBindingStr.add(String.valueOf(integer));
         }
 
         try {
@@ -122,7 +167,7 @@ public class ConfigModel {
             out.write(Double.toString(gameSpeed) + ",");
             out.write(Boolean.toString(colorBlindMode) + ",");
             out.write(Integer.toString(keyBinding.length) + ",");
-            out.write(String.join(",", strList));
+            out.write(String.join(",", lisfOfKeyBindingStr));
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,6 +175,7 @@ public class ConfigModel {
 
     }
 
+    // Config 설정 파일 불러오기
     public static void loadConfig() {
         try {
             File f = new File(path);
