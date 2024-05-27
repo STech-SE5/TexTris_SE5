@@ -80,16 +80,15 @@ public class ConfigModel {
             KeyEvent.VK_LEFT, // LEFT
             KeyEvent.VK_RIGHT, // RIGHT
             KeyEvent.VK_DOWN, // DOWN
-            KeyEvent.VK_SPACE, // DROP
-            KeyEvent.VK_U, // ROTATE_2P
-            KeyEvent.VK_H, // LEFT_2P
-            KeyEvent.VK_K, // RIGHT_2P
-            KeyEvent.VK_J, // DOWN_2P
-            KeyEvent.VK_P, // DROP_2P
+            KeyEvent.VK_SHIFT, // DROP
+            KeyEvent.VK_W, // ROTATE_2P
+            KeyEvent.VK_A, // LEFT_2P
+            KeyEvent.VK_D, // RIGHT_2P
+            KeyEvent.VK_S, // DOWN_2P
+            KeyEvent.VK_SPACE, // DROP_2P
             KeyEvent.VK_ESCAPE // ESC
             , 0
     };
-
     public enum PlayerKey {
         ROTATE, LEFT, RIGHT, DOWN, DROP, ROTATE_2P, LEFT_2P, RIGHT_2P, DOWN_2P, DROP_2P, ESC, UNDEFINED;
 
@@ -131,8 +130,16 @@ public class ConfigModel {
         gameSpeed = 1;
         colorBlindMode = false;
         keyBinding = new int[]{
-                KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_DOWN, KeyEvent.VK_SPACE,
-                KeyEvent.VK_U, KeyEvent.VK_H, KeyEvent.VK_K, KeyEvent.VK_J, KeyEvent.VK_P,
+                KeyEvent.VK_UP, // ROTATE
+                KeyEvent.VK_LEFT, // LEFT
+                KeyEvent.VK_RIGHT, // RIGHT
+                KeyEvent.VK_DOWN, // DOWN
+                KeyEvent.VK_SHIFT, // DROP
+                KeyEvent.VK_W, // ROTATE_2P
+                KeyEvent.VK_A, // LEFT_2P
+                KeyEvent.VK_D, // RIGHT_2P
+                KeyEvent.VK_S, // DOWN_2P
+                KeyEvent.VK_SPACE, // DROP_2P
                 KeyEvent.VK_ESCAPE, 0};
         saveConfig();
     }

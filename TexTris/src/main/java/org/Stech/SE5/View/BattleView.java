@@ -366,7 +366,24 @@ public class BattleView extends JFrame{
     }
 
     class Player1KeyListener implements KeyListener {
+
+        int down;
+        int right;
+        int left;
+        int dropdown;
+        int rotate;
+        int escape;
+
         private static final Logger logger = Logger.getLogger(BattleView.Player1KeyListener.class.getName());
+
+        public Player1KeyListener() {
+            down = ConfigModel.keyBinding[3];
+            right = ConfigModel.keyBinding[2];
+            left = ConfigModel.keyBinding[1];
+            rotate = ConfigModel.keyBinding[0];
+            dropdown = ConfigModel.keyBinding[4];
+            escape = ConfigModel.keyBinding[10];
+        }
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -375,30 +392,21 @@ public class BattleView extends JFrame{
         @Override
         public void keyPressed(final KeyEvent e) {
             long startTime = System.nanoTime();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_S:
-                    battlecontroller.moveDown(true);
-                    break;
-                case KeyEvent.VK_D:
-                    battlecontroller.moveRight(true);
-                    break;
-                case KeyEvent.VK_A:
-                    battlecontroller.moveLeft(true);
-                    break;
-                case KeyEvent.VK_W:
-                    battlecontroller.moveRotate(true);
-                    break;
-                case KeyEvent.VK_SHIFT:
-                    if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_LEFT) {
-                        battlecontroller.moveStraightDown(true);
-                        break;
-                    }
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    battlecontroller.gameStop();
-                    highlightPauseButton(buttoncount);
-                    break;
+            int keyCode = e.getKeyCode();
 
+            if (keyCode == down) {
+                battlecontroller.moveDown(true);
+            } else if (keyCode == right) {
+                battlecontroller.moveRight(true);
+            } else if (keyCode == left) {
+                battlecontroller.moveLeft(true);
+            } else if (keyCode == rotate) {
+                battlecontroller.moveRotate(true);
+            } else if (keyCode == dropdown) {
+                battlecontroller.moveStraightDown(true);
+            } else if (keyCode == escape) {
+                battlecontroller.gameStop();
+                highlightPauseButton(buttoncount);
             }
             long endTime = System.nanoTime();
             long responseTime = endTime - startTime;
@@ -412,7 +420,21 @@ public class BattleView extends JFrame{
     }
 
     class Player2KeyListener implements KeyListener {
-        private static final Logger logger = Logger.getLogger(BattleView.Player2KeyListener.class.getName());
+        int down;
+        int right;
+        int left;
+        int dropdown;
+        int rotate;
+
+        private static final Logger logger = Logger.getLogger(BattleView.Player1KeyListener.class.getName());
+
+        public Player2KeyListener() {
+            down = ConfigModel.keyBinding[8];
+            right = ConfigModel.keyBinding[7];
+            left = ConfigModel.keyBinding[6];
+            rotate = ConfigModel.keyBinding[5];
+            dropdown = ConfigModel.keyBinding[9];
+        }
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -421,30 +443,18 @@ public class BattleView extends JFrame{
         @Override
         public void keyPressed(final KeyEvent e) {
             long startTime = System.nanoTime();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_DOWN:
-                    battlecontroller.moveDown(false);
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    battlecontroller.moveRight(false);
-                    break;
-                case KeyEvent.VK_LEFT:
-                    battlecontroller.moveLeft(false);
-                    break;
-                case KeyEvent.VK_UP:
-                    battlecontroller.moveRotate(false);
-                    break;
-                case KeyEvent.VK_SHIFT:
-                    if(e.getKeyLocation() == KeyEvent.KEY_LOCATION_RIGHT) {
-                        battlecontroller.moveStraightDown(false);
-                        break;
-                    }
-                    break;
+            int keyCode = e.getKeyCode();
 
-                case KeyEvent.VK_P:
-                battlecontroller.gameStop();
-                highlightPauseButton(buttoncount);
-                    break;
+            if (keyCode == down) {
+                battlecontroller.moveDown(false);
+            } else if (keyCode == right) {
+                battlecontroller.moveRight(false);
+            } else if (keyCode == left) {
+                battlecontroller.moveLeft(false);
+            } else if (keyCode == rotate) {
+                battlecontroller.moveRotate(false);
+            } else if (keyCode == dropdown) {
+                battlecontroller.moveStraightDown(false);
             }
             long endTime = System.nanoTime();
             long responseTime = endTime - startTime;
@@ -458,32 +468,36 @@ public class BattleView extends JFrame{
     }
 
     class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
-        private static final Logger logger = Logger.getLogger(BattleView.PauseKeyListener.class.getName());
+        int right;
+        int left;
+        int escape;
+        private static final Logger logger = Logger.getLogger(GameView.PauseKeyListener.class.getName());
+        public PauseKeyListener() {
+            right = ConfigModel.keyBinding[2];
+            left = ConfigModel.keyBinding[1];
+            escape = ConfigModel.keyBinding[10];
+        }
         @Override
         public void keyTyped(final KeyEvent e) {}
         @Override
         public void keyPressed(final KeyEvent e) {
             long startTime = System.nanoTime();
-             switch (e.getKeyCode()) {
-                case KeyEvent.VK_ESCAPE:
+            int keyCode = e.getKeyCode();
+
+            if (keyCode == escape) {
+                battlecontroller.gameStart();
+            } else if (keyCode == left) {
+                buttoncount = !buttoncount;
+                highlightPauseButton(buttoncount);
+            } else if (keyCode == right) {
+                buttoncount = !buttoncount;
+                highlightPauseButton(buttoncount);
+            } else if (keyCode == KeyEvent.VK_ENTER) {
+                if (buttoncount) {
                     battlecontroller.gameStart();
-                    break;
-                case KeyEvent.VK_LEFT:
-                    buttoncount = !buttoncount;
-                    highlightPauseButton(buttoncount);
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    buttoncount = !buttoncount;
-                    highlightPauseButton(buttoncount);
-                    break;
-                case KeyEvent.VK_ENTER:
-                    if (buttoncount){
-                        battlecontroller.gameStart();
-                        break;
-                    }else {
-                        exitGame();
-                        break;
-                    }
+                } else {
+                    exitGame();
+                }
             }
             long endTime = System.nanoTime();
             long responseTime = endTime - startTime;
