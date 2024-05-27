@@ -217,6 +217,13 @@ public class GameView extends JFrame {
     }
 
     class PlayerKeyListener implements KeyListener {
+
+        int down;
+        int right;
+        int left;
+        int dropdown;
+        int rotate;
+        int escape;
         private static final Logger logger = Logger.getLogger(PlayerKeyListener.class.getName());
         @Override
         public void keyTyped(final KeyEvent e) {
