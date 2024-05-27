@@ -224,7 +224,18 @@ public class GameView extends JFrame {
         int dropdown;
         int rotate;
         int escape;
+
+        public PlayerKeyListener() {
+            down = ConfigModel.keyBinding[3];
+            right = ConfigModel.keyBinding[2];
+            left = ConfigModel.keyBinding[1];
+            rotate = ConfigModel.keyBinding[0];
+            dropdown = ConfigModel.keyBinding[4];
+            escape = ConfigModel.keyBinding[10];
+        }
+
         private static final Logger logger = Logger.getLogger(PlayerKeyListener.class.getName());
+
         @Override
         public void keyTyped(final KeyEvent e) {
 
@@ -233,66 +244,65 @@ public class GameView extends JFrame {
         @Override
         public void keyPressed(final KeyEvent e) {          //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
             long startTime = System.nanoTime();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_DOWN:
-                   gamecontroller.moveDown();
-                   break;
-                case KeyEvent.VK_RIGHT:
-                    gamecontroller.moveRight();
-                    break;
-                case KeyEvent.VK_LEFT:
-                    gamecontroller.moveLeft();
-                    break;
-                case KeyEvent.VK_UP:
-                    gamecontroller.actRotate();
-                    break;
-                case KeyEvent.VK_SPACE:
-                    gamecontroller.moveStraightDown();
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    gamecontroller.gameStop();
-                    highlightSelectedButton(buttoncount);
-                    break;
+            int keyCode = e.getKeyCode();
+            if (keyCode == down) {
+                gamecontroller.moveDown();
+            } else if (keyCode == right) {
+                gamecontroller.moveRight();
+            } else if (keyCode == left) {
+                gamecontroller.moveLeft();
+            } else if (keyCode == rotate) {
+                gamecontroller.actRotate();
+            } else if (keyCode == dropdown) {
+                gamecontroller.moveStraightDown();
+            } else if (keyCode == escape) {
+                gamecontroller.gameStop();
+                highlightSelectedButton(buttoncount);
             }
             long endTime = System.nanoTime();
             long responseTime = endTime - startTime;
-            logger.info("Response Time (ns): " + responseTime);
+            logger.info("Response Time (ns): "+responseTime);
         }
+
         @Override
         public void keyReleased(final KeyEvent e) {}
     }
 
     class PauseKeyListener implements KeyListener {     //일단은 기본키로 설정, 설정과 연동해서 키 값 받아와야함
+
+        int right;
+        int left;
+        int escape;
         private static final Logger logger = Logger.getLogger(PauseKeyListener.class.getName());
+        public PauseKeyListener() {
+            right = ConfigModel.keyBinding[2];
+            left = ConfigModel.keyBinding[1];
+            escape = ConfigModel.keyBinding[10];
+        }
         @Override
         public void keyTyped(final KeyEvent e) {}
         @Override
         public void keyPressed(final KeyEvent e) {
             long startTime = System.nanoTime();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_ESCAPE:
+            int keyCode = e.getKeyCode();
+            if (keyCode == escape) {
+                gamecontroller.gameStart();
+            } else if (keyCode == left) {
+                buttoncount = !buttoncount;
+                highlightSelectedButton(buttoncount);
+            } else if (keyCode == right) {
+                buttoncount = !buttoncount;
+                highlightSelectedButton(buttoncount);
+            } else if (keyCode == KeyEvent.VK_ENTER) {
+                if (buttoncount) {
                     gamecontroller.gameStart();
-                    break;
-                case KeyEvent.VK_LEFT:
-                    buttoncount = !buttoncount;
-                    highlightSelectedButton(buttoncount);
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    buttoncount = !buttoncount;
-                    highlightSelectedButton(buttoncount);
-                    break;
-                case KeyEvent.VK_ENTER:
-                    if (buttoncount){
-                        gamecontroller.gameStart();
-                        break;
-                    }else {
-                        exitGame();
-                        break;
-                    }
+                } else {
+                    exitGame();
+                }
+                long endTime = System.nanoTime();
+                long responseTime = endTime - startTime;
+                logger.info("Response Time (ns): " + responseTime);
             }
-            long endTime = System.nanoTime();
-            long responseTime = endTime - startTime;
-            logger.info("Response Time (ns): " + responseTime);
         }
         @Override
         public void keyReleased(final KeyEvent e) {}

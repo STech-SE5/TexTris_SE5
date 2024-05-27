@@ -9,7 +9,7 @@ import org.Stech.SE5.Data.Record;
 
 public class RecordModel {
 
-    final static String RECORD_FILE_PATH = "Data/record.txt";
+    public final static String RECORD_FILE_PATH = "Data/record.txt";
     public static int lastID = -1;
 
     public static ArrayList<Record> rankedRecords = new ArrayList<>(); //record 자체의 조작이 외부에서 불가능 하도록 수정 필요..?
@@ -37,7 +37,7 @@ public class RecordModel {
         return rankedRecords;
     }
 
-    static void saveRecord() {
+    public static void saveRecord() {
         try (BufferedWriter out = new BufferedWriter(new FileWriter(RECORD_FILE_PATH))) {
             for (Record record : rankedRecords) {
                 out.write(String.format("%d,%d,%d,%d,%s,%s\n",
