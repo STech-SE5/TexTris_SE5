@@ -48,7 +48,7 @@ public abstract class Block {
         return false;
     }
 
-    public BlockType getKind() {
+    public BlockType getType() {
         return type;
     }
 }

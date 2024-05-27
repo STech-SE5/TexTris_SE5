@@ -1,5 +1,7 @@
 package org.Stech.SE5.Controller;
 
+import org.Stech.SE5.Block.BlockType;
+import org.Stech.SE5.Item.WeightBlock;
 import org.Stech.SE5.View.GameEndView;
 import org.Stech.SE5.View.GameView;
 import org.Stech.SE5.Model.GameModel;
@@ -18,16 +20,16 @@ public class GameController{
 
     private GameView gameView;
     private GameModel gameModel;
-
     private GameEndView gameEnd;
-
     private final Timer mainTimer;
     private final Timer deleteTimer;
     private final Timer weightBlockTimer;
-
-    private static final double INIT_INTERVAL = 1000 / 1;       //추후 1자리에 설정에서 speed 받아와서 넣기
+    private static final double INIT_INTERVAL = 1000;
 
     public GameController(boolean itemmodeflag, int diff) {
+        if (diff < 0 || diff > 2){
+            throw new IllegalArgumentException("Invalid Difficulty Data!");
+        }
         mainTimer = new Timer((int)INIT_INTERVAL, new MainTimerActionListener());
         deleteTimer = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener());
         weightBlockTimer = new Timer((int)INIT_INTERVAL / 5, new WeightBlockTimerActionListener());
@@ -41,7 +43,7 @@ public class GameController{
         }
     }
 
-    public class DeleteTimerActionListener implements ActionListener {      //메인하고나서
+    public class DeleteTimerActionListener implements ActionListener {
         @Override
         public final void actionPerformed(final ActionEvent e) {
             gameModel.runDelete();
@@ -49,7 +51,7 @@ public class GameController{
         }
     }
 
-    public class WeightBlockTimerActionListener implements ActionListener {      //아이템 나중에
+    public class WeightBlockTimerActionListener implements ActionListener {
         @Override
         public final void actionPerformed(final ActionEvent e) {
             gameModel.moveWeightBlockDown();
@@ -68,8 +70,11 @@ public class GameController{
     }
 
     public void initController(boolean itemmodeflag, int diff) {
+        if (diff < 0 || diff > 2){
+            throw new IllegalArgumentException("Invalid Difficulty Data!");
+        }
+        this.gameView = new GameView(this, itemmodeflag);
         this.gameModel = new GameModel(this, itemmodeflag, diff);
-        this.gameView = new GameView(this, itemmodeflag, diff);
         this.gameView.drawBoard(this.gameModel.getBoard());
     }
 
@@ -98,7 +103,7 @@ public class GameController{
     public final void gameOver() {
         gameView.stopPlayerKeyListen();
         gameView.stopPauseKeyListen();
-        mainTimer.stop();   //종료화면 불러와야함, 불러올때 게임난이도,점수 넘겨줘야함
+        mainTimer.stop();
         gameEnd = new GameEndView((int)(gameModel.getScore()), gameModel.getMode(),gameModel.getDiff(), gameModel.getLineCounts());
         this.setVisible(false);
         gameEnd.setVisible(true);
@@ -126,8 +131,10 @@ public class GameController{
     }
 
     public final void actRotate() {
-        gameModel.actRotate();
-        drawView();
+        if (gameModel.getCurrentBlock().getType() != BlockType.WEIGHT_BLOCK) {
+            gameModel.actRotate();
+            drawView();
+        }
     }
 
     public final void moveLeft() {
