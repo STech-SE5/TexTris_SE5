@@ -4,9 +4,7 @@ import org.Stech.SE5.Model.ConfigModel;
 import org.Stech.SE5.View.ConfigView;
 
 // New config view - prototype
-import org.Stech.SE5.View.ConfigViewNew;
 
-import java.awt.event.KeyEvent;
 
 public class ConfigController {
 
@@ -16,7 +14,7 @@ public class ConfigController {
         this.configModel = configModel;
     }
 
-    private ConfigViewNew configView;
+    private ConfigView configView;
 
     int VIEW_WIDTH;
     int VIEW_HEIGHT;
@@ -28,7 +26,7 @@ public class ConfigController {
     }
 
     public void initController() {
-        configView = new ConfigViewNew(this);
+        configView = new ConfigView(this);
     }
 
     public void setVisible(boolean visible) {

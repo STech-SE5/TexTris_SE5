@@ -1,15 +1,12 @@
 package org.Stech.SE5.View.ConfigViews;
 
 import org.Stech.SE5.Controller.ConfigController;
-import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Model.ConfigModel;
-import org.Stech.SE5.View.ConfigViewNew;
+import org.Stech.SE5.View.ConfigView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.ObjectInputFilter;
-import java.security.Key;
 
 public class KeyListenConfigView extends JFrame {
     private JLabel label;

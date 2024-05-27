@@ -16,6 +16,9 @@ public class ConfigModel {
 
     }
 
+    // 게임 모드, 난이도, 창 크기, 게임 속도, 컬러블라인 모드, 키 바인딩 설정
+
+    // 게임 모드
     public enum GameMode {
         BASIC(1), ITEM(0.5);
 
@@ -26,6 +29,7 @@ public class ConfigModel {
         }
     }
 
+    // 난이도
     public enum GameDifficulty {
         EASY(0.5), NORMAL(1.0), HARD(1.5);
 
@@ -36,6 +40,7 @@ public class ConfigModel {
         }
     }
 
+    // 창 크기
     public enum BoardSize {
         SMALL(8, 20), MEDIUM(10, 20), LARGE(12, 20);
 
@@ -48,14 +53,8 @@ public class ConfigModel {
         }
     }
 
-    // public enum PlayerKey {
-    // ROTATE, LEFT, RIGHT, DOWN, DROP, ESC, UNDEFINED
-    // }
-    // public static int[] keyBinding = {
-    // KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
-    // KeyEvent.VK_DOWN, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE, 0
-    // };
 
+    // 초기화 - 게임 모드, 난이도, 보드 사이즈, 게임 속도, 컬러블라인 모드, 키 바인딩 초기 설정 값
     public static GameMode gameMode = GameMode.BASIC;
     public static GameDifficulty gameDifficulty = GameDifficulty.NORMAL;
     public static BoardSize boardSize = BoardSize.MEDIUM;
@@ -64,24 +63,16 @@ public class ConfigModel {
     public static double gameSpeed = 1;
     public static boolean colorBlindMode = false;
 
+    // Config 파일 경로 - loadConfig(), saveConfig() 메소드에서 사용
     private final static String path = "saved-config/config.txt";
-
-    // public static PlayerKey getPlayerKey(final KeyEvent e) {
-    // PlayerKey[] values = PlayerKey.values();
-    // for (int i = 0; i < values.length; i++) {
-    // if (keyBinding[i] == e.getKeyCode()) {
-    // return values[i];
-    // }
-    // }
-    // return PlayerKey.UNDEFINED;
-    // }
 
     // Update Keyboard Part
     private PlayerKey lastKey = PlayerKey.UNDEFINED;
 
-    public boolean getColorblindState() {
-        return colorBlindMode;
-    }
+
+    // public boolean getColorblindState() {
+    //     return colorBlindMode;
+    // }
 
     // Static array to hold key bindings
     // Default key bindings:
@@ -96,6 +87,7 @@ public class ConfigModel {
             KeyEvent.VK_J, // DOWN_2P
             KeyEvent.VK_P, // DROP_2P
             KeyEvent.VK_ESCAPE // ESC
+            , 0
     };
 
     public enum PlayerKey {
@@ -190,8 +182,8 @@ public class ConfigModel {
             boardHeight = Integer.parseInt(configs[4]);
             gameSpeed = Double.parseDouble(configs[5]);
             colorBlindMode = Boolean.parseBoolean(configs[6]);
-            int keyBingdingLength = Integer.parseInt(configs[7]);
-            for (int i = 0; i < keyBingdingLength; i++) {
+            int keyBindingLength = Integer.parseInt(configs[7]);
+            for (int i = 0; i < keyBindingLength; i++) {
                 keyBinding[i] = Integer.parseInt(configs[8 + i]);
             }
             bufReader.close();

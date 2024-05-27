@@ -1,394 +1,328 @@
 package org.Stech.SE5.View;
 
-import org.Stech.SE5.Controller.HomeController;
-import org.Stech.SE5.Main;
-import org.Stech.SE5.Model.ConfigModel;
-//import tetris.model.RecordModel;
 import org.Stech.SE5.Controller.ConfigController;
+import org.Stech.SE5.Controller.HomeController;
+import org.Stech.SE5.Model.ConfigModel;
+import org.Stech.SE5.Model.RecordModel;
+import org.Stech.SE5.Service.GameBoardSizeLoop;
+import org.Stech.SE5.View.ConfigViews.KeyListenConfigView;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.Serial;
+import java.util.ArrayList;
 
 public class ConfigView extends JFrame {
+    private int focusedButtonIndex = 0;
+    private final int columns = 2; // Number of the columns
 
-    // Panel and Label for border size
-    private JPanel borderSizeSetPanel;
-    private JLabel borderSizeSetLabel;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    // Labels for color blindness, key labels
-    private JLabel colorBlindnessLabel, downKeyLabel, leftKeyLabel, rightKeyLabel, dropKeyLabel, rotationKeyLabel;
+    // Key Setting
+    // Show button names and their current key bindings - 1P
+    private final JButton setDownKeyButton = new JButton("1P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
+    private final JButton setLeftKeyButton = new JButton("1P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
+    private final JButton setRightKeyButton = new JButton("1P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
+    private final JButton setDropKeyButton = new JButton("1P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
+    private final JButton setRotateKeyButton = new JButton("1P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
 
-    // Text panes for key settings
-    private JTextPane downKeyPane, leftKeyPane, rightKeyPane, dropKeyPane, rotationKeyPane;
+    // Show button names and their current key bindings - 2P
+    private final JButton setDownKeyButton2P = new JButton("2P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN_2P.ordinal()]));
+    private final JButton setLeftKeyButton2P = new JButton("2P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT_2P.ordinal()]));
+    private final JButton setRightKeyButton2P = new JButton("2P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT_2P.ordinal()]));
+    private final JButton setDropKeyButton2P = new JButton("2P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP_2P.ordinal()]));
+    private final JButton setRotateKeyButton2P = new JButton("2P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE_2P.ordinal()]));
 
-    // Last key event and key bind listener
-    private KeyEvent lastKeyEvent;
-    private KeyBindListener keyBindListener;
+    // UI Setting
 
-    private double Size;
+    private final JButton boardSizeButton = new JButton("Boardsize: " + ConfigModel.boardSize);
 
-    public ConfigView(final ConfigController presenter) {
-        super("TETRIS");
+    // Colorblind Mode Toggle
+    private final JButton colorBlindToggleButton = new JButton("Colorblind: Deactivated");
+
+    private final ArrayList<JButton> buttonList; // 만든 버튼을 저장할 ArrayList
+
+    public ConfigView(final ConfigController controller) {
+        setTitle("Tetris Settings");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        getsize(ConfigModel.boardSize);
+        setLayout(new GridLayout(0, 2));
+        setSize(300, 400);
 
-        JPanel configPanel = new JPanel();
+        // Initialize button array for navigation
 
-        configPanel.setLayout(null);
-        configPanel.setBackground(Color.black);
+        // You should consider an existence of JToggleButton: colorBlindToggleButton
 
-        // Set text label for border size
-        borderSizeSetLabel = new JLabel("Border Size");
-        borderSizeSetLabel.setText("Border Size");
-        borderSizeSetLabel.setForeground(Color.white);
-        borderSizeSetLabel.setBounds((int) (130 * Size), (int) (75 * Size), (int) (50 * Size), (int) (20 * Size));
+        buttonList = new ArrayList<>(); // Remove the empty square brackets
 
-        // Set panel for containing texts
-        borderSizeSetPanel = new JPanel();
-        borderSizeSetPanel.setBackground(Color.black);
-        borderSizeSetPanel.add(borderSizeSetLabel);
+        // 홈으로 이동
+        // buttonList
+        JButton goToHomeButton = new JButton("Go Previous");
+        buttonList.add(goToHomeButton);
 
-        JButton smallBtn = new JButton("Small");
-        JButton mediumBtn = new JButton("Medium");
-        JButton largeBtn = new JButton("Large");
+        // 창 크 기설정
+        buttonList.add(boardSizeButton);
 
-        colorBlindnessLabel = new JLabel("Color Blindness");
-        colorBlindnessLabel.setText("Color Blindness");
-        colorBlindnessLabel.setForeground(Color.white);
-        JButton colorBlindToggleBtn = new JButton("Colorblind");
+        // 게임 플레이 키보드 키 설정 - 1P
+        buttonList.add(setDownKeyButton);
+        buttonList.add(setLeftKeyButton);
+        buttonList.add(setRightKeyButton);
+        buttonList.add(setDropKeyButton);
+        buttonList.add(setRotateKeyButton);
 
-        downKeyLabel = new JLabel("Down Key");
-        downKeyLabel.setText("Down Key");
-        downKeyLabel.setForeground(Color.white);
-        JButton setDownKeyButton = new JButton("Set");
+        // 게임 플레이 키보드 키 설정 - 2P
+        buttonList.add(setDownKeyButton2P);
+        buttonList.add(setLeftKeyButton2P);
+        buttonList.add(setRightKeyButton2P);
+        buttonList.add(setDropKeyButton2P);
+        buttonList.add(setRotateKeyButton2P);
 
-        leftKeyLabel = new JLabel("Left Key");
-        leftKeyLabel.setText("Left Key");
-        leftKeyLabel.setForeground(Color.white);
-        JButton setLeftKeyButton = new JButton("Set");
+        // 색맹 버튼
+        buttonList.add(colorBlindToggleButton);
 
-        rightKeyLabel = new JLabel("Right Key");
-        rightKeyLabel.setText("Right Key");
-        rightKeyLabel.setForeground(Color.white);
-        JButton setRightKeyBtn = new JButton("Set");
+        // 초기화
+        // Initialize Settings, Scores
+        JButton initializeSettingsButton = new JButton("Initialize Settings");
+        buttonList.add(initializeSettingsButton);
+        JButton clearGameRecords = new JButton("Clear Score");
+        buttonList.add(clearGameRecords);
 
-        dropKeyLabel = new JLabel("Drop Key");
-        dropKeyLabel.setText("Drop Key");
-        dropKeyLabel.setForeground(Color.white);
-        JButton setDropKeyBtn = new JButton("Set");
-
-        rotationKeyLabel = new JLabel("Rotation Key");
-        rotationKeyLabel.setText("Rotation Key");
-        rotationKeyLabel.setForeground(Color.white);
-        JButton setRotateKeyBtn = new JButton("Set");
-
-        JButton initializeRecordBtn = new JButton("Initialize Record");
-        JButton initializeSettingBtn = new JButton("Initialize Setting");
-        JButton exit = new JButton("EXIT");
-
-        smallBtn.setForeground(Color.WHITE);
-        mediumBtn.setForeground(Color.WHITE);
-        largeBtn.setForeground(Color.WHITE);
-        colorBlindToggleBtn.setForeground(Color.WHITE);
-        setDownKeyButton.setForeground(Color.WHITE);
-        setLeftKeyButton.setForeground(Color.WHITE);
-        setRightKeyBtn.setForeground(Color.WHITE);
-        setDropKeyBtn.setForeground(Color.WHITE);
-        setRotateKeyBtn.setForeground(Color.WHITE);
-        initializeRecordBtn.setForeground(Color.WHITE);
-        initializeSettingBtn.setForeground(Color.WHITE);
-
-        smallBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.SMALL ? Color.white : Color.gray, 2)));
-        smallBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.SMALL ? Color.white : Color.gray);
-        smallBtn.setContentAreaFilled(false);
-        smallBtn.setBounds((int) (172 * Size), (int) (126 * Size), (int) (50 * Size), (int) (33 * Size));
-        smallBtn.addActionListener(e -> {
-            ConfigModel.changeBoardSize(ConfigModel.BoardSize.SMALL);
-            smallBtn.setBorder(new TitledBorder(new LineBorder(Color.white)));
-            smallBtn.setForeground(Color.white);
-            mediumBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            mediumBtn.setForeground(Color.gray);
-            largeBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            largeBtn.setForeground(Color.gray);
-            setFocusable(true);
-            requestFocus();
-        });
-
-        mediumBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.MEDIUM ? Color.white : Color.gray, 2)));
-        mediumBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.MEDIUM ? Color.white : Color.gray);
-        mediumBtn.setContentAreaFilled(false);
-        mediumBtn.setBackground(new Color(0, 0, 0, ConfigModel.boardSize == ConfigModel.BoardSize.MEDIUM ? 0 : 122));
-        mediumBtn.setBounds((int) (230 * Size), (int) (126 * Size), (int) (50 * Size), (int) (33 * Size));
-        mediumBtn.addActionListener(e -> {
-            ConfigModel.changeBoardSize(ConfigModel.BoardSize.MEDIUM);
-            smallBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            smallBtn.setForeground(Color.gray);
-            mediumBtn.setBorder(new TitledBorder(new LineBorder(Color.white)));
-            mediumBtn.setForeground(Color.white);
-            largeBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            largeBtn.setForeground(Color.gray);
-            setFocusable(true);
-            requestFocus();
-        });
-
-        largeBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.LARGE ? Color.white : Color.gray, 2)));
-        largeBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.LARGE ? Color.white : Color.gray);
-        largeBtn.setContentAreaFilled(false);
-        largeBtn.setBounds((int) (288 * Size), (int) (126 * Size), (int) (50 * Size), (int) (33 * Size));
-        largeBtn.addActionListener(e -> {
-            ConfigModel.changeBoardSize(ConfigModel.BoardSize.LARGE);
-            smallBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            smallBtn.setForeground(Color.gray);
-            mediumBtn.setBorder(new TitledBorder(new LineBorder(Color.gray)));
-            mediumBtn.setForeground(Color.gray);
-            largeBtn.setBorder(new TitledBorder(new LineBorder(Color.white)));
-            largeBtn.setForeground(Color.white);
-            setFocusable(true);
-            requestFocus();
-        });
-
-        colorBlindToggleBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.colorBlindMode ? Color.white : Color.gray, 2)));
-        colorBlindToggleBtn.setForeground(ConfigModel.colorBlindMode ? Color.white : Color.gray);
-        colorBlindToggleBtn.setContentAreaFilled(false);
-        colorBlindToggleBtn.setBounds((int) (226 * Size), (int) (168 * Size), (int) (112 * Size), (int) (33 * Size));
-        colorBlindToggleBtn.addActionListener(e -> {
-            ConfigModel.changeColorBlindMode(!ConfigModel.colorBlindMode);
-            colorBlindToggleBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.colorBlindMode ? Color.white : Color.gray, 2)));
-            colorBlindToggleBtn.setForeground(ConfigModel.colorBlindMode ? Color.white : Color.gray);
-            setFocusable(true);
-            requestFocus();
-        });
-
-        keyBindListener = new KeyBindListener();
-        addKeyListener(keyBindListener);
-        keyBindListener.keyPressed(lastKeyEvent);
-
-        setDownKeyButton.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        setDownKeyButton.setContentAreaFilled(false);
-        setDownKeyButton.setBounds((int) (279 * Size), (int) (243 * Size), (int) (60 * Size), (int) (33 * Size));
-        setDownKeyButton.addActionListener(e -> {
-
-            // Print lastKeyEvent to console when down key setting button is pressed
-            System.out.println("Down key set: " + lastKeyEvent);
-
-            if (lastKeyEvent == null) return;
-
-            ConfigModel.changeKeyBinding(ConfigModel.PlayerKey.DOWN, lastKeyEvent);
-            downKeyPane.setText(KeyEvent.getKeyText(lastKeyEvent.getKeyCode()));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        setLeftKeyButton.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        setLeftKeyButton.setContentAreaFilled(false);
-        setLeftKeyButton.setBounds((int) (279 * Size), (int) (284 * Size), (int) (60 * Size), (int) (33 * Size));
-        setLeftKeyButton.addActionListener(e -> {
-
-            // Print lastKeyEvent to console when left key setting button is pressed
-            System.out.println("Left key set: " + lastKeyEvent);
-            if (lastKeyEvent == null) return;
-            ConfigModel.changeKeyBinding(ConfigModel.PlayerKey.LEFT, lastKeyEvent);
-            leftKeyPane.setText(KeyEvent.getKeyText(lastKeyEvent.getKeyCode()));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        setRightKeyBtn.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        setRightKeyBtn.setContentAreaFilled(false);
-        setRightKeyBtn.setBounds((int) (279 * Size), (int) (325 * Size), (int) (60 * Size), (int) (33 * Size));
-        setRightKeyBtn.addActionListener(e -> {
-            System.out.println("Right key set: " + lastKeyEvent);
-            if (lastKeyEvent == null) return;
-            ConfigModel.changeKeyBinding(ConfigModel.PlayerKey.RIGHT, lastKeyEvent);
-            rightKeyPane.setText(KeyEvent.getKeyText(lastKeyEvent.getKeyCode()));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        setDropKeyBtn.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        setDropKeyBtn.setContentAreaFilled(false);
-        setDropKeyBtn.setBounds((int) (279 * Size), (int) (366 * Size), (int) (60 * Size), (int) (33 * Size));
-        setDropKeyBtn.addActionListener(e -> {
-            System.out.println("Drop key set: " + lastKeyEvent);
-            if (lastKeyEvent == null) return;
-            ConfigModel.changeKeyBinding(ConfigModel.PlayerKey.DROP, lastKeyEvent);
-            dropKeyPane.setText(KeyEvent.getKeyText(lastKeyEvent.getKeyCode()));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        setRotateKeyBtn.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        setRotateKeyBtn.setContentAreaFilled(false);
-        setRotateKeyBtn.setBounds((int) (279 * Size), (int) (407 * Size), (int) (60 * Size), (int) (33 * Size));
-        setRotateKeyBtn.addActionListener(e -> {
-            System.out.println("Rotate key set: " + lastKeyEvent);
-            if (lastKeyEvent == null) return;
-            ConfigModel.changeKeyBinding(ConfigModel.PlayerKey.ROTATE, lastKeyEvent);
-            rotationKeyPane.setText(KeyEvent.getKeyText(lastKeyEvent.getKeyCode()));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        initializeSettingBtn.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        initializeSettingBtn.setContentAreaFilled(false);
-        initializeSettingBtn.setBounds((int) (208 * Size), (int) (488 * Size), (int) (130 * Size), (int) (33 * Size));
-        initializeSettingBtn.addActionListener(e -> {
-            ConfigModel.initConfig();
-            smallBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.SMALL ? Color.white : Color.gray, 2)));
-            smallBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.SMALL ? Color.white : Color.gray);
-            mediumBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.MEDIUM ? Color.white : Color.gray, 2)));
-            mediumBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.MEDIUM ? Color.white : Color.gray);
-            largeBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.boardSize == ConfigModel.BoardSize.LARGE ? Color.white : Color.gray, 2)));
-            largeBtn.setForeground(ConfigModel.boardSize == ConfigModel.BoardSize.LARGE ? Color.white : Color.gray);
-            colorBlindToggleBtn.setBorder(new TitledBorder(new LineBorder(ConfigModel.colorBlindMode ? Color.white : Color.gray, 2)));
-            colorBlindToggleBtn.setForeground(ConfigModel.colorBlindMode ? Color.white : Color.gray);
-            downKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
-            leftKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
-            rightKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
-            dropKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
-            rotationKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
-            setFocusable(true);
-            requestFocus();
-        });
-
-        exit.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        exit.setContentAreaFilled(false);
-        exit.setBounds((int) (343 * Size), (int) (10 * Size), (int) (30 * Size), (int) (30 * Size));
-
-        exit.addActionListener(e -> {
+        goToHomeButton.addActionListener(e -> {
+            setVisible(false);
             HomeController homeController = new HomeController();
             homeController.setVisible(true);
-            setVisible(false);
         });
 
-        // pane
+        // Key binding - 게임 조작 방향키 설정 뷰 접근
 
-        downKeyPane = new JTextPane();
-        downKeyPane.setEditable(false);
-        downKeyPane.setBackground(Color.black);
-        downKeyPane.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        downKeyPane.setBounds((int) (144 * Size), (int) (243 * Size), (int) (115 * Size), (int) (33 * Size));
-        downKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
+        setDownKeyButton.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DOWN);
+            keyListenConfigView.setVisible(true);
+        });
 
-        leftKeyPane = new JTextPane();
-        leftKeyPane.setEditable(false);
-        leftKeyPane.setBackground(Color.black);
-        leftKeyPane.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        leftKeyPane.setBounds((int) (144 * Size), (int) (284 * Size), (int) (115 * Size), (int) (33 * Size));
-        leftKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
+        setRotateKeyButton.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.ROTATE);
+            keyListenConfigView.setVisible(true);
+        });
 
-        rightKeyPane = new JTextPane();
-        rightKeyPane.setEditable(false);
-        rightKeyPane.setBackground(Color.black);
-        rightKeyPane.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        rightKeyPane.setBounds((int) (144 * Size), (int) (325 * Size), (int) (115 * Size), (int) (33 * Size));
-        rightKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
+        setDropKeyButton.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DROP);
+            keyListenConfigView.setVisible(true);
+        });
 
-        dropKeyPane = new JTextPane();
-        dropKeyPane.setEditable(false);
-        dropKeyPane.setBackground(Color.black);
-        dropKeyPane.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        dropKeyPane.setBounds((int) (144 * Size), (int) (366 * Size), (int) (115 * Size), (int) (33 * Size));
-        dropKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
+        setRightKeyButton.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.RIGHT);
+            keyListenConfigView.setVisible(true);
+        });
 
-        rotationKeyPane = new JTextPane();
-        rotationKeyPane.setEditable(false);
-        rotationKeyPane.setBackground(Color.black);
-        rotationKeyPane.setBorder(new TitledBorder(new LineBorder(Color.white, 2)));
-        rotationKeyPane.setBounds((int) (144 * Size), (int) (407 * Size), (int) (115 * Size), (int) (33 * Size));
-        rotationKeyPane.setText(KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
+        setLeftKeyButton.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.LEFT);
+            keyListenConfigView.setVisible(true);
+        });
 
-        SimpleAttributeSet textPaneStyle = new SimpleAttributeSet();
-        StyleConstants.setAlignment(textPaneStyle, StyleConstants.ALIGN_CENTER);
-        StyleConstants.setFontSize(textPaneStyle, 20);
-        StyledDocument doc = downKeyPane.getStyledDocument();
-        doc.setParagraphAttributes(0, doc.getLength(), textPaneStyle, false);
+        // Key binding - 2P 게임 조작 방향키 설정 뷰 접근
 
-        doc = leftKeyPane.getStyledDocument();
-        doc.setParagraphAttributes(0, doc.getLength(), textPaneStyle, false);
+        setDownKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DOWN_2P);
+            keyListenConfigView.setVisible(true);
+        });
 
-        doc = rightKeyPane.getStyledDocument();
-        doc.setParagraphAttributes(0, doc.getLength(), textPaneStyle, false);
+        setRotateKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.ROTATE_2P);
+            keyListenConfigView.setVisible(true);
+        });
 
-        doc = dropKeyPane.getStyledDocument();
-        doc.setParagraphAttributes(0, doc.getLength(), textPaneStyle, false);
+        setDropKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.DROP_2P);
+            keyListenConfigView.setVisible(true);
+        });
 
-        doc = rotationKeyPane.getStyledDocument();
-        doc.setParagraphAttributes(0, doc.getLength(), textPaneStyle, false);
+        setRightKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.RIGHT_2P);
+            keyListenConfigView.setVisible(true);
+        });
 
-        downKeyPane.setForeground(Color.WHITE);
-        leftKeyPane.setForeground(Color.WHITE);
-        rightKeyPane.setForeground(Color.WHITE);
-        dropKeyPane.setForeground(Color.WHITE);
-        rotationKeyPane.setForeground(Color.WHITE);
+        setLeftKeyButton2P.addActionListener(e -> {
+            setVisible(false);
+            KeyListenConfigView keyListenConfigView = new KeyListenConfigView(controller, new ConfigModel(), ConfigModel.PlayerKey.LEFT_2P);
+            keyListenConfigView.setVisible(true);
+        });
 
-        this.setContentPane(configPanel);
+        colorBlindToggleButton.addActionListener(e -> {
+            ConfigModel.changeColorBlindMode(!ConfigModel.colorBlindMode);
+            colorBlindToggleButton.setText(ColorBlindStatusText());
 
-        configPanel.add(smallBtn);
-        configPanel.add(mediumBtn);
-        configPanel.add(largeBtn);
-        configPanel.add(colorBlindToggleBtn);
-        configPanel.add(setDownKeyButton);
-        configPanel.add(setLeftKeyButton);
-        configPanel.add(setRightKeyBtn);
-        configPanel.add(setDropKeyBtn);
-        configPanel.add(setRotateKeyBtn);
-        configPanel.add(initializeRecordBtn);
-        configPanel.add(initializeSettingBtn);
-        configPanel.add(exit);
+            // Log to the prompt
+            System.out.println("Colorblind: " + ConfigModel.colorBlindMode);
 
-        configPanel.add(borderSizeSetPanel);
+        });
 
-        configPanel.add(downKeyPane);
-        configPanel.add(leftKeyPane);
-        configPanel.add(rightKeyPane);
-        configPanel.add(dropKeyPane);
-        configPanel.add(rotationKeyPane);
+        boardSizeButton.addActionListener(e -> {
+            GameBoardSizeLoop gameBoardSizeLoop = new GameBoardSizeLoop();
 
-        keyBindListener = new KeyBindListener();
-        addKeyListener(keyBindListener);
-        setFocusable(true);
-        requestFocus();
+            ConfigModel.BoardSize newSetting = gameBoardSizeLoop.traverseListOfSize(ConfigModel.boardSize);
+            ConfigModel.changeBoardSize(newSetting);
+            boardSizeButton.setText("Board size: " + ConfigModel.boardSize);
+        });
+
+        initializeSettingsButton.addActionListener(e -> {
+            ConfigModel.initConfig();
+
+            setDownKeyButton.setText("1P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN.ordinal()]));
+            setLeftKeyButton.setText("1P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT.ordinal()]));
+            setRightKeyButton.setText("1P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT.ordinal()]));
+            setDropKeyButton.setText("1P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP.ordinal()]));
+            setRotateKeyButton.setText("1P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE.ordinal()]));
+
+            setDownKeyButton2P.setText("2P Down Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DOWN_2P.ordinal()]));
+            setLeftKeyButton2P.setText("2P Left Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.LEFT_2P.ordinal()]));
+            setRightKeyButton2P.setText("2P Right Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.RIGHT_2P.ordinal()]));
+            setDropKeyButton2P.setText("2P Drop Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.DROP_2P.ordinal()]));
+            setRotateKeyButton2P.setText("2P Rotate Key: " + KeyEvent.getKeyText(ConfigModel.keyBinding[ConfigModel.PlayerKey.ROTATE_2P.ordinal()]));
+
+            colorBlindToggleButton.setText("Colorblind: " + (ConfigModel.colorBlindMode ? "Activated" : "Deactivated"));
+
+        });
+
+        clearGameRecords.addActionListener(e -> {
+            RecordModel.clearRecord();
+            Timer timer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    clearGameRecords.setText("Clear Score");
+                }
+            });
+            clearGameRecords.setText("CLEARED!");
+            timer.setRepeats(false);
+            timer.start();
+        });
+
+        // Add buttonList to the frame
+        for (JButton button : buttonList) {
+            add(button);
+            button.setBackground(new Color(20, 20, 20));
+            button.setForeground(new Color(180, 180, 180));
+            button.setFocusable(true);
+        }
+
+        // Set up key bindings for navigation
+        setupKeyboardNavigation();
+
+        setVisible(true);
     }
 
-    public void getsize(ConfigModel.BoardSize boardSize) {
-        switch (boardSize) {
-            case LARGE -> {
-                Size = 1.5;
-                break;
+    // 키보드 네비게이션 설정
+    private void setupKeyboardNavigation() {
+        ActionMap actionMap = getRootPane().getActionMap();
+        InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "navigateDown");
+        actionMap.put("navigateDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(1);
             }
-            case MEDIUM -> {
-                Size = 1.25;
-                break;
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "navigateDown");
+        actionMap.put("navigateDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(columns);
             }
-            case SMALL -> {
-                Size = 1;
-                break;
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "navigateUp");
+        actionMap.put("navigateUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(-columns);
             }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "navigateRight");
+        actionMap.put("navigateRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(1);
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "navigateLeft");
+        actionMap.put("navigateLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveFocusAndUpdateHighlight(-1);
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "activate");
+        actionMap.put("activate", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performButtonAction();
+            }
+        });
+
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "exit");
+        actionMap.put("exit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exitSettings();
+            }
+        });
+    }
+
+    // Set colorblind panel text
+    public String ColorBlindStatusText() {
+        if (ConfigModel.colorBlindMode) return "Colorblind: Activated";
+        else return "Colorblind: Deactivated";
+    }
+
+    private void performButtonAction() {
+        Component focused = getFocusOwner();
+        if (focused instanceof JButton) {
+            ((JButton) focused).doClick();
         }
     }
 
-    class KeyBindListener implements KeyListener {
-        @Override
-        public void keyTyped(final KeyEvent e) {
+    // 버튼 포커스 이동
+    public void moveFocusAndUpdateHighlight(int direction) {
+        int newFocusedButtonIndex = (focusedButtonIndex + direction + buttonList.size()) % buttonList.size();
+        highlightButton(newFocusedButtonIndex);
+        focusedButtonIndex = newFocusedButtonIndex;
+    }
 
+    // 버튼 하이라이트
+    private void highlightButton(int index) {
+        for (int i = 0; i < buttonList.size(); i++) {
+            if (i == index) {
+                buttonList.get(i).setBackground(new Color(180, 180, 180));
+                buttonList.get(i).setForeground(new Color(20, 20, 20));
+            } else {
+                buttonList.get(i).setBackground(new Color(20, 20, 20));
+                buttonList.get(i).setForeground(new Color(180, 180, 180));
+            }
         }
+        buttonList.get(index).requestFocusInWindow();
+    }
 
-        @Override
-        public void keyPressed(final KeyEvent e) {
-            lastKeyEvent = e;
-        }
-
-        @Override
-        public void keyReleased(final KeyEvent e) {
-
-        }
+    private void exitSettings() {
+        System.out.println("Exiting Settings, show home view");
+        HomeController homeController = new HomeController();
+        homeController.setVisible(true);
+        setVisible(false);
     }
 }
