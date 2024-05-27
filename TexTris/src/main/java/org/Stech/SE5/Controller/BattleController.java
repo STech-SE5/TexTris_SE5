@@ -22,7 +22,7 @@ public class BattleController {
     private static final double INIT_INTERVAL = 1000;
 
     public BattleController(int mode) {
-        mainTimerP1 = new Timer((int)INIT_INTERVAL, new MainTimerActionListener(true));
+        mainTimerP1 = new Timer(100000/*(int)INIT_INTERVAL*/, new MainTimerActionListener(true));
         deleteTimerP1 = new Timer((int)INIT_INTERVAL / 3, new DeleteTimerActionListener(true));
         weightItemTimerP1 = new Timer((int)INIT_INTERVAL / 5, new WeightItemTimerActionListener(true));
         mainTimerP2 = new Timer((int)INIT_INTERVAL, new MainTimerActionListener(false));
