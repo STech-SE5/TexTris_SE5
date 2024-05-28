@@ -67,6 +67,7 @@ public class GameModel {
                 this.attack.add(receiveAttack.get(i));
             }
         }
+        Collections.reverse(attack);
     }
 
     public ArrayList<Element[]> getAttack() {
@@ -75,6 +76,7 @@ public class GameModel {
 
     private void attackToBoard() {
         if(attack.size() == 0) return;
+        Collections.reverse(attack);
         for(int k=0; k < 20 - attack.size(); k++) {
             for (int i = 0; i < 10; i++) {
                 if (k >= board.size() || i >= board.get(k).length || k + attack.size() >= board.size() || i >= board.get(k + attack.size()).length){
