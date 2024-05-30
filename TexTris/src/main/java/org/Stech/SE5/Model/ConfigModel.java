@@ -119,16 +119,16 @@ public class ConfigModel {
         gameSpeed = 1;
         colorBlindMode = false;
         keyBinding = new int[]{
-                KeyEvent.VK_UP, // ROTATE
-                KeyEvent.VK_LEFT, // LEFT
-                KeyEvent.VK_RIGHT, // RIGHT
-                KeyEvent.VK_DOWN, // DOWN
-                KeyEvent.VK_SHIFT, // DROP
-                KeyEvent.VK_W, // ROTATE_2P
-                KeyEvent.VK_A, // LEFT_2P
-                KeyEvent.VK_D, // RIGHT_2P
-                KeyEvent.VK_S, // DOWN_2P
-                KeyEvent.VK_SPACE, // DROP_2P
+                KeyEvent.VK_W, // ROTATE
+                KeyEvent.VK_A, // LEFT
+                KeyEvent.VK_D, // RIGHT
+                KeyEvent.VK_S, // DOWN
+                KeyEvent.VK_SPACE, // DROP
+                KeyEvent.VK_UP, // ROTATE2P
+                KeyEvent.VK_LEFT, // LEFT2P
+                KeyEvent.VK_RIGHT, // RIGHT2P
+                KeyEvent.VK_DOWN, // DOWN2P
+                KeyEvent.VK_SHIFT, // DROP2P
                 KeyEvent.VK_ESCAPE, 0};
         saveConfig();
     }

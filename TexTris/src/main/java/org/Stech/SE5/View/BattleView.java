@@ -378,11 +378,11 @@ public class BattleView extends JFrame{
         private static final Logger logger = Logger.getLogger(BattleView.Player1KeyListener.class.getName());
 
         public Player1KeyListener() {
-            down = ConfigModel.keyBinding[8];
-            right = ConfigModel.keyBinding[7];
-            left = ConfigModel.keyBinding[6];
-            rotate = ConfigModel.keyBinding[5];
-            dropdown = ConfigModel.keyBinding[9];
+            down = ConfigModel.keyBinding[3];
+            right = ConfigModel.keyBinding[2];
+            left = ConfigModel.keyBinding[1];
+            rotate = ConfigModel.keyBinding[0];
+            dropdown = ConfigModel.keyBinding[4];
             escape = ConfigModel.keyBinding[10];
         }
         @Override
@@ -430,11 +430,11 @@ public class BattleView extends JFrame{
         private static final Logger logger = Logger.getLogger(BattleView.Player1KeyListener.class.getName());
 
         public Player2KeyListener() {
-            down = ConfigModel.keyBinding[3];
-            right = ConfigModel.keyBinding[2];
-            left = ConfigModel.keyBinding[1];
-            rotate = ConfigModel.keyBinding[0];
-            dropdown = ConfigModel.keyBinding[4];
+            down = ConfigModel.keyBinding[8];
+            right = ConfigModel.keyBinding[7];
+            left = ConfigModel.keyBinding[6];
+            rotate = ConfigModel.keyBinding[5];
+            dropdown = ConfigModel.keyBinding[9];
         }
         @Override
         public void keyTyped(final KeyEvent e) {

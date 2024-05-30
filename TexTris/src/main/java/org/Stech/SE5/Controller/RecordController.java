@@ -35,7 +35,6 @@ public class RecordController {
     }
 
     public void initResolution() {
-        ConfigModel.BoardSize boardSize = ConfigModel.boardSize;
         switch (resolution) {
             case 0:
                 WIDTH = 400;
