@@ -25,18 +25,13 @@ public class GameBoardSizeLoop {
     public ConfigModel.BoardSize traverseListOfSize(ConfigModel.BoardSize currentSetting) {
 
         // Switches the current setting to the next setting in the list
-        
-        switch (currentSetting) {
-            case ConfigModel.BoardSize.SMALL:
-                currentSetting = ConfigModel.BoardSize.MEDIUM;
-                break;
-            case ConfigModel.BoardSize.MEDIUM:
-                currentSetting = ConfigModel.BoardSize.LARGE;
-                break;
-            // If the current setting is the last setting in the list, it will switch to the first setting
-            case ConfigModel.BoardSize.LARGE:
-                currentSetting = ConfigModel.BoardSize.SMALL;
-                break;
+
+        if (currentSetting == ConfigModel.BoardSize.SMALL) {
+            currentSetting = ConfigModel.BoardSize.MEDIUM;
+        } else if (currentSetting == ConfigModel.BoardSize.MEDIUM) {
+            currentSetting = ConfigModel.BoardSize.LARGE;
+        } else if (currentSetting == ConfigModel.BoardSize.LARGE) {
+            currentSetting = ConfigModel.BoardSize.SMALL;
         }
 
         return currentSetting;
