@@ -17,7 +17,6 @@ import java.util.Objects;
 public class GameEndView extends JFrame {
 
     public RecordController recordController;
-    //public AbstractButton recordButton;
     int resolution;
     private JTextField userNameField;
 
@@ -117,7 +116,6 @@ public class GameEndView extends JFrame {
                             userName = "default";
 
                         // Score Board 화면으로 이동하는 로직
-                        //RecordModel.loadRecord();
                         RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                         RecordController record = new RecordController();
                         record.setVisible(true);
@@ -135,7 +133,6 @@ public class GameEndView extends JFrame {
                     String userName = userNameField.getText();
 
                     // Score Board 화면으로 이동하는 로직
-                    //RecordModel.loadRecord();
                     RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                     RecordController record = new RecordController();
                     record.setVisible(true);
@@ -149,7 +146,6 @@ public class GameEndView extends JFrame {
         }
         else{
             if(currentScore >= RecordModel.rankedRecords.get(13).getScore()){
-                //System.out.println("executed else");
                 // 사용자 이름 입력 필드
                 userNameField = new JTextField();
                 userNameField.setBounds(98, 150, WIDTH - 200, 50);
@@ -173,7 +169,6 @@ public class GameEndView extends JFrame {
                                 userName = "default";
 
                             // Score Board 화면으로 이동하는 로직
-                            //RecordModel.loadRecord();
                             RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                             RecordController record = new RecordController();
                             record.setVisible(true);
@@ -191,7 +186,6 @@ public class GameEndView extends JFrame {
                         String userName = userNameField.getText();
 
                         // Score Board 화면으로 이동하는 로직
-                        //RecordModel.loadRecord();
                         RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                         RecordController record = new RecordController();
                         record.setVisible(true);
@@ -217,8 +211,6 @@ public class GameEndView extends JFrame {
                     public void keyPressed(KeyEvent e) {
                         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                             // Score Board 화면으로 이동하는 로직
-                            //RecordModel.loadRecord();
-                            //RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                             RecordController record = new RecordController();
                             record.setVisible(true);
 
@@ -235,8 +227,6 @@ public class GameEndView extends JFrame {
                         //String userName = userNameField.getText();
 
                         // Score Board 화면으로 이동하는 로직
-                        //RecordModel.loadRecord();
-                        //RecordModel.addRecord(currentScore, currentDeletedLine, currentGameMode, currentGameDifficulty, formattedDate, userName);
                         RecordController record = new RecordController();
                         record.setVisible(true);
 
