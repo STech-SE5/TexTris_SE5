@@ -65,16 +65,17 @@ public class ConfigModel {
     private PlayerKey lastKey = PlayerKey.UNDEFINED;
 
     // Default key bindings:
-    public static int[] keyBinding = {KeyEvent.VK_UP, // ROTATE
-            KeyEvent.VK_LEFT, // LEFT
-            KeyEvent.VK_RIGHT, // RIGHT
-            KeyEvent.VK_DOWN, // DOWN
-            KeyEvent.VK_SHIFT, // DROP
+    public static int[] keyBinding = {
             KeyEvent.VK_W, // ROTATE_2P
             KeyEvent.VK_A, // LEFT_2P
             KeyEvent.VK_D, // RIGHT_2P
             KeyEvent.VK_S, // DOWN_2P
             KeyEvent.VK_SPACE, // DROP_2P
+            KeyEvent.VK_UP, // ROTATE
+            KeyEvent.VK_LEFT, // LEFT
+            KeyEvent.VK_RIGHT, // RIGHT
+            KeyEvent.VK_DOWN, // DOWN
+            KeyEvent.VK_SHIFT, // DROP
             KeyEvent.VK_ESCAPE // ESC
             , 0
     };
