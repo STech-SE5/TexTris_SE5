@@ -12,13 +12,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
-/*
-    1) UI를 설정하는 부분을 하나의 메소드로 분리하기 -> 해결
-    2) Model-View-Controller에 맞게 메소드 분리하고, 관리하기
-    3) ButtonList에서 버튼 선택하는 방식 정형화; KeyListener에도 버퍼가 있나?
-        3-1) 종료 버튼에서 설정 버튼으로 올라왔다면, 설정에서 아래 방향키를 누를 때, 스코어보드가 아닌 종료 버튼으로 돌아가면 좋겠음
-        3-2) 반대도 마찬가지; 종료 버튼에서 일반 모드 버튼으로 내려갔다면, 위 방향키를 누를 때도 종료 버튼을 가리키면 좋겠음
- */
 
 public class HomeView extends JFrame {
     private double Size;    //설정에서 받아와야함

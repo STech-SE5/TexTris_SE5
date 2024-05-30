@@ -59,7 +59,7 @@ public class ConfigModel {
     public static boolean colorBlindMode = false;
 
     // Config 파일 경로 - loadConfig(), saveConfig() 메소드에서 사용
-    public static String path = "saved-config/config.txt";
+    public final static String path = "saved-config/config.txt";
 
     // Update Keyboard Part
     private PlayerKey lastKey = PlayerKey.UNDEFINED;

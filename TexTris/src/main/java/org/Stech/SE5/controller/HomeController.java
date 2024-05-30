@@ -2,10 +2,6 @@ package org.Stech.SE5.Controller;
 
 import org.Stech.SE5.View.HomeView;
 
-/*
-    1) 설정에서 변경한 해상도 반영
-    2) 키보드 입력 받기
- */
 
 public class HomeController { // Controller Interface에서 Overriding
     private HomeView homeView;
