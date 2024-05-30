@@ -8,13 +8,19 @@ import org.Stech.SE5.View.RecordView;
 import org.Stech.SE5.Controller.RecordController;
 import org.Stech.SE5.Data.Record;
 import org.Stech.SE5.Model.ConfigModel;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -42,7 +48,7 @@ public class GameTest {
         int S = 0;
         int T = 0;
         int Z = 0;
-        for (int i = 0; i < 70; i++){
+        for (int i = 0; i < 70; i++) {
             gameModel.setRandomBlock_test();
             switch (gameModel.getNextBlock().getType()) {
                 case I_BLOCK:
@@ -89,7 +95,7 @@ public class GameTest {
         int S = 0;
         int T = 0;
         int Z = 0;
-        for (int i = 0; i < 70; i++){
+        for (int i = 0; i < 70; i++) {
             gameModel.setRandomBlock_test();
             switch (gameModel.getNextBlock().getType()) {
                 case I_BLOCK:
@@ -136,7 +142,7 @@ public class GameTest {
         int S = 0;
         int T = 0;
         int Z = 0;
-        for (int i = 0; i < 70; i++){
+        for (int i = 0; i < 70; i++) {
             gameModel.setRandomBlock_test();
             switch (gameModel.getNextBlock().getType()) {
                 case I_BLOCK:
@@ -182,7 +188,7 @@ public class GameTest {
         int B = 0;
         int I = 0;
         int C = 0;
-        for (int i = 0; i < 50; i++){
+        for (int i = 0; i < 50; i++) {
             gameModel.setRandomBlock_test();
             gameModel.triggerItem();
             switch (gameModel.getNextBlock().getType()) {
@@ -211,7 +217,7 @@ public class GameTest {
     }
 
     @Test
-    public void testModelValue_Single(){
+    public void testModelValue_Single() {
         GameController gameController = new GameController(true, 1);
         GameModel gameModel = new GameModel(gameController, true, 1);
         assertEquals(1, gameModel.getMode());
@@ -224,7 +230,7 @@ public class GameTest {
     }
 
     @Test
-    public void testModelValue_Battle(){
+    public void testModelValue_Battle() {
         BattleController battleController = new BattleController(2);
         GameModel gameModel = new GameModel(battleController, 2, true);
         assertEquals(0, gameModel.getMode());   //item모드면 1, timer모드임
@@ -262,6 +268,7 @@ public class GameTest {
         assertEquals(500, width); // 기본 해상도가 MEDIUM일 때 너비가 500인지 확인
         assertEquals(750, height); // 기본 해상도가 MEDIUM일 때 높이가 750인지 확인
     }
+
     @Test
     public void testInitResolutionSmall() {
         // Given
@@ -378,7 +385,6 @@ public class GameTest {
     }
 
 
-
     //RecordModelTest
 
     @Test
@@ -456,7 +462,7 @@ public class GameTest {
     public void testLoadRecord() {
         // Given
         RecordModel.initRecord();
-        RecordModel.addRecord(100,5,1,2,"2024-05-18","TestUser");
+        RecordModel.addRecord(100, 5, 1, 2, "2024-05-18", "TestUser");
         RecordModel.saveRecord();
 
         // When
@@ -495,5 +501,127 @@ public class GameTest {
         } catch (IOException e) {
             fail("IOException occurred while reading the file: " + e.getMessage());
         }
+    }
+
+    private Path tempConfigFile;
+
+    @Before
+    public void setUp() throws IOException {
+        // Create a temporary file for testing
+        tempConfigFile = Files.createTempFile("config", ".txt");
+        ConfigModel.path = tempConfigFile.toString();
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        // Delete the temporary file after each test
+        Files.deleteIfExists(tempConfigFile);
+    }
+
+    @Test
+    public void testInitConfig() {
+        // Initialize the configuration
+        ConfigModel.initConfig();
+
+        // Assert that all the configuration settings are correct
+
+        assertEquals(ConfigModel.BoardSize.MEDIUM, ConfigModel.boardSize);
+        assertEquals(10, ConfigModel.boardWidth);
+        assertEquals(20, ConfigModel.boardHeight);
+        assertFalse(ConfigModel.colorBlindMode);
+        assertArrayEquals(
+                new int[]{
+                        KeyEvent.VK_UP, // ROTATE
+                        KeyEvent.VK_LEFT, // LEFT
+                        KeyEvent.VK_RIGHT, // RIGHT
+                        KeyEvent.VK_DOWN, // DOWN
+                        KeyEvent.VK_SHIFT, // DROP
+                        KeyEvent.VK_W, // ROTATE_2P
+                        KeyEvent.VK_A, // LEFT_2P
+                        KeyEvent.VK_D, // RIGHT_2P
+                        KeyEvent.VK_S, // DOWN_2P
+                        KeyEvent.VK_SPACE, // DROP_2P
+                        KeyEvent.VK_ESCAPE, 0},
+                ConfigModel.keyBinding
+        );
+    }
+
+    @Test
+    public void testSaveConfig() throws IOException {
+        // Change settings before save
+
+        ConfigModel.boardSize = ConfigModel.BoardSize.LARGE;
+        ConfigModel.boardWidth = 15;
+        ConfigModel.boardHeight = 25;
+        ConfigModel.gameSpeed = 2;
+        ConfigModel.colorBlindMode = true;
+        ConfigModel.keyBinding = new int[]{
+                KeyEvent.VK_DOWN, // ROTATE
+                KeyEvent.VK_RIGHT, // LEFT
+                KeyEvent.VK_LEFT, // RIGHT
+                KeyEvent.VK_UP, // DOWN
+                KeyEvent.VK_SHIFT, // DROP
+                KeyEvent.VK_S, // ROTATE_2P
+                KeyEvent.VK_D, // LEFT_2P
+                KeyEvent.VK_A, // RIGHT_2P
+                KeyEvent.VK_W, // DOWN_2P
+                KeyEvent.VK_ENTER, // DROP_2P
+                KeyEvent.VK_ESCAPE, 1
+        };
+
+        // Save the configuration to the file
+        ConfigModel.saveConfig();
+
+        // Read the saved configuration from the file
+        StringBuilder contentBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(tempConfigFile.toFile()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line);
+            }
+        }
+
+        // Verify the contents of the saved configuration file
+        String expectedContent = String.join(",",
+                ConfigModel.gameMode.name(),
+                ConfigModel.gameDifficulty.name(),
+                ConfigModel.boardSize.name(),
+                Integer.toString(ConfigModel.boardWidth),
+                Integer.toString(ConfigModel.boardHeight),
+                Double.toString(ConfigModel.gameSpeed),
+                Boolean.toString(ConfigModel.colorBlindMode),
+                Integer.toString(ConfigModel.keyBinding.length),
+                Arrays.stream(ConfigModel.keyBinding)
+                        .mapToObj(String::valueOf)
+                        .reduce((a, b) -> a + "," + b)
+                        .orElse("")
+        );
+
+        assertEquals(expectedContent, contentBuilder.toString());
+
+        // Reinitialize the configuration to verify persistence
+        ConfigModel.initConfig();
+
+        // Assert that the initial values are restored after reinitialization
+        assertEquals(ConfigModel.BoardSize.MEDIUM, ConfigModel.boardSize);
+        assertEquals(10, ConfigModel.boardWidth);
+        assertEquals(20, ConfigModel.boardHeight);
+
+        assertFalse(ConfigModel.colorBlindMode);
+        assertArrayEquals(
+                new int[]{
+                        KeyEvent.VK_UP, // ROTATE
+                        KeyEvent.VK_LEFT, // LEFT
+                        KeyEvent.VK_RIGHT, // RIGHT
+                        KeyEvent.VK_DOWN, // DOWN
+                        KeyEvent.VK_SHIFT, // DROP
+                        KeyEvent.VK_W, // ROTATE_2P
+                        KeyEvent.VK_A, // LEFT_2P
+                        KeyEvent.VK_D, // RIGHT_2P
+                        KeyEvent.VK_S, // DOWN_2P
+                        KeyEvent.VK_SPACE, // DROP_2P
+                        KeyEvent.VK_ESCAPE, 0},
+                ConfigModel.keyBinding
+        );
     }
 }
