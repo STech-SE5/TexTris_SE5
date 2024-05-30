@@ -2,8 +2,10 @@ package org.Stech.SE5;
 
 import org.Stech.SE5.Controller.BattleController;
 import org.Stech.SE5.Controller.GameController;
+import org.Stech.SE5.Controller.HomeController;
 import org.Stech.SE5.Model.GameModel;
 import org.Stech.SE5.Model.RecordModel;
+import org.Stech.SE5.View.HomeView;
 import org.Stech.SE5.View.RecordView;
 import org.Stech.SE5.Controller.RecordController;
 import org.Stech.SE5.Data.Record;
@@ -12,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GameTest {
 
@@ -239,6 +244,7 @@ public class GameTest {
         double delta = 0.0001;
         assertEquals(1.01, gameModel.getGameSpeed(), delta);
         assertEquals(1.05, gameModel.getScorerate(), delta);
+        assertEquals(gameModel.getCurrnetAttack(), 0);
     }
 
     @Test
