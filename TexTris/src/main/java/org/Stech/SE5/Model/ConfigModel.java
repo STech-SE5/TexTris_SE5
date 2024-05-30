@@ -1,15 +1,10 @@
 package org.Stech.SE5.Model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
 public class ConfigModel {
     public ConfigModel() {
         loadConfig();
