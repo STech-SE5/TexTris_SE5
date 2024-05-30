@@ -226,11 +226,11 @@ public class GameView extends JFrame {
         int escape;
 
         public PlayerKeyListener() {
-            down = ConfigModel.keyBinding[3];
-            right = ConfigModel.keyBinding[2];
-            left = ConfigModel.keyBinding[1];
-            rotate = ConfigModel.keyBinding[0];
-            dropdown = ConfigModel.keyBinding[4];
+            down = ConfigModel.keyBinding[8];
+            right = ConfigModel.keyBinding[7];
+            left = ConfigModel.keyBinding[6];
+            rotate = ConfigModel.keyBinding[5];
+            dropdown = ConfigModel.keyBinding[9];
             escape = ConfigModel.keyBinding[10];
         }
 
@@ -275,8 +275,8 @@ public class GameView extends JFrame {
         int escape;
         private static final Logger logger = Logger.getLogger(PauseKeyListener.class.getName());
         public PauseKeyListener() {
-            right = ConfigModel.keyBinding[2];
-            left = ConfigModel.keyBinding[1];
+            right = ConfigModel.keyBinding[7];
+            left = ConfigModel.keyBinding[6];
             escape = ConfigModel.keyBinding[10];
         }
         @Override
