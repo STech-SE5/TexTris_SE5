@@ -64,17 +64,11 @@ public class ConfigModel {
     public static boolean colorBlindMode = false;
 
     // Config 파일 경로 - loadConfig(), saveConfig() 메소드에서 사용
-    private final static String path = "saved-config/config.txt";
+    public static String path = "saved-config/config.txt";
 
     // Update Keyboard Part
     private PlayerKey lastKey = PlayerKey.UNDEFINED;
 
-
-    // public boolean getColorblindState() {
-    //     return colorBlindMode;
-    // }
-
-    // Static array to hold key bindings
     // Default key bindings:
     public static int[] keyBinding = {KeyEvent.VK_UP, // ROTATE
             KeyEvent.VK_LEFT, // LEFT
