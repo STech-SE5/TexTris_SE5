@@ -50,11 +50,24 @@ public class GameModel {
     }
 
     public void receiveAttack(ArrayList<Element[]> receiveAttack) {
-        for(int i=0; i<receiveAttack.size(); i++) {
-            if (i >= receiveAttack.size() || i < 0){throw new ArrayIndexOutOfBoundsException("Invalid index");}
-            if(this.attack.size() >= 10) return;
-            this.attack.add(receiveAttack.get(i));
+        if(getCurrnetAttack() >= 10) return;
+        int maxAttackSize = 10 - getCurrnetAttack();
+        if (receiveAttack.size() <= maxAttackSize) {
+            for (int i = 0; i < receiveAttack.size(); i++) {
+                if (i >= receiveAttack.size() || i < 0) {
+                    throw new ArrayIndexOutOfBoundsException("Invalid index");
+                }
+                this.attack.add(receiveAttack.get(i));
+            }
+        } else {
+            for (int i = maxAttackSize; i > 0; i--) {
+                if (i >= receiveAttack.size() || i < 0) {
+                    throw new ArrayIndexOutOfBoundsException("Invalid index");
+                }
+                this.attack.add(receiveAttack.get(i));
+            }
         }
+        Collections.reverse(attack);
     }
 
     public ArrayList<Element[]> getAttack() {
@@ -63,6 +76,7 @@ public class GameModel {
 
     private void attackToBoard() {
         if(attack.size() == 0) return;
+        Collections.reverse(attack);
         for(int k=0; k < 20 - attack.size(); k++) {
             for (int i = 0; i < 10; i++) {
                 if (k >= board.size() || i >= board.get(k).length || k + attack.size() >= board.size() || i >= board.get(k + attack.size()).length){
@@ -142,6 +156,22 @@ public class GameModel {
             }
             board.add(row);
         }
+    }
+
+    public int getCurrnetAttack(){
+        int cnt = 0;
+        int tmp = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 10; j++) {
+                if(board.get(i)[j] == Element.ATTACK) {
+                    tmp++;
+                }
+            }
+            if (tmp > 0){
+                cnt++;
+            }
+        }
+        return cnt;
     }
 
     public int getMode(){
