@@ -50,7 +50,7 @@ public class RecordModel {
     }
 
     public static void loadRecord() {
-        rankedRecords.clear(); // 기존 기록 초기화
+        // rankedRecords.clear(); // 기존 기록 초기화
         try (BufferedReader bufReader = new BufferedReader(new FileReader(RECORD_FILE_PATH))) {
             String line;
             Random rnd = new Random(System.currentTimeMillis());
